@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NCD Evidence · ผู้ช่วยค้นหลักฐาน</title><link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script></head>
+<body><header><a class="brand" href="/">NCD<span>Evidence</span></a><span class="course">Building LLM-Powered Applications</span><span id="health" class="badge">กำลังตรวจระบบ</span></header>
+<main><section class="intro"><p class="eyebrow">THAI GUIDELINES · GROUNDED ANSWERS</p><h1>ถามจากความสงสัย<br><span>ตอบจากหลักฐาน</span></h1><p class="subtitle">ค้นเอกสาร NCD ภาษาไทย พร้อมข้อความอ้างอิงและเลขหน้า<br>สำหรับการศึกษาและอ่านแนวทาง ไม่ใช้แทนการวินิจฉัยรายบุคคล</p></section>
+<div class="workspace"><section class="conversation"><form id="ask-form"><label for="question">อยากค้นเรื่องอะไรในเอกสาร</label><textarea id="question" rows="4" maxlength="1500" required placeholder="เช่น เป้าหมาย HbA1c ในผู้ป่วยเบาหวานคือเท่าไร"></textarea><div class="form-footer"><span id="counter">0 / 1500</span><button id="submit" type="submit">ค้นหลักฐานและตอบ <span aria-hidden="true">↗</span></button></div></form>
+<div class="examples"><span>ลองเริ่มจาก</span><button type="button" data-question="เป้าหมาย HbA1c ในผู้ป่วยเบาหวานคือเท่าไร">เป้าหมาย HbA1c</button><button type="button" data-question="แนวทาง NCD ระบุราคาบิตคอยน์วันพรุ่งนี้เท่าไร">คำถามนอกขอบเขต</button></div>
+<section id="result" class="result" hidden aria-live="polite"><div class="answer-heading"><span class="eyebrow">คำตอบจากเอกสาร</span><span id="answer-status" class="badge"></span></div><p id="answer"></p><div id="stats" class="stats"></div></section>
+<p id="loading" class="loading" hidden role="status">กำลังค้นเอกสารและตรวจหลักฐาน การใช้งานครั้งแรกจะใช้เวลาโหลด index สักครู่</p><p id="error" role="alert" hidden></p>
+<details id="trace-panel" hidden><summary>ดูขั้นตอนการค้นหา</summary><ol id="trace"></ol></details></section>
+<aside><div class="source-heading"><h2>หลักฐานอ้างอิง</h2><span id="source-count">0</span></div><div id="sources"><div class="empty"><span class="document-mark" aria-hidden="true">≡</span><p>ข้อความและเลขหน้าจะปรากฏที่นี่<br>เมื่อมีคำตอบที่อ้างอิงได้</p></div></div></aside></div>
+<section class="evaluation"><div><p class="eyebrow">ตรวจสอบคุณภาพได้</p><h2>Retrieval ที่มีผลวัดจริง</h2><p>ผล frozen test ของ pipeline เดิม บน 52 คำถามที่ตอบได้<br>ตัวเลขนี้วัดการค้นหลักฐาน ไม่ใช่ความถูกต้องของคำตอบ Gemma</p></div><div id="metrics" class="metrics">กำลังโหลดผลประเมิน</div></section>
+</main><footer><span>Gemma · class proxy</span><span>66 เอกสารใน index · corpus v12 · มี stop condition</span></footer></body></html>

@@ -1,0 +1,9 @@
+# Frozen retrieval versions; install into the application's own Python 3.12 environment.
+torch==2.14.1
+sentence-transformers==6.1.0
+transformers==5.18.0
+numpy==2.5.3
+bm25s==0.3.12
+pythainlp==5.3.8
+openai==1.109.1
+-e .[dev]
