@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rag/question.schema.json",
+  "title": "Evaluation question (silver or gold)",
+  "description": "Gold evidence is tied to edition/page/quote, not chunk IDs, so it stays valid when chunking changes. Silver rows are agent drafts; gold rows need a named human reviewer.",
+  "type": "object",
+  "required": ["qid", "split", "status", "question", "answer", "type", "answerable", "evidence", "generated_by", "reviewed_by", "review_date", "changes"],
+  "additionalProperties": false,
+  "properties": {
+    "qid": {"type": "string", "pattern": "^q[0-9]{3,4}$"},
+    "split": {"enum": ["dev", "test"]},
+    "status": {"enum": ["silver", "gold", "rejected"]},
+    "question": {"type": "string", "minLength": 1},
+    "answer": {"type": ["string", "null"]},
+    "type": {"enum": ["fact", "number_unit", "condition", "table", "multi_page", "cross_document", "unanswerable"]},
+    "answerable": {"type": "boolean"},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["document_id", "edition_id", "pdf_page", "quote"],
+        "additionalProperties": false,
+        "properties": {
+          "document_id": {"type": "string", "minLength": 1},
+          "edition_id": {"type": "string", "minLength": 1},
+          "pdf_page": {"type": "integer", "minimum": 1},
+          "quote": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "alt_evidence": {
+      "description": "Optional. Other pages that answer the same question equally well (not the primary evidence). Counted as relevant in the lenient metric only; the strict metric uses `evidence` alone. kind=duplicate: the page contains the evidence quote verbatim (found by script); same_fact: a person confirmed it states the same fact.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["document_id", "edition_id", "pdf_page", "quote", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "document_id": {"type": "string", "minLength": 1},
+          "edition_id": {"type": "string", "minLength": 1},
+          "pdf_page": {"type": "integer", "minimum": 1},
+          "quote": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["duplicate", "same_fact"]}
+        }
+      }
+    },
+    "generated_by": {"type": ["string", "null"]},
+    "reviewed_by": {"type": ["string", "null"]},
+    "review_date": {"type": ["string", "null"], "format": "date"},
+    "changes": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"answerable": {"const": false}}},
+      "then": {"properties": {"answer": {"type": "null"}, "evidence": {"maxItems": 0}, "alt_evidence": {"maxItems": 0}, "type": {"const": "unanswerable"}}},
+      "else": {"properties": {"answer": {"type": "string", "minLength": 1}, "evidence": {"minItems": 1}, "type": {"not": {"const": "unanswerable"}}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "gold"}}},
+      "then": {"properties": {"reviewed_by": {"type": "string", "minLength": 1}, "review_date": {"type": "string"}}}
+    },
+    {
+      "if": {"properties": {"split": {"const": "test"}}},
+      "then": {"properties": {"status": {"enum": ["gold", "rejected"]}}}
+    }
+  ]
+}

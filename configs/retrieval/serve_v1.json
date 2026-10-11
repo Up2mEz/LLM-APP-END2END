@@ -1,0 +1,13 @@
+{
+  "id": "serve_v1",
+  "same_settings_as": "configs/retrieval/frozen_v1.json (frozen 2026-10-11 before the test run); this file only writes them so a program can read them",
+  "model": "bge-m3",
+  "paths": {
+    "parent_chunks": "data/index/chunks-v12-t512",
+    "child_chunks": "data/index/chunks-v12-t128",
+    "dense_index": "data/index/dense-bge-m3-t128-v12"
+  },
+  "lexical": {"tokenizer": "char3", "k1": 2.18, "b": 0.86},
+  "fusion": {"type": "convex", "alpha": 0.6, "pool": 100},
+  "rerank": {"model": "BAAI/bge-reranker-v2-m3", "depth": 30}
+}

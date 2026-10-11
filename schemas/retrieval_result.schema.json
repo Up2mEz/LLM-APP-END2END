@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rag/retrieval_result.schema.json",
+  "title": "Ranked retrieval result for one question and one variant",
+  "description": "One row of results.jsonl. hits are ordered by rank; dense_rank/bm25_rank are null when that retriever did not return the chunk or is not part of the variant.",
+  "type": "object",
+  "required": ["run_id", "qid", "variant", "k", "query", "hits", "latency_ms"],
+  "additionalProperties": false,
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "qid": {"type": "string", "minLength": 1},
+    "variant": {"enum": ["A", "B", "C"]},
+    "k": {"type": "integer", "minimum": 1},
+    "query": {"type": "string", "minLength": 1},
+    "hits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rank", "chunk_id", "score", "document_id", "edition_id", "pdf_page_start", "pdf_page_end"],
+        "additionalProperties": false,
+        "properties": {
+          "rank": {"type": "integer", "minimum": 1},
+          "chunk_id": {"type": "string", "minLength": 1},
+          "score": {"type": "number"},
+          "dense_rank": {"type": ["integer", "null"], "minimum": 1},
+          "bm25_rank": {"type": ["integer", "null"], "minimum": 1},
+          "rerank_score": {"type": ["number", "null"]},
+          "document_id": {"type": "string", "minLength": 1},
+          "edition_id": {"type": "string", "minLength": 1},
+          "pdf_page_start": {"type": "integer", "minimum": 1},
+          "pdf_page_end": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "latency_ms": {
+      "type": "object",
+      "required": ["total"],
+      "additionalProperties": {"type": "number", "minimum": 0},
+      "properties": {"total": {"type": "number", "minimum": 0}}
+    }
+  }
+}

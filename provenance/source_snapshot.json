@@ -1,0 +1,249 @@
+{
+  "source_repository": "https://github.com/Chaiporn2005/thai-ncd-guideline-qa",
+  "source_commit_reviewed": "3fb287cdbceab04d13e73f6dfb3bdf5eeb1b6829",
+  "copied_at_utc": "2026-10-11T13:16:00.109689+00:00",
+  "source_working_tree_clean": "not_assumed",
+  "files": [
+    {
+      "source": "src/ncdqa/retrieval/__init__.py",
+      "destination": "src/ncdqa/retrieval/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "src/ncdqa/retrieval/search.py",
+      "destination": "src/ncdqa/retrieval/search.py",
+      "sha256": "8db955f1297e0102ca3f282871013c308ee9d5a0ad0b541f771ac2bc8f49e846"
+    },
+    {
+      "source": "src/ncdqa/retrieval/embed.py",
+      "destination": "src/ncdqa/retrieval/embed.py",
+      "sha256": "7bebaf4752ea4b0b61d590200614162aa9402b93f5ad94daadba89e6530c53d9"
+    },
+    {
+      "source": "src/ncdqa/retrieval/dense.py",
+      "destination": "src/ncdqa/retrieval/dense.py",
+      "sha256": "0c337deed3ca07037e13b2ccff344a7a307c24f7711137ed171535113144b631"
+    },
+    {
+      "source": "src/ncdqa/retrieval/parent_child.py",
+      "destination": "src/ncdqa/retrieval/parent_child.py",
+      "sha256": "e19ec468b3089c62959f256bb432d1ea3a45a902b3b868b76ed3e35cdb23ef3c"
+    },
+    {
+      "source": "src/ncdqa/retrieval/fusion.py",
+      "destination": "src/ncdqa/retrieval/fusion.py",
+      "sha256": "23b6f17e7259361e40b01678c3e612b2905bd041cb5fa148fd4483d1bab78132"
+    },
+    {
+      "source": "src/ncdqa/retrieval/bm25.py",
+      "destination": "src/ncdqa/retrieval/bm25.py",
+      "sha256": "ccd34744e57d51ff77abc1adce307579d48a9b50d8e085112b343f2834b47221"
+    },
+    {
+      "source": "src/ncdqa/retrieval/thai_tokens.py",
+      "destination": "src/ncdqa/retrieval/thai_tokens.py",
+      "sha256": "6ca66609f4dd28203b3d64ece5140a57f1c7d2f690a7df0df429c95ccfef93c4"
+    },
+    {
+      "source": "src/ncdqa/retrieval/evaluate.py",
+      "destination": "src/ncdqa/retrieval/evaluate.py",
+      "sha256": "3296bc645f8ff90a2c340d71231637acb3808aaf5ddcc206d97df00bbb841cc0"
+    },
+    {
+      "source": "src/ncdqa/retrieval/answer_match.py",
+      "destination": "src/ncdqa/retrieval/answer_match.py",
+      "sha256": "e640043e73a30a392f731e4b3440a7e177245de026a251c8c81e8cc3f09fde68"
+    },
+    {
+      "source": "src/ncdqa/__init__.py",
+      "destination": "src/ncdqa/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "configs/retrieval/serve_v1.json",
+      "destination": "configs/retrieval/serve_v1.json",
+      "sha256": "c6e3163240fbd98e32dc060fe5889a00a458599618f371d57f904d26c40ecb51"
+    },
+    {
+      "source": "configs/retrieval/frozen_v1.json",
+      "destination": "configs/retrieval/frozen_v1.json",
+      "sha256": "2ca4cba42ec61557cf494d94359c4bd41d9c9dcc0b34a2380fea21b379465080"
+    },
+    {
+      "source": "data/index/chunks-v12-t128/chunks.jsonl",
+      "destination": "data/index/chunks-v12-t128/chunks.jsonl",
+      "sha256": "2db734d48d9384305051288d30cc765e0c67f23b13576d617c8f01c7124e550e"
+    },
+    {
+      "source": "data/index/chunks-v12-t128/chunk_stats.json",
+      "destination": "data/index/chunks-v12-t128/chunk_stats.json",
+      "sha256": "33f3d2f8c8f37af88bd17cf2d96cd74278bff3574a696ae4cf5fc7f160649fee"
+    },
+    {
+      "source": "data/index/chunks-v12-t512/chunks.jsonl",
+      "destination": "data/index/chunks-v12-t512/chunks.jsonl",
+      "sha256": "4beb721e181b5ef344754b37479fecda1874657b889bdeca4502d4e8ec31088c"
+    },
+    {
+      "source": "data/index/chunks-v12-t512/chunk_stats.json",
+      "destination": "data/index/chunks-v12-t512/chunk_stats.json",
+      "sha256": "1e85991dc08312ae95b520a282b52545e32634335d2b4f0f18d93543d3629c7b"
+    },
+    {
+      "source": "data/index/dense-bge-m3-t128-v12/vectors.npy",
+      "destination": "data/index/dense-bge-m3-t128-v12/vectors.npy",
+      "sha256": "ff5effce8de382f81cd9071515306f887003fba49a92ff1d91636799a9bef09a"
+    },
+    {
+      "source": "data/index/dense-bge-m3-t128-v12/chunk_ids.json",
+      "destination": "data/index/dense-bge-m3-t128-v12/chunk_ids.json",
+      "sha256": "0a849c51cca54bec8287e9107e76f1da2db8e3be5892988e9dad98ac2c49020d"
+    },
+    {
+      "source": "data/index/dense-bge-m3-t128-v12/index_manifest.json",
+      "destination": "data/index/dense-bge-m3-t128-v12/index_manifest.json",
+      "sha256": "7dc3e5482abf27abf8987ce0e3d1db4316d00930f22ec2271152471c3126083e"
+    },
+    {
+      "source": "data/handoff/track_c_20261012/questions_all_reviewed.jsonl",
+      "destination": "data/gold/questions_all_reviewed.jsonl",
+      "sha256": "680a752e738d7a60f463345c08e3e098934ab945df2183a8bb1e0d97b1f6ddea"
+    },
+    {
+      "source": "data/manifests/corpus_normalized-v12_inventory.json",
+      "destination": "data/manifests/corpus_normalized-v12_inventory.json",
+      "sha256": "1862de303a1a44797a9d02697fffbf74efc3695ce540feba017d40d911ec42b9"
+    },
+    {
+      "source": "data/index/runs/final/dev-A-bge-m3/results.jsonl",
+      "destination": "data/frozen/dev-A/results.jsonl",
+      "sha256": "b94b90edcbf1ff9559a7a8ff9604840cc8c620b5c516fa9c226797dabbe25a4c"
+    },
+    {
+      "source": "data/index/runs/final/dev-A-bge-m3/metrics.json",
+      "destination": "data/frozen/dev-A/metrics.json",
+      "sha256": "286f510a1e9cd43f1831b7f12189e2f6ad2140df5f21bda02f03aba30fa36372"
+    },
+    {
+      "source": "data/index/runs/final/dev-A-bge-m3/run_manifest.json",
+      "destination": "data/frozen/dev-A/run_manifest.json",
+      "sha256": "a388543194341db9d754b6e1cf575f37fcbe8d268d2c17af5883292cb3dcc2f8"
+    },
+    {
+      "source": "data/index/runs/final/dev-A-bge-m3/config.json",
+      "destination": "data/frozen/dev-A/config.json",
+      "sha256": "f87f47d2bcc0c5d73b59a98a12a90214491075d1e4e376c866940f159165a107"
+    },
+    {
+      "source": "data/index/runs/final/dev-B-bge-m3/results.jsonl",
+      "destination": "data/frozen/dev-B/results.jsonl",
+      "sha256": "e61104c5d13d1491289287d0db9d7e9a7ad08e71f810dd911e9f3b5de8964240"
+    },
+    {
+      "source": "data/index/runs/final/dev-B-bge-m3/metrics.json",
+      "destination": "data/frozen/dev-B/metrics.json",
+      "sha256": "606285628b52796ef56def30129a408ae78ac2cdeb4bbc36241182c4129bff1d"
+    },
+    {
+      "source": "data/index/runs/final/dev-B-bge-m3/run_manifest.json",
+      "destination": "data/frozen/dev-B/run_manifest.json",
+      "sha256": "9eae7711d5c201da903871b00026d1e9e9afb1bc88c413ee2831d34772aa680a"
+    },
+    {
+      "source": "data/index/runs/final/dev-B-bge-m3/config.json",
+      "destination": "data/frozen/dev-B/config.json",
+      "sha256": "d7c0721c51c911f97cfa3c2e6939b04df9517faf29473d499a284b66cc312210"
+    },
+    {
+      "source": "data/index/runs/final/dev-C-bge-m3/results.jsonl",
+      "destination": "data/frozen/dev-C/results.jsonl",
+      "sha256": "381917fa93e06bf84920d01c93eb22119372f3fe5a321653d7f9e83b036e69af"
+    },
+    {
+      "source": "data/index/runs/final/dev-C-bge-m3/metrics.json",
+      "destination": "data/frozen/dev-C/metrics.json",
+      "sha256": "5cf07e4d0af96614a9ad08abd3155405fc9221b9001bd26f76384f67e331dc41"
+    },
+    {
+      "source": "data/index/runs/final/dev-C-bge-m3/run_manifest.json",
+      "destination": "data/frozen/dev-C/run_manifest.json",
+      "sha256": "7639e904a65b0442ab7cf798ff86c4f2a7c29575f7879640e2636c9658fbc96b"
+    },
+    {
+      "source": "data/index/runs/final/dev-C-bge-m3/config.json",
+      "destination": "data/frozen/dev-C/config.json",
+      "sha256": "fcb88cc725bb5619d8796628222c48c3b84ee28bb1154ced044328f6a3406687"
+    },
+    {
+      "source": "data/index/runs/final/test-A-bge-m3/results.jsonl",
+      "destination": "data/frozen/test-A/results.jsonl",
+      "sha256": "ab928831091b130ae9b3cd58ed4a883262403980e17567a8f24ce4cf35e46005"
+    },
+    {
+      "source": "data/index/runs/final/test-A-bge-m3/metrics.json",
+      "destination": "data/frozen/test-A/metrics.json",
+      "sha256": "fd595f704cb8d270d7825fa80eea2616a3f976a11153b1e00b2705935805c6f0"
+    },
+    {
+      "source": "data/index/runs/final/test-A-bge-m3/run_manifest.json",
+      "destination": "data/frozen/test-A/run_manifest.json",
+      "sha256": "927f5f4fe8ebf5aa2e7f7f13183937c1b62c3ffad8795a00385eca406395aeef"
+    },
+    {
+      "source": "data/index/runs/final/test-A-bge-m3/config.json",
+      "destination": "data/frozen/test-A/config.json",
+      "sha256": "0273d47da63c9499f397ed293d8e1343efe71e5026e556fcbd21930740f667d9"
+    },
+    {
+      "source": "data/index/runs/final/test-B-bge-m3/results.jsonl",
+      "destination": "data/frozen/test-B/results.jsonl",
+      "sha256": "c588946442a010e1e8ddfc70507a0e3d150aa6c769ea999d1c31324f7147a223"
+    },
+    {
+      "source": "data/index/runs/final/test-B-bge-m3/metrics.json",
+      "destination": "data/frozen/test-B/metrics.json",
+      "sha256": "365c2131f31258a28a149e55ed6ae8d69aabf2b23a6bbb634f2d15ed4b9b3674"
+    },
+    {
+      "source": "data/index/runs/final/test-B-bge-m3/run_manifest.json",
+      "destination": "data/frozen/test-B/run_manifest.json",
+      "sha256": "278a5eca8e40e89882ae77642d514e6229885864e905d139886f46634e93afbe"
+    },
+    {
+      "source": "data/index/runs/final/test-B-bge-m3/config.json",
+      "destination": "data/frozen/test-B/config.json",
+      "sha256": "4edf6f628a3606ab03ddf7fd0ead941cf907a0b3e0223ff2337d9dc887908066"
+    },
+    {
+      "source": "data/index/runs/final/test-C-bge-m3/results.jsonl",
+      "destination": "data/frozen/test-C/results.jsonl",
+      "sha256": "29ede06911fd607afdb0a12beb7528c8f7c4dc11ae40acc907484d2411706f66"
+    },
+    {
+      "source": "data/index/runs/final/test-C-bge-m3/metrics.json",
+      "destination": "data/frozen/test-C/metrics.json",
+      "sha256": "a62426005dc994e59b0245ef395b2b3a8f3458c8e64785afe47c178234d3a7f2"
+    },
+    {
+      "source": "data/index/runs/final/test-C-bge-m3/run_manifest.json",
+      "destination": "data/frozen/test-C/run_manifest.json",
+      "sha256": "3777de028fc5cc7355debdcd1fe66a77edfe6a74ea95263926a00c3ff0b15947"
+    },
+    {
+      "source": "data/index/runs/final/test-C-bge-m3/config.json",
+      "destination": "data/frozen/test-C/config.json",
+      "sha256": "70bffba0bd84e222a5a0bbaccc8dc9d1af0313f2ca3d666f8072a5ad767b9941"
+    },
+    {
+      "source": "data/schemas/rag/question.schema.json",
+      "destination": "schemas/question.schema.json",
+      "sha256": "e30ba8cef29c10315a35a78f3818b3d512d81b6cbfcef87fb5a7bfd49f6e0d1e"
+    },
+    {
+      "source": "data/schemas/rag/retrieval_result.schema.json",
+      "destination": "schemas/retrieval_result.schema.json",
+      "sha256": "97f38ead772153b2678105d5a26eeea5963ba6fff480dffedc24500d651abfaf"
+    }
+  ],
+  "rights": "Corpus stays private. Publishing requires a separately cleared corpus or authorized access."
+}

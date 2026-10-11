@@ -1,0 +1,15 @@
+{
+  "id": "frozen_v1",
+  "frozen_at": "2026-10-11, before any test question was scored",
+  "corpus_version": "normalized-v12 (Clinic Plus manual excluded from search by owner decision)",
+  "primary": {
+    "model": "bge-m3",
+    "dense": "parent-child: child chunks 128 tokens (chunks-v12-t128, vectors from Kaggle T4 float16) -> parent chunks 512 tokens (chunks-v12-t512)",
+    "lexical": {"library": "bm25s (Lucene variant)", "tokenizer": "char3", "k1": 2.18, "b": 0.86, "text": "header_text + text of the 512-token chunks"},
+    "fusion": {"type": "convex combination of min-max scores", "alpha": 0.6, "pool": 100},
+    "k": 10
+  },
+  "why": "Chosen on gold dev only (docs/hybrid_retrieval_experiment.md). bge-m3 had the higher dense and hybrid Recall@5 than e5-base on dev; convex combination beat RRF and dense alone; tokenizer, k1/b and alpha 0.5-0.7 were not separable from noise, so the values the sweep selected are used as they are and are not tuned further.",
+  "test_runs": "variant A (dense parent-child, same index) and variant B (this configuration), each run once with scripts/run_retrieval.py --split test; e5-base is reported on dev only",
+  "not_tested_on_test": ["reranker", "doc2query", "query rewriting", "e5-base"]
+}
