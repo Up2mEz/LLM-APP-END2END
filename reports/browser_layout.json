@@ -1,0 +1,103 @@
+{
+  "checks": [
+    {
+      "overflowing": [],
+      "scrollWidth": 305,
+      "smallTargets": [],
+      "submitBottom": 995.0312728881836,
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 360,
+      "smallTargets": [],
+      "submitBottom": 946.8437728881836,
+      "viewport": 375,
+      "width": 360
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 399,
+      "smallTargets": [],
+      "submitBottom": 946.8437728881836,
+      "viewport": 414,
+      "width": 399
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 753,
+      "smallTargets": [],
+      "submitBottom": 887.8542098999023,
+      "viewport": 768,
+      "width": 753
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 305,
+      "smallTargets": [],
+      "submitBottom": 455.6979293823242,
+      "viewport": 320,
+      "width": 305
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 305,
+      "smallTargets": [],
+      "submitBottom": -561.6354141235352,
+      "viewport": 320,
+      "width": 305,
+      "state": "answered q045"
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 360,
+      "smallTargets": [],
+      "submitBottom": -458.4896011352539,
+      "viewport": 375,
+      "width": 360,
+      "state": "answered q045"
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 399,
+      "smallTargets": [],
+      "submitBottom": -458.4896011352539,
+      "viewport": 414,
+      "width": 399,
+      "state": "answered q045"
+    },
+    {
+      "overflowing": [],
+      "scrollWidth": 753,
+      "smallTargets": [],
+      "submitBottom": -387.5521011352539,
+      "viewport": 768,
+      "width": 753,
+      "state": "answered q045"
+    }
+  ],
+  "reducedMotion": {
+    "tested": true,
+    "resultAnimation": "none",
+    "loaderAnimation": "none",
+    "overrideReset": true
+  },
+  "interactions": [
+    "help modal and return focus",
+    "example question",
+    "clear input",
+    "real answer q045",
+    "copy with citations",
+    "citation anchor",
+    "source disclosure",
+    "abstention q125",
+    "whitespace validation: inline error + focus, no API call"
+  ],
+  "consoleErrorsObserved": [],
+  "pdf": {
+    "pages": 6,
+    "all_pages_visually_reviewed": true
+  },
+  "viewportOverrideReset": true
+}

@@ -6,7 +6,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .agent import PROMPT_VERSION, SYSTEM_PROMPT
+from .agent import PROMPT_VERSION, SYSTEM_PROMPT, SEARCH_SYSTEM_PROMPT, VERIFY_SYSTEM_PROMPT
 from .config import ROOT
 from .retrieval import file_hash
 
@@ -73,10 +73,10 @@ def make_dev_plan(limit=30):
         for kind in sorted(buckets):
             if buckets[kind] and len(selected) < limit:
                 selected.append(buckets[kind].pop(0))
-    plan = {"id": "gemma-dev-v1", "split": "dev", "scope": "development evaluation, not a held-out test",
+    plan = {"id": "gemma-dev-v5", "split": "dev", "scope": "development evaluation, not a held-out test",
             "qids": [q["qid"] for q in selected], "type_counts": dict(Counter(q["type"] for q in selected)),
             "question_hash": file_hash(ROOT / "data/gold/questions_all_reviewed.jsonl"),
-            "prompt_version": PROMPT_VERSION, "prompt_sha256": hashlib.sha256(SYSTEM_PROMPT.encode()).hexdigest(),
+            "prompt_version": PROMPT_VERSION, "prompt_sha256": hashlib.sha256((SEARCH_SYSTEM_PROMPT + SYSTEM_PROMPT + VERIFY_SYSTEM_PROMPT).encode()).hexdigest(),
             "model": "gemma-4-E4B-it", "selection": "round-robin types; SHA256(ncd-gemma-dev-v1:qid) order",
             "temperature": 0, "maximum_model_requests": limit * 4,
             "metrics": ["completion rate", "abstention decision accuracy", "citation primary-evidence coverage", "character F1 (lexical proxy only)"],
@@ -105,7 +105,7 @@ def char_f1(predicted, expected):
 def evaluate_agent(agent, limit=30):
     from ncdqa.retrieval.evaluate import covers
     selected, plan = make_dev_plan(limit)
-    folder = ROOT / "private/runs/gemma-dev-v1"
+    folder = ROOT / f"private/runs/{plan['id']}"
     folder.mkdir(parents=True, exist_ok=True)
     output = folder / "answers.jsonl"
     completed = {r["qid"]: r for r in rows(output)} if output.exists() else {}

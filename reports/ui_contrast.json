@@ -1,0 +1,60 @@
+{
+  "method": "OKLCH to linear sRGB with gamut clipping; representative computed UI pairs, not full accessibility certification",
+  "pairs": [
+    {
+      "foreground": "ink",
+      "background": "paper",
+      "wcag_ratio": 13.79
+    },
+    {
+      "foreground": "ink",
+      "background": "surface",
+      "wcag_ratio": 14.37
+    },
+    {
+      "foreground": "muted",
+      "background": "paper",
+      "wcag_ratio": 6.71
+    },
+    {
+      "foreground": "muted",
+      "background": "surface",
+      "wcag_ratio": 7.0
+    },
+    {
+      "foreground": "surface",
+      "background": "accent",
+      "wcag_ratio": 6.35
+    },
+    {
+      "foreground": "accent",
+      "background": "paper",
+      "wcag_ratio": 6.1
+    },
+    {
+      "foreground": "success",
+      "background": "success_bg",
+      "wcag_ratio": 8.85
+    },
+    {
+      "foreground": "warning",
+      "background": "warning_bg",
+      "wcag_ratio": 8.37
+    },
+    {
+      "foreground": "error",
+      "background": "error_bg",
+      "wcag_ratio": 8.01
+    },
+    {
+      "foreground": "focus",
+      "background": "paper",
+      "wcag_ratio": 7.76
+    },
+    {
+      "foreground": "focus",
+      "background": "surface",
+      "wcag_ratio": 8.09
+    }
+  ]
+}

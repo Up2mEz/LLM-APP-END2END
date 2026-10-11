@@ -1,41 +1,29 @@
 # สถานะงาน 11 ตุลาคม 2026
 
-แอปอยู่ใน `D:\KMITL\LLMapp\ncd-gemma` ใช้สำเนา gold, chunks, vectors และ retrieval code จากต้นทาง งานนี้ไม่มีการแก้ไฟล์ใน repository ต้นทาง ตรวจ SHA-256 ของไฟล์ที่อ่านทั้ง 48 ไฟล์แล้วไม่พบความเปลี่ยนแปลง ขอบเขตนี้ไม่ใช่การยืนยันว่า working tree ทั้ง repo ไม่มีงานของผู้อื่น
+ทำงานใน D:\KMITL\LLMapp\ncd-gemma โดยใช้สำเนา gold, chunks, vectors และ retrieval เดิม ตรวจไฟล์ต้นทางที่เกี่ยวข้อง 48 ไฟล์แล้ว SHA-256 ไม่เปลี่ยน ขอบเขตนี้ไม่ใช่การยืนยันว่า repo ต้นทางทั้งชุดไม่มีงานของผู้อื่น
 
 ## ทำแล้ว
 
-- สร้าง Git repository และ environment Python 3.12.13 แยกภายในโฟลเดอร์ใหม่
-- นำเข้าไฟล์ตาม allow-list พร้อมบันทึก provenance และตรวจ SHA-256 ก่อน/หลัง copy
-- ต่อ OpenAI SDK กับ `gemma-4-E4B-it` ผ่าน class proxy ของวิชา เก็บ key เฉพาะ `.env` ที่ Git ignore
-- เพิ่ม native `search_docs`, agent loop, argument/answer validation, citation quote validation, bounded repair, timeout, cache และ trace
-- ใช้ retrieval variant B เดิม ไม่มีการเปลี่ยน gold, chunking, vectors หรือ ranking algorithm
-- เพิ่ม FastAPI และหน้าเว็บภาษาไทยสำหรับคำถาม คำตอบ แหล่งอ้างอิง และ trace
-- ล็อก dev evaluation 30 ข้อ พร้อม evaluator ที่แยก reference answer ออกจาก model context
-- เตรียม proposal, README, dependency lock, demo script และ PDF ฉบับร่าง 6 หน้า
+- OpenAI SDK + gemma-4-E4B-it ผ่าน class proxy, native search_docs, bounded agent loop, cache และ trace
+- Safe parser สำหรับ Gemma native arguments, JSON normalization ก่อนส่ง tool history และละ tool_choice เมื่อไม่มี tools
+- Answer schema, ตรวจ quote/source IDs รวม grouped citations และตรวจคำตอบกับหลักฐานอีกหนึ่งรอบด้วย Gemma ตัวเดิม รวมใน budget 4 calls/150 วินาที
+- UI ภาษาไทยสำหรับผู้ใช้ทั่วไป โทนฟ้า–ขาวตาม Hallmark, mascot หนังสือ, copy/clear/help/source disclosure และ animation ที่รองรับ reduced motion
+- Unit/API tests 50 passed, 0 failed/error/skipped มี Starlette deprecation warning 1 รายการ
+- Dev 30 ข้อเดิมครบ: v5 ตอบ 18 งดตอบ 12; completion 28/30, abstention decision accuracy 0.7000, citation primary-evidence hit rate 0.5200, character F1 0.2344
+- Browser tests: ตอบจริง q045, งดตอบ q125, copy, anchors, details, examples, clear และ dialog; UI ใช้ cached proxy completions จาก evaluation เพื่อไม่สิ้นเปลืองการเรียกซ้ำ
+- ตรวจ layout 320/375/414/768 px และ desktop 1280×800; ทดสอบ reduced motion แล้วคืนค่า override
+- Frozen retrieval metrics ตรงเดิม 6 runs: B Recall@5 0.8846, MRR@10 0.7374 บน answerable test 52 ข้อ ไม่ใช่ answer accuracy
+- ตั้ง origin ไป Up2mEz/LLM-APP-END2END แล้ว ไม่มีการ push หรือเผยแพร่ corpus
 
-## หลักฐานการตรวจ
+## ข้อจำกัดที่พบจริง
 
-| การตรวจ | ผลและขอบเขต |
-|---|---|
-| Unit/API tests | 30 passed, 0 failed/error/skipped; ใช้ fake model/retriever |
-| Pytest JUnit | XML อ่านได้ครบ 30 ข้อ; runtime แจ้ง WMI exception ระหว่างดึง hostname ในขั้นสร้าง XML แต่ process exit 0 และ pytest สรุป 30 passed |
-| Native proxy probe | เรียก class proxy จริง ได้ `search_docs` tool call; ยังไม่ได้ส่งข้อความ corpus |
-| Retrieval probe | โหลด BGE-M3/index จริง สำเร็จในประมาณ 298 วินาที แล้วค้นได้ 3 hits |
-| Frozen metrics | คำนวณซ้ำจาก saved ranked hits ตรงเดิมทั้ง dev/test A/B/C รวม 6 runs; ไม่ใช่รัน retrieval test ใหม่ |
-| Source integrity | ไฟล์ต้นทางที่ใช้ทั้ง 48 ไฟล์ hash ไม่เปลี่ยน |
-| Local HTTP health | HTTP endpoint ตอบพร้อม ตั้งค่า proxy และพบข้อมูล; server ยังไม่ได้โหลด retriever จนกว่าจะมีคำถาม |
-| PDF | 6 หน้า ตรวจภาพ render ทั้ง 6 หน้าแล้ว ไม่มีข้อความล้นหรือ glyph ไทยหาย |
+อ่าน ANSWER_REVIEW_TH.md สำหรับทั้ง 30 ข้อ ยังมี table misreading, missing sub-answers, population/context mismatch และ false acceptance ของ verifier การทดสอบ code ผ่านไม่ได้แปลว่าคำตอบสุขภาพถูกทั้งหมด
 
-ผล frozen test ของ B: Recall@5 0.8846, MRR@10 0.7374 เทียบ A: 0.8077, 0.6181 ใช้ answerable 52 ข้อ ผลนี้ไม่ใช่ answer accuracy ของ Gemma
+v1 หยุดหลัง 17 ข้อเนื่องจาก native arguments/HTTP 400; v2–v3 ใช้ 30 ข้อเดิมเพื่อปรับ protocol/prompt; v4 รอบตรวจติด HTTP 400 จาก empty tools; v5 แก้ adapter แล้ว ใช้ cache ของ candidate responses โดยเพิ่ม live verification เท่าที่จำเป็น เก็บ raw runs/metrics เก่าไว้ครบ ไม่ลบข้อผิดพลาด
 
-## ยังไม่เสร็จและเหตุผล
+## งานส่งที่ยังเหลือ ตามขอบเขตที่ตกลง
 
-1. การรัน Gemma dev 30 ข้อยังไม่เริ่ม ระบบอนุมัติอัตโนมัติปฏิเสธการส่งคำถามและข้อความ corpus ภายในไปยัง `https://llm.nat-d.uk` โดยขอสิทธิ์ส่งข้อมูลเฉพาะส่วนนี้เพิ่ม มีคำถามยืนยันส่งให้ผู้ใช้แล้ว ไม่มีการเปลี่ยนช่องทางเพื่อหลบการปฏิเสธ
-2. การตรวจ UI ด้วย browser ยังไม่สำเร็จ เพราะ Codex เปิด webview ใหม่ไม่ได้ (attach timeout) แม้ local HTTP health ตอบได้ จึงยังไม่มีหลักฐาน browser end-to-end
-3. PDF เป็นฉบับร่าง ต้องเติมผลจริง ตัวอย่าง success/failure และข้อมูลผู้จัดทำหลังประเมินครบ
-4. Q1 public reproducibility ยังติดสิทธิ์เผยแพร่ corpus เดิม ยังไม่มี remote repository หรือการ push ถ้าต้องใช้ public subset ให้ version และประเมินใหม่
-5. Q3 มี demo script แต่ยังไม่มีวิดีโอ 3–6 นาทีหรือ deployed URL ที่ผู้ตรวจเข้าถึงได้
-
-## ขั้นตอนต่อเมื่ออนุญาตส่งข้อมูลแล้ว
-
-รัน `.venv312\Scripts\python -m ncd_gemma.cli evaluate agent` ตาม plan ที่ล็อกไว้ ตรวจคำตอบและ failure จากไฟล์จริง หากต้องแก้ prompt หรือ protocol ให้เก็บ version/ผลเก่าและสร้างแผน version ใหม่อย่างชัดเจน จากนั้นตรวจ UI, สร้าง PDF ใหม่ และจัด public deliverable ตามสิทธิ์ข้อมูลที่ยืนยันแล้ว
+1. ใช้ corpus ในเครื่องก่อนตามผู้ใช้สั่ง public reproducibility ยังต้องจัดสิทธิ์ข้อมูลหรือทำ public subset พร้อมประเมินใหม่
+2. ต้องเติมชื่อผู้จัดทำในรายงานและตรวจเนื้อหาก่อนส่ง
+3. มี demo script และ local app แต่ยังไม่มีวิดีโอ 3–6 นาทีหรือ deployed URL ที่ผู้ตรวจเข้าถึงได้
+4. ต้องปรับและตรวจความถูกต้องของคำตอบกับผู้มีความรู้ก่อนใช้ตัดสินใจเรื่องสุขภาพ ไม่ถือว่า same-model verifier เป็นหลักประกัน

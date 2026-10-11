@@ -81,14 +81,15 @@ flowchart LR
     R --> E[Evidence IDs / text / document / page]
     E --> A
     A --> C[Answer schema + citation quote validation]
-    C --> U
+    C --> V2[Same-model evidence review / fail closed]
+    V2 --> U
     GOLD[Gold dev/test] --> EV[Evaluation only]
     EV --> M[Metrics / baseline comparison]
 ```
 
 Gold ไม่ถูกโหลดโดย serving layer และไม่มี reference answers ถูกส่งให้ Gemma ฝั่ง retrieval ใช้ child 128 tokens, parent 512 tokens, bge-m3, BM25 char3, k1=2.18, b=0.86 และ min-max convex fusion alpha=0.6, pool=100 ตาม frozen config เดิม
 
-Agent บังคับเริ่มด้วย `search_docs` จากนั้นเลือกค้นเพิ่มหรือตอบได้เอง เก็บ assistant tool calls และส่ง tool result กลับพร้อม `tool_call_id` ที่ตรงกัน จำกัด 4 model rounds, 3 searches, top_k ไม่เกิน 8 และ context รวม 18,000 ตัวอักษร ปฏิเสธ query/filter ซ้ำ ชื่อ tool อื่น และ filter ที่ไม่มีใน metadata รอบสุดท้ายปิดการเรียก tools มี request timeout และ agent deadline
+Agent บังคับเริ่มด้วย `search_docs` จากนั้นเลือกค้นเพิ่มหรือตอบได้เอง เก็บ assistant tool calls และส่ง tool result กลับพร้อม `tool_call_id` ที่ตรงกัน จำกัด 4 model rounds รวม verification, 3 searches, top_k ไม่เกิน 8 และ context รวม 18,000 ตัวอักษร ปฏิเสธ query/filter ซ้ำ ชื่อ tool อื่น และ filter ที่ไม่มีใน metadata รอบสุดท้ายปิดการเรียก tools มี request timeout และ agent deadline
 
 Final answer ผ่าน Pydantic schema มีสถานะ answered หรือ insufficient_evidence ทุก citation ต้องอ้าง source ID ที่ tool ส่งมาจริง quote ต้องอยู่ในข้อความที่ model เห็น และ citation markers ในคำตอบต้องตรงกับรายการอ้างอิง ถ้าผิดให้แก้ได้หนึ่งรอบ แล้วหยุดอย่างชัดเจน การตรวจนี้ยืนยันที่มาของ quote ไม่ได้พิสูจน์ความหมายของคำตอบทุกประโยค
 
@@ -116,19 +117,29 @@ B เพิ่ม Recall@5 7.69 percentage points และ MRR@10 0.1193 เม
 | 4 Agentic tool calling | Gemma native search_docs loop + stop conditions |
 | 6 Served interface | FastAPI REST API + Thai browser UI |
 
-มี incremental Git commits สำหรับงานนี้ อ่าน proposal และ demo script ใน `docs/` และรายงานผลจริงใน `reports/` ยังต้องตรวจความพร้อมของ public corpus/repository และส่ง PDF/demo URL ตามรายการส่งจริง
+มี incremental Git commits สำหรับงานนี้ อ่าน proposal และ demo script ใน `docs/` และรายงานผลจริงใน `reports/` ตั้ง origin เป็น https://github.com/Up2mEz/LLM-APP-END2END แล้ว ยังไม่ได้ push ตามขอบเขตใช้ corpus ในเครื่องก่อน ต้องตรวจความพร้อมของ public corpus/repository และส่ง PDF/demo URL ตามรายการส่งจริง
 
 ## สถานะการตรวจล่าสุด
 
-- Unit/API tests ผ่าน 30 ข้อ ครอบคลุม protocol, validation, budget, error และ HTTP boundaries ด้วย model/retriever จำลอง
-- เรียก Gemma ผ่าน class proxy จริงได้ และได้ native `search_docs` tool call กลับมา การตรวจนี้ยังไม่ได้ส่ง corpus ให้ model
-- โหลด BGE-M3/index จากสำเนาในโปรเจคนี้และค้นหลักฐานจริงได้
-- คำนวณ strict retrieval metrics จาก frozen ranked hits ได้ตรงเดิมทั้ง 6 runs
-- SHA-256 ของไฟล์ต้นทางทั้ง 48 ไฟล์ที่อ่านยังตรงกับก่อนคัดลอก ดู `reports/source_integrity.json`
-- Dev evaluation 30 ข้อยังไม่เริ่ม: ระบบอนุมัติการทำงานปฏิเสธการส่งคำถามและข้อความ corpus ไปยัง class proxy โดยขอสิทธิ์ส่งข้อมูลที่ชัดเจนเพิ่ม ยังไม่มีผล Gemma answer quality ให้สรุป
-- API health ผ่าน แต่การเปิดแท็บใน Codex ติด webview attach timeout จึงยังไม่ได้ยืนยันหน้าเว็บด้วยภาพหรือการใช้งาน end-to-end
+- Unit/API tests ผ่าน **50 ข้อ** ไม่มี failed/error/skipped ตรวจ adapter, native protocol, citations, verification budget และ API boundaries ด้วย fake model/retriever
+- รัน Gemma dev **30 ข้อเดิม** ครบใน `gemma-dev-v5`: ตอบ 18 ข้อ งดตอบ 12 ข้อ; stop reason completed 28/30, answer validation failed 1 และ verification invalid 1
+- Abstention decision accuracy **0.7000**, citation primary-evidence hit rate **0.5200**, character F1 **0.2344** ตัวเลขเหล่านี้ไม่ใช่ความถูกต้องทางคลินิก
+- ตรวจเทียบคำตอบกับ reference พบการอ่านตารางผิด ตอบไม่ครบ และสับสนบริบท แม้ same-model verifier อนุมัติบางข้อ จึงยังต้องตรวจโดยผู้มีความรู้ก่อนใช้ตัดสินใจ ดู [รายการตรวจรายข้อ](docs/ANSWER_REVIEW_TH.md)
+- รักษาผล v1–v4 ทั้งหมดไว้ใน `private/runs/` และ `reports/history/` รอบที่ล้มเหลวไม่ได้ถูกตัดออกเพื่อทำให้ผลดูดี
+- หน้าเว็บใช้ Hallmark โทนฟ้า–ขาว มี CSS book mascot, คัดลอกคำตอบ, เปิดบริบท, help dialog, loading และ reduced motion
+- Browser tests ผ่านเส้นทาง answered/abstention, copy, source anchor/disclosure และ form controls บนแอปจริง; การทดสอบ UI ใช้ completions ที่ cache จาก evaluation ขณะที่ retrieval ทำงานจริง
+- ตรวจ 320/375/414/768 px ไม่พบ horizontal overflow หรือเป้าหมายปุ่มเล็กกว่า 44 px; บันทึกใน `reports/browser_layout.json`
+- คำนวณ frozen metrics ตรงเดิมทั้ง 6 runs; hashes ต้นทาง 48 ไฟล์ไม่เปลี่ยน
 
-รายงาน PDF เป็นฉบับร่าง 6 หน้า สร้างได้ด้วย `.venv312\Scripts\python scripts/build_report.py` และเก็บที่ `output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf` ต้องรัน agent evaluation แล้วสร้างใหม่ก่อนใช้เป็นฉบับส่ง ข้อมูลผู้จัดทำและ public demo link ยังต้องเติม
+อ่าน [สถานะงาน](docs/IMPLEMENTATION_STATUS_TH.md) และ [ผลตรวจดีไซน์](docs/UI_REVIEW_TH.md) รายงาน PDF สร้างจาก artifacts จริงด้วย `.venv312\Scripts\python scripts/build_report.py` ที่ `output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf` ยังต้องเติมผู้จัดทำและ demo URL ก่อนส่ง
+
+## ข้อสังเกตจาก class proxy
+
+Proxy ส่ง Gemma native syntax อยู่ใน `function.arguments` บางครั้ง จึง parse รูปแบบที่อนุญาตด้วย parser ที่ไม่ใช้ eval แล้วส่งกลับเป็น JSON ที่ผ่าน schema ก่อนทำ tool call รอบถัดไป Raw response ยังอยู่ใน cache
+
+รอบตรวจคำตอบแยกใช้ Gemma ตัวเดิมเปรียบเทียบ question/answer/evidence โดยไม่รับ gold label ต้องละ `tools` และ `tool_choice` เมื่อไม่ใช้ tools เพราะ proxy ปฏิเสธ empty tools + tool_choice คำตอบที่ตรวจไม่ได้จะงดตอบ รอบตรวจนี้นับรวมใน budget 4 model calls และ 150 วินาที ไม่ใช่ independent verifier และยังปล่อยคำตอบผิดบางข้อ
+
+แหล่ง protocol: [Google Gemma 4 function calling](https://ai.google.dev/gemma/docs/capabilities/text/function-calling-gemma4) พฤติกรรม HTTP 400 ข้างต้นตรวจพบจาก class proxy จริง ไม่ได้อนุมานว่าใช้ server implementation ใด
 
 ## การเผยแพร่และข้อจำกัด
 

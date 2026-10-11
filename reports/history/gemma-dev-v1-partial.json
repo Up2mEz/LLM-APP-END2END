@@ -1,0 +1,25 @@
+{
+  "status": "interrupted_after_repeated_protocol_failure",
+  "completed_questions": 17,
+  "planned_questions": 30,
+  "qids_completed": [
+    "q014",
+    "q017",
+    "q113",
+    "q126",
+    "q079",
+    "q125",
+    "q041",
+    "q068",
+    "q108",
+    "q045",
+    "q080",
+    "q116",
+    "q081",
+    "q093",
+    "q111",
+    "q099",
+    "q082"
+  ],
+  "reason": "Proxy returned Gemma native syntax or answer JSON inside function.arguments; invalid JSON in assistant history caused HTTP 400. Kept raw responses and answers; v2 changes protocol handling and uses the same dev questions."
+}

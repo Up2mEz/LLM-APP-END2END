@@ -9,6 +9,8 @@ def test_ui_health_and_no_secret_in_health():
     assert body["model"] == "gemma-4-E4B-it"
     assert "api_key" not in body
     assert client.get("/style.css").status_code == 200
+    assert client.get("/tokens.css").status_code == 200
+    assert client.get("/clinic.css").status_code == 200
 
 
 def test_reject_empty_and_extra_fields():

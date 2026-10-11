@@ -4,7 +4,7 @@ import threading
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
@@ -74,6 +74,11 @@ def evaluation():
         raise HTTPException(404, "ยังไม่ได้สร้างผล evaluation")
     import json
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+@app.get("/tokens.css", include_in_schema=False)
+def design_tokens():
+    return FileResponse(ROOT / "tokens.css", media_type="text/css")
 
 
 app.mount("/", StaticFiles(directory=ROOT / "static", html=True), name="static")

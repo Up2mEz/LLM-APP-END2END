@@ -30,7 +30,10 @@ class ProxyClient:
 
     def complete(self, messages: list[dict], tools: list[dict], tool_choice, remaining: float):
         payload = {"model": self.settings.model, "messages": messages, "temperature": 0,
-                   "max_tokens": self.settings.max_output_tokens, "tools": tools, "tool_choice": tool_choice}
+                   "max_tokens": self.settings.max_output_tokens}
+        # The class proxy rejects tool_choice when no tools are supplied.
+        if tools:
+            payload.update(tools=tools, tool_choice=tool_choice)
         key = hashlib.sha256(json.dumps({"endpoint": self.endpoint_identity, "payload": payload},
                                        ensure_ascii=False, sort_keys=True).encode()).hexdigest()
         path = self.settings.cache_dir / f"{key}.json"

@@ -1,5 +1,5 @@
 {
-  "id": "gemma-dev-v1",
+  "id": "gemma-dev-v5",
   "split": "dev",
   "scope": "development evaluation, not a held-out test",
   "qids": [
@@ -43,8 +43,8 @@
     "unanswerable": 5
   },
   "question_hash": "680a752e738d7a60f463345c08e3e098934ab945df2183a8bb1e0d97b1f6ddea",
-  "prompt_version": "ncd-gemma-v1",
-  "prompt_sha256": "9949c8f30d749baad7385bbaf523e14ef4ececd7b3090d062189862dac98c77d",
+  "prompt_version": "ncd-gemma-v5",
+  "prompt_sha256": "112b58fd8160334cca3702c9aed5628cf7fb0969261ce14ce95ef558fa94a69e",
   "model": "gemma-4-E4B-it",
   "selection": "round-robin types; SHA256(ncd-gemma-dev-v1:qid) order",
   "temperature": 0,
@@ -55,5 +55,5 @@
     "citation primary-evidence coverage",
     "character F1 (lexical proxy only)"
   ],
-  "frozen_at_utc": "2026-10-11T13:43:20.352320+00:00"
+  "frozen_at_utc": "2026-10-11T15:33:23.674714+00:00"
 }

@@ -33,6 +33,9 @@ class FakeLLM:
 
     def complete(self, messages, tools, tool_choice, remaining):
         self.requests.append(json.loads(json.dumps({"messages": messages, "choice": tool_choice})))
+        if not tools:
+            return {"message": {"content": json.dumps({"supported": True, "reason": "Fixture evidence supports answer"})},
+                    "cached": False, "usage": {"total_tokens": 8}}
         message = next(self.messages)
         if isinstance(message, Exception):
             raise message
@@ -175,3 +178,77 @@ def test_retrieval_exception_is_bounded_and_sanitized():
     result, _, _ = run([call()], BrokenRetriever())
     assert result["status"] == "error"
     assert "sensitive" not in json.dumps(result)
+
+
+def test_gemma_native_wrapped_arguments_complete_round_trip():
+    message = call()
+    message["tool_calls"][0]["function"]["arguments"] = '<|tool_call>call:search_docs{query:<|"|>คำถามทดสอบ<|"|>}<tool_call|>'
+    result, llm, retriever = run([message, answered()])
+    assert result["status"] == "answered"
+    assert retriever.calls[0].query == "คำถามทดสอบ"
+    history = llm.requests[1]["messages"]
+    assert json.loads(history[2]["tool_calls"][0]["function"]["arguments"]) == {"query": "คำถามทดสอบ"}
+    assert history[3]["tool_call_id"] == "call_1"
+
+
+def test_invalid_native_arguments_are_never_sent_back_as_invalid_json():
+    message = call()
+    message["tool_calls"][0]["function"]["arguments"] = '<|tool_call>call:search_docs{query:broken}<tool_call|>'
+    result, llm, _ = run([message, call(call_id="call_2"), answered()])
+    assert result["status"] == "answered"
+    previous = llm.requests[1]["messages"][2]["tool_calls"][0]["function"]["arguments"]
+    assert json.loads(previous) == {"__invalid_arguments__": True}
+
+
+def test_grouped_citation_cannot_hide_unlisted_source():
+    draft = json.loads(answered()["content"])
+    draft["answer"] = "ข้อความ [S1] และอีกข้อความ [S1, S9]"
+    with pytest.raises(ValueError, match="markers"):
+        parse_answer(json.dumps(draft), {"S1": EVIDENCE}, True)
+
+
+def test_all_grouped_citations_are_validated():
+    draft = json.loads(answered()["content"])
+    draft["answer"] = "ข้อความ [S1, S2]"
+    draft["citations"].append({"source_id": "S2", "quote": EVIDENCE["text"]})
+    assert parse_answer(json.dumps(draft), {"S1": EVIDENCE, "S2": EVIDENCE}, True).status == "answered"
+    with pytest.raises(ValueError, match="Unknown"):
+        parse_answer(json.dumps(draft), {"S1": EVIDENCE}, True)
+
+
+@pytest.mark.parametrize("verdict, reason", [
+    ('{"supported":false,"reason":"คำตอบไม่ตรงกลุ่มที่ถาม"}', "unsupported_answer"),
+    ('{"supported":"true","reason":"bad type"}', "verification_invalid"),
+    ('not JSON', "verification_invalid"),
+])
+def test_verification_fails_closed(verdict, reason):
+    class Reviewer(FakeLLM):
+        def complete(self, messages, tools, tool_choice, remaining):
+            if not tools:
+                assert "reference_answer" not in messages[-1]["content"]
+                assert json.loads(messages[-1]["content"])["evidence"][0]["text"] == EVIDENCE["text"]
+                return {"message": {"content": verdict}, "cached": False}
+            return super().complete(messages, tools, tool_choice, remaining)
+    result = Agent(Reviewer([call(), answered()]), FakeRetriever(), Settings()).run("คำถามทดสอบ")
+    assert result["status"] == "insufficient_evidence"
+    assert result["stop_reason"] == reason
+    assert result["citations"] == []
+    assert result["stats"]["model_rounds"] == 3
+
+
+def test_verification_respects_shared_model_budget():
+    result, llm, _ = run([call(), answered()], max_steps=2)
+    assert result["stop_reason"] == "verification_budget_exceeded"
+    assert len(llm.requests) == 2
+
+
+def test_verification_proxy_failure_does_not_release_candidate():
+    class Reviewer(FakeLLM):
+        def complete(self, messages, tools, tool_choice, remaining):
+            if not tools:
+                raise ProxyError("proxy_http_503")
+            return super().complete(messages, tools, tool_choice, remaining)
+    result = Agent(Reviewer([call(), answered()]), FakeRetriever(), Settings()).run("คำถามทดสอบ")
+    assert result["stop_reason"] == "verification_unavailable"
+    assert result["status"] == "insufficient_evidence"
+    assert result["stats"]["api_calls"] == 3

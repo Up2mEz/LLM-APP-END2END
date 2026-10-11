@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-11",
+  "scope": "in-place single page redesign",
+  "implementation": "static HTML/CSS/JS + FastAPI",
+  "existing_css": "static/style.css:1",
+  "existing_html": "static/index.html:1",
+  "existing_palette": "green + warm paper; user explicitly replaced with clinic blue and white",
+  "fonts": [
+    "Leelawadee UI",
+    "Tahoma"
+  ],
+  "routes": [
+    "/",
+    "/api/health",
+    "/api/ask",
+    "/api/evaluation"
+  ],
+  "new_route": "/tokens.css",
+  "source_repo": "read only",
+  "deletions": []
+}

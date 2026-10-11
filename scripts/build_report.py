@@ -17,7 +17,7 @@ OUT.parent.mkdir(parents=True, exist_ok=True)
 pdfmetrics.registerFont(TTFont("Thai", r"C:\Windows\Fonts\tahoma.ttf", shapable=True))
 pdfmetrics.registerFont(TTFont("ThaiBold", r"C:\Windows\Fonts\tahomabd.ttf", shapable=True))
 pdfmetrics.registerFontFamily("Thai", normal="Thai", bold="ThaiBold")
-INK, GREEN, MUTED, LIGHT = map(colors.HexColor, ("#193930", "#28614e", "#64776c", "#eaf0e4"))
+INK, GREEN, MUTED, LIGHT = map(colors.HexColor, ("#18364e", "#0964aa", "#52697e", "#edf6ff"))
 styles = {
     "body": ParagraphStyle("body", fontName="Thai", fontSize=10.5, leading=17, textColor=INK,
                            wordWrap="CJK", shaping=True, spaceAfter=9, alignment=TA_LEFT),
@@ -90,7 +90,7 @@ section(1, "ผู้ช่วยค้นหลักฐาน NCD ภาษา
 add("Project: Building LLM-Powered Applications", "h2")
 if not agent:
     add("ฉบับร่าง: ยังไม่ได้ประเมินคำตอบ Gemma แบบ end-to-end", "small")
-add("NCD Evidence ใช้ Gemma ผ่าน class proxy เพื่อช่วยค้นและสรุปหลักฐานจากเอกสาร NCD ภาษาไทย ผู้ใช้ถามเป็นภาษาธรรมชาติ แล้วระบบเรียก retrieval tool เพื่อเลือกข้อความที่เกี่ยวข้องก่อนตอบพร้อมเลขหน้า เป้าหมายคือช่วยนักศึกษาและผู้อ่านแนวทางกลับไปตรวจเอกสารได้สะดวก ไม่ใช้วินิจฉัยหรือสั่งยารายบุคคล")
+add("NCD Evidence ใช้ Gemma ผ่าน class proxy เพื่อช่วยค้นและสรุปหลักฐานจากเอกสาร NCD ภาษาไทย ผู้ใช้ถามเป็นภาษาธรรมชาติ แล้วระบบเรียก retrieval tool เพื่อเลือกข้อความที่เกี่ยวข้องก่อนตอบพร้อมเลขหน้า เป้าหมายคือช่วยผู้ใช้ทั่วไปและผู้อ่านแนวทางกลับไปตรวจเอกสารได้สะดวก ไม่ใช้วินิจฉัยหรือสั่งยารายบุคคล")
 add("ส่วนที่นำมาใช้ต่อและส่วนที่พัฒนาเพิ่ม", "h2")
 add("งานนี้นำ corpus, gold, chunking, document vectors และ hybrid retrieval จาก Thai NCD Guideline QA ของทีมมาใช้ต่อ ส่วนที่เพิ่มสำหรับวิชา LLM คือ OpenAI SDK adapter, native tool calling, agent loop, answer/citation validation, หน้าเว็บ และ evaluation ของการสร้างคำตอบ ไม่ได้อ้างว่าสร้างข้อมูลและ retrieval ใหม่ทั้งหมด")
 table(["Capability family", "สิ่งที่ทำในแอป"], [
@@ -108,7 +108,7 @@ add("เส้นทางจากคำถามถึงคำตอบ", "h2
 add("เมื่อรับคำถาม ระบบบังคับให้ Gemma เริ่มด้วย search_docs ผ่าน native function calling โค้ดตรวจชื่อ tool และ arguments ก่อนเรียก retrieval ผลค้นถูกส่งกลับเป็น tool message พร้อม tool_call_id ที่ตรงกับ assistant message จากนั้น model เลือกค้นเพิ่มหรือสรุปคำตอบเป็น JSON ได้")
 add("Retrieval ใช้ child chunks ขนาด 128 tokens เพื่อค้น dense แล้วคืน parent chunks ขนาด 512 tokens รวมกับ BM25 char3 ด้วย convex fusion ค่า alpha=0.6 และ candidate pool=100 ตาม frozen config เดิม แอปใช้ variant B เป็นค่าเดียวในการตอบ จึงไม่เพิ่มภาระ reranker ของ variant C")
 add("การจำกัดและตรวจผล", "h2")
-add("กำหนดไม่เกิน 4 model rounds และ 3 searches ต่อคำถาม จำกัด top_k ที่ 8 และข้อความ context รวม 18,000 ตัวอักษร ปฏิเสธการค้น query/filter ซ้ำ มี request timeout และ deadline ของ agent Tool ที่อนุญาตมีเพียง search_docs จึงไม่มีเส้นทางเรียก shell หรืออ่านไฟล์ตามคำสั่งจาก model")
+add("กำหนดไม่เกิน 4 model rounds รวมรอบตรวจคำตอบ และ 3 searches ต่อคำถาม จำกัด top_k ที่ 8 และข้อความ context รวม 18,000 ตัวอักษร ปฏิเสธการค้น query/filter ซ้ำ มี request timeout และ deadline ของ agent ก่อนแสดงคำตอบให้ Gemma ตรวจความตรงกับคำถามและหลักฐานอีกหนึ่งรอบ หากตรวจไม่ได้จะงดตอบ Tool ที่อนุญาตมีเพียง search_docs จึงไม่มีเส้นทางเรียก shell หรืออ่านไฟล์ตามคำสั่งจาก model")
 add("คำตอบที่สถานะ answered ต้องมี source ID ที่ปรากฏในผลค้นจริง quote ต้องอยู่ในข้อความที่ model ได้รับ และ citation markers ต้องตรงกับรายการอ้างอิง หาก validation ไม่ผ่านให้แก้ได้หนึ่งรอบ ถ้ายังผิดหรือครบ budget จะหยุดโดยแสดงสถานะชัดเจน ทั้งนี้ quote ที่มีอยู่จริงยังไม่รับรองว่าคำตอบทุกประโยคสอดคล้องกับความหมายของหลักฐาน")
 add("การเรียกโมเดล", "h2")
 add("ใช้ from openai import OpenAI และ OpenAI() อ่าน OPENAI_API_KEY/OPENAI_BASE_URL จาก environment กำหนด model เป็น gemma-4-E4B-it และ temperature=0 เก็บ cache ของ response รวม tool calls โดยผูกกับ endpoint, model, messages และ parameters ไม่มี API key ถูกส่งให้ frontend")
@@ -131,13 +131,14 @@ section(4, "การประเมินส่วน Gemma ที่เพิ�
 add("ล็อกแผนก่อนเรียกโมเดล", "h2")
 add("เลือก dev sample 30 ข้อโดยวนตามประเภทคำถาม และเรียงด้วย SHA-256 ของ qid ในแต่ละประเภท ได้ condition, fact, multi_page, number_unit, table และ unanswerable อย่างละ 5 ข้อ เก็บ qids, prompt hash, gold hash, model และ temperature ใน plan ก่อนเริ่มรัน การประเมินนี้เป็น development result ไม่ใช่ held-out test")
 if agent:
-    table(["Metric", "ผลจริง"], [("จำนวนคำถาม",str(agent["n"])), ("จบด้วย final answer ที่ผ่าน schema",str(agent["completed_rate"])),
+    table(["Metric", "ผลจริง"], [("จำนวนคำถาม",str(agent["n"])), ("Stop reason completed (รวมงดตอบ)",str(agent["completed_rate"])),
         ("Abstention decision accuracy",str(agent["abstention_decision_accuracy"])),
         ("Citation primary-evidence hit rate",str(agent["citation_primary_evidence_hit_rate_answerable"])),
         ("Mean character F1 (lexical proxy)",str(agent["mean_character_f1_answerable"])),
         ("Status counts",json.dumps(agent["status_counts"],ensure_ascii=False))], [105,60])
 else:
     add("ยังไม่มีผล aggregate ของ Gemma evaluation ใน artifacts ที่ใช้สร้าง PDF รอบนี้ จึงยังไม่ใส่ค่าความแม่นยำหรืออ้างว่าผ่านการประเมิน end-to-end ให้รัน evaluate agent แล้วสร้างรายงานใหม่ก่อนใช้เป็นฉบับส่ง")
+add("รุ่น " + agent["plan_id"] + ": เก็บผลรุ่นก่อนหน้ารวมรอบที่ล้มเหลวไว้ครบใน reports/history และ private/runs; รายการตรวจทั้ง 30 ข้ออยู่ใน docs/ANSWER_REVIEW_TH.md", "small")
 add("การตีความ metric", "h2")
 add("Abstention decision accuracy ตรวจว่าระบบตอบหรือเว้นตอบสอดคล้องกับ answerable label หรือไม่ ไม่ใช่คะแนนความถูกต้องของเนื้อหาคำตอบ Citation primary-evidence hit rate ตรวจ source ที่อ้างกับ primary evidence เดิม ส่วน character F1 วัดเพียงสัดส่วนอักษรร่วมกับ reference answer จึงไม่ใช้แทนการตรวจความหมายหรือความถูกต้องทางคลินิก")
 add("ไม่มี reference answer ถูกส่งให้ model ระหว่าง serving หรือ evaluation แอปได้รับเฉพาะคำถามและหลักฐานจาก retrieval ส่วน labels ถูกใช้ภายหลังเพื่อคำนวณ metric ผลดิบและ cache อยู่ในโฟลเดอร์ private เพื่อเก็บ trace และกลับมาตรวจ failure ได้")
@@ -148,18 +149,20 @@ add("ทดสอบ tool-call round trip, arguments ผิดชนิด/เ�
 if validation:
     add(f"ผล automated tests: {validation.get('tests_passed', 'ไม่ระบุ')} ข้อผ่าน ใช้ fake model/retriever เพื่อตรวจ edge cases แยกจากการค้นข้อมูลจริงและ proxy probe ดูขอบเขตใน reports/validation.json")
 else:
-    add("ผล automated tests ที่รันแล้ว: 30 ข้อผ่านบน environment Python 3.12.13 ก่อนสร้างรายงานรอบนี้ การทดสอบเหล่านี้ใช้ fake model สำหรับ edge cases จึงแยกจาก proxy probe และ evaluation จริง")
-answers_path = ROOT / "private/runs/gemma-dev-v1/answers.jsonl"
+    add("ยังไม่มี test receipt ใน artifacts ที่ใช้สร้างรายงานนี้ จึงไม่สรุปจำนวน tests ที่ผ่าน ให้รัน pytest และ scripts/record_validation.py ก่อนใช้เป็นฉบับส่ง")
+answers_path = ROOT / f"private/runs/{plan['id']}/answers.jsonl"
 answers = [json.loads(s) for s in answers_path.read_text(encoding="utf-8").splitlines()] if answers_path.exists() else []
 success = next((r for r in answers if r["prediction"]["status"] == "answered"), None)
-failure = next((r for r in answers if r["answerable"] and r["prediction"]["status"] != "answered"), None)
+failure = next((r for r in answers if r["qid"] == "q113"), None)
 for title, item in [("ตัวอย่างที่ตอบพร้อมหลักฐานได้",success),("ตัวอย่างข้อจำกัดที่พบจริง",failure)]:
     add(title,"h2")
     if item:
         prediction=item["prediction"]
         add(f"qid {item['qid']} | status {prediction['status']} | stop reason {prediction['stop_reason']}")
         add(item["question"])
-        add(prediction["answer"][:650])
+        add(prediction["answer"][:500])
+        if title.startswith("ตัวอย่างข้อจำกัด"):
+            add("Reference: " + str(item["reference_answer"]) + " ผลนี้อ่านค่าจากตารางผิดและตอบไม่ครบ แม้ same-model verifier อนุมัติ", "small")
     else:
         add("ยังไม่มีตัวอย่างประเภทนี้ในไฟล์ผลรันที่ใช้สร้างรายงาน ไม่สร้างตัวอย่างผลสำเร็จหรือความผิดพลาดขึ้นเอง")
 add("สิ่งที่ยังต้องตรวจด้วยคน", "h2")
@@ -168,13 +171,13 @@ add("ผู้ประเมินต้องกลับไปดูว่า
 section(6, "การทำซ้ำ ข้อจำกัด และสิ่งที่ต้องส่ง")
 add("วิธีตรวจผลงาน", "h2")
 add("ติดตั้ง environment ตาม requirements-runtime.txt หรือ lock ที่บันทึกไว้ ตั้งค่า class proxy ใน .env นำข้อมูลจากแหล่งที่ได้รับสิทธิ์ด้วย scripts/import_source.py แล้วใช้ run.ps1 เพื่อเปิดหน้าเว็บ ใช้ evaluate retrieval เพื่อคำนวณผลจาก frozen ranked hits และ evaluate agent เพื่อรันตาม dev plan ที่ล็อกไว้")
-table(["Deliverable", "สถานะที่ต้องตรวจเมื่อส่ง"], [("Q1 Public repository", "มี source, README, tests, evaluation และ incremental commits ในเครื่อง ต้องจัดสิทธิ์ corpus และ public reproducibility ก่อนเผยแพร่"),
+table(["Deliverable", "สถานะที่ต้องตรวจเมื่อส่ง"], [("Q1 Public repository", "ตั้ง origin เป็น Up2mEz/LLM-APP-END2END แล้ว ยังไม่ push; ต้องจัดสิทธิ์ corpus และ public reproducibility ตามขอบเขตที่ตกลง"),
     ("Q2 PDF 4–8 หน้า", "รายงานฉบับนี้มี 6 หน้า ต้องตรวจผล evaluation และข้อมูลผู้จัดทำก่อนส่ง"),
     ("Q3 Demo URL", "มี local app และสคริปต์บรรยาย 3–6 นาที ยังต้องอัดวิดีโอหรือ deploy แล้วใช้ URL ที่ผู้ตรวจเข้าถึงได้")], [55,110])
 add("ข้อจำกัดของ corpus และการเผยแพร่", "h2")
 add("Handoff ต้นทางระบุว่ามีข้อความที่ใช้ภายในทีม จึงยังไม่เผยแพร่ gold/chunks/index ผ่าน Git การมี local import script ไม่ทำให้ public repo reproduce ได้สำหรับผู้ที่ไม่มีสิทธิ์ข้อมูล หากเปลี่ยน corpus เพื่อเผยแพร่ได้ ต้อง version และประเมินชุดส่งใหม่ ไม่ใช้ metrics ของ v12 อ้างแทน subset")
 add("แนวทางพัฒนาต่อ", "h2")
-add("ตรวจคำตอบจริงกับผู้มีความรู้ในโดเมน เพิ่ม claim-level faithfulness evaluation และแยกความผิดพลาดตามชนิดคำถาม เตรียมตัวอย่างสำเร็จและ failure สำหรับ live defence พร้อมอธิบายเหตุผลเลือก hybrid และตัวหารของ metric ได้ งานเหล่านี้สำคัญกว่าการเพิ่ม tool หลายชนิดโดยไม่วัดผล")
+add("ตรวจคำตอบจริงกับผู้มีความรู้ในโดเมน เพิ่ม independent claim-level faithfulness evaluation เพราะ same-model review ยังยอมรับคำตอบผิด และแยกความผิดพลาดตามชนิดคำถาม เตรียมตัวอย่างสำเร็จและ failure สำหรับ live defence พร้อมอธิบายเหตุผลเลือก hybrid และตัวหารของ metric ได้ งานเหล่านี้สำคัญกว่าการเพิ่ม tool หลายชนิดโดยไม่วัดผล")
 add("แหล่งอ้างอิง", "h2")
 add("Thai NCD Guideline QA: github.com/Chaiporn2005/thai-ncd-guideline-qa; source snapshot และ SHA-256 ใน provenance/source_snapshot.json", "small")
 add("Project rubric: courses.nat-d.uk/courses/building-llm-powered-applications/courseworks/20", "small")

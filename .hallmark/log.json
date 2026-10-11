@@ -1,0 +1,14 @@
+[
+  {
+    "date": "2026-10-11",
+    "macrostructure": "Workbench",
+    "theme": "custom",
+    "theme_axes": "light / humanist sans / blue",
+    "vibe": "friendly clear clinical tactile",
+    "enrichment": "Tier A CSS book mascot",
+    "brief": "Thai general-reader evidence search in clinic blue and white",
+    "nav": "N1 two destinations",
+    "footer": "Ft2 inline rule",
+    "font_adaptation": "Local Thai fonts preserve legibility and offline use; no external font dependency"
+  }
+]
