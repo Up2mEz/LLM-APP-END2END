@@ -34,7 +34,10 @@ class FakeLLM:
     def complete(self, messages, tools, tool_choice, remaining):
         self.requests.append(json.loads(json.dumps({"messages": messages, "choice": tool_choice})))
         if not tools:
-            return {"message": {"content": json.dumps({"supported": True, "reason": "Fixture evidence supports answer"})},
+            return {"message": {"content": json.dumps({
+                        "checks": [{"requirement": "คำถามทดสอบ", "covered": True,
+                                    "answer_quote": "คำตอบตัวอย่าง", "source_id": "S1", "evidence_quote": EVIDENCE["text"]}],
+                        "supported": True, "reason": "Fixture evidence supports answer"})},
                     "cached": False, "usage": {"total_tokens": 8}}
         message = next(self.messages)
         if isinstance(message, Exception):
@@ -217,7 +220,9 @@ def test_all_grouped_citations_are_validated():
 
 
 @pytest.mark.parametrize("verdict, reason", [
-    ('{"supported":false,"reason":"คำตอบไม่ตรงกลุ่มที่ถาม"}', "unsupported_answer"),
+    (json.dumps({"checks": [{"requirement": "กลุ่มที่ถาม", "covered": False,
+                            "answer_quote": "", "source_id": "", "evidence_quote": ""}],
+                 "supported": False, "reason": "คำตอบไม่ตรงกลุ่มที่ถาม"}), "unsupported_answer"),
     ('{"supported":"true","reason":"bad type"}', "verification_invalid"),
     ('not JSON', "verification_invalid"),
 ])
@@ -225,15 +230,15 @@ def test_verification_fails_closed(verdict, reason):
     class Reviewer(FakeLLM):
         def complete(self, messages, tools, tool_choice, remaining):
             if not tools:
-                assert "reference_answer" not in messages[-1]["content"]
-                assert json.loads(messages[-1]["content"])["evidence"][0]["text"] == EVIDENCE["text"]
+                assert "reference_answer" not in messages[1]["content"]
+                assert json.loads(messages[1]["content"])["evidence"][0]["text"] == EVIDENCE["text"]
                 return {"message": {"content": verdict}, "cached": False}
             return super().complete(messages, tools, tool_choice, remaining)
     result = Agent(Reviewer([call(), answered()]), FakeRetriever(), Settings()).run("คำถามทดสอบ")
     assert result["status"] == "insufficient_evidence"
     assert result["stop_reason"] == reason
     assert result["citations"] == []
-    assert result["stats"]["model_rounds"] == 3
+    assert result["stats"]["model_rounds"] == (3 if reason == "unsupported_answer" else 4)
 
 
 def test_verification_respects_shared_model_budget():
@@ -252,3 +257,28 @@ def test_verification_proxy_failure_does_not_release_candidate():
     assert result["stop_reason"] == "verification_unavailable"
     assert result["status"] == "insufficient_evidence"
     assert result["stats"]["api_calls"] == 3
+
+
+def test_review_repair_recovers_within_shared_four_call_budget():
+    class RepairingReviewer(FakeLLM):
+        reviews = 0
+
+        def complete(self, messages, tools, tool_choice, remaining):
+            if not tools:
+                self.reviews += 1
+                if self.reviews == 1:
+                    return {"message": {"role": "assistant", "content": "not JSON"}, "cached": False}
+            return super().complete(messages, tools, tool_choice, remaining)
+    model = RepairingReviewer([call(), answered()])
+    result = Agent(model, FakeRetriever(), Settings()).run("คำถามทดสอบ")
+    assert result["status"] == "answered"
+    assert result["stats"]["model_rounds"] == 4
+    assert model.reviews == 2
+
+
+def test_quantity_question_cannot_pass_with_only_a_citation_number():
+    model = FakeLLM([call(), answered()])
+    result = Agent(model, FakeRetriever(), Settings()).run("กิจกรรมนี้ได้กี่คะแนน")
+    assert result["status"] == "insufficient_evidence"
+    assert result["stop_reason"] == "answer_missing_quantity"
+    assert result["stats"]["model_rounds"] == 2

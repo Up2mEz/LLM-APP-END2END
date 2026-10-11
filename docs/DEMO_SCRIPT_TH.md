@@ -2,9 +2,9 @@
 
 1. นาที 0:00–0:40 อธิบายปัญหา ผู้ใช้ และสิ่งที่ reuse จากงานทีมเดิม ไม่อ้างว่าสร้าง retrieval/gold ใหม่ทั้งหมด
 2. นาที 0:40–1:40 เปิดหน้าเว็บ ถามตัวอย่างที่มีหลักฐาน อธิบายคำตอบ ข้อความ quote และเลขหน้า เปิด trace ให้เห็น Gemma เรียก search_docs จริง
-3. นาที 1:40–2:30 ถามนอกขอบเขต เช่นราคาสินทรัพย์ในอนาคต แสดงการงดตอบและ stop reason หากมี failure จาก dev evaluation ให้แสดงกรณีนั้นตามผลจริง
+3. นาที 1:40–2:30 แสดง failure จริง q076 เรื่องนาทีออกกำลังสำหรับไขมัน: แอปตอบ 150 นาทีจาก guideline ความดัน ขณะที่ gold ระบุ 150–300 นาที อธิบายความต่างของบริบท จากนั้นแสดง q113 ที่ระบบระงับคำตอบตารางผิด โดยบอกชัดว่าไม่ได้แก้ให้โมเดลอ่านตารางถูกแล้ว
 4. นาที 2:30–3:40 อธิบาย baseline A dense เทียบ B hybrid โดย Recall@5 เพิ่ม 0.0769 บน answerable test 52 ข้อ แยก retrieval metrics ออกจากผลคำตอบของ Gemma
-5. นาที 3:40–4:40 เปิด src/ncd_gemma/agent.py อธิบาย tool_call_id, argument validation, citation validation และขีดจำกัด 4 rounds/3 searches
+5. นาที 3:40–4:40 เปิด src/ncd_gemma/agent.py อธิบาย tool_call_id, argument/citation validation และ 4 calls/3 searches รวม reviewer repair เปิดตาราง v5–v8 ให้เห็นว่า false abstention เพิ่ม ไม่อ้างว่า overall accuracy ดีขึ้น
 6. นาที 4:40–5:30 รับ input ใหม่และอธิบายข้อจำกัด ห้ามบอกว่ามีหลักฐานรับรองความถูกต้องทางคลินิก
 
 เมื่ออัดเสร็จ ตรวจความยาว 3–6 นาที เสียงบรรยายอ่านรู้เรื่อง ไม่มี API key หรือ private environment แสดงในภาพ แล้วใช้ URL ที่ผู้ตรวจเข้าถึงได้ การเปิด localhost อย่างเดียวไม่ใช่ deployed demo URL ตาม Q3

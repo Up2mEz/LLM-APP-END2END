@@ -48,7 +48,7 @@ $env:PYTHONPATH = "$PWD\src"
 .venv312\Scripts\python -B -m ncd_gemma.cli evaluate agent
 ```
 
-`doctor --live` และ `evaluate agent` เรียก class proxy จริง `evaluate retrieval` คำนวณ metrics จาก saved ranked hits และตรวจ hash ไม่เรียกโมเดลหรือรัน test retrieval ใหม่ `evaluate plan` ล็อก dev sample 30 ข้อก่อนเรียกโมเดล การเปลี่ยนคำถามหรือ prompt หลังมีแผนต้องสร้าง version ใหม่ ไม่ปรับแผนตามผล
+`doctor --live` และ `evaluate agent` เรียก class proxy จริง `evaluate retrieval` คำนวณ metrics จาก saved ranked hits และตรวจ hash ไม่เรียกโมเดลหรือรัน test retrieval ใหม่ `evaluate plan` ล็อก dev sample 30 ข้อก่อนเรียกโมเดล แผนผูกกับ hashes ของ agent, verifier, adapter, schemas, config และ retrieval wrapper การเปลี่ยน implementation คำถามหรือ prompt หลังมีแผนต้องสร้าง version ใหม่ ไม่ปรับแผนตามผล
 
 ผล aggregate อยู่ใน `reports/` ผลคำตอบพร้อมหลักฐานอยู่ใน `private/runs/` และ raw model cache อยู่ใน `.cache/llm/` ทั้งสองโฟลเดอร์ถูก ignore การรัน agent evaluation ซ้ำ resume จาก qid ที่มีอยู่แล้ว ไม่เรียก API ซ้ำโดยไม่จำเป็น Cache เก็บ response เต็มรวม tool calls และผูกกับ endpoint identity, model, messages, tools และ parameters
 
@@ -121,23 +121,33 @@ B เพิ่ม Recall@5 7.69 percentage points และ MRR@10 0.1193 เม
 
 ## สถานะการตรวจล่าสุด
 
-- Unit/API tests ผ่าน **50 ข้อ** ไม่มี failed/error/skipped ตรวจ adapter, native protocol, citations, verification budget และ API boundaries ด้วย fake model/retriever
-- รัน Gemma dev **30 ข้อเดิม** ครบใน `gemma-dev-v5`: ตอบ 18 ข้อ งดตอบ 12 ข้อ; stop reason completed 28/30, answer validation failed 1 และ verification invalid 1
-- Abstention decision accuracy **0.7000**, citation primary-evidence hit rate **0.5200**, character F1 **0.2344** ตัวเลขเหล่านี้ไม่ใช่ความถูกต้องทางคลินิก
-- ตรวจเทียบคำตอบกับ reference พบการอ่านตารางผิด ตอบไม่ครบ และสับสนบริบท แม้ same-model verifier อนุมัติบางข้อ จึงยังต้องตรวจโดยผู้มีความรู้ก่อนใช้ตัดสินใจ ดู [รายการตรวจรายข้อ](docs/ANSWER_REVIEW_TH.md)
-- รักษาผล v1–v4 ทั้งหมดไว้ใน `private/runs/` และ `reports/history/` รอบที่ล้มเหลวไม่ได้ถูกตัดออกเพื่อทำให้ผลดูดี
-- หน้าเว็บใช้ Hallmark โทนฟ้า–ขาว มี CSS book mascot, คัดลอกคำตอบ, เปิดบริบท, help dialog, loading และ reduced motion
-- Browser tests ผ่านเส้นทาง answered/abstention, copy, source anchor/disclosure และ form controls บนแอปจริง; การทดสอบ UI ใช้ completions ที่ cache จาก evaluation ขณะที่ retrieval ทำงานจริง
-- ตรวจ 320/375/414/768 px ไม่พบ horizontal overflow หรือเป้าหมายปุ่มเล็กกว่า 44 px; บันทึกใน `reports/browser_layout.json`
-- คำนวณ frozen metrics ตรงเดิมทั้ง 6 runs; hashes ต้นทาง 48 ไฟล์ไม่เปลี่ยน
+- Unit/API tests ผ่าน **68 ข้อ** ไม่มี failed/error/skipped มี Starlette deprecation warning 1 รายการ
+- Gemma dev ชุดเดิม 30 ข้อ รุ่น **v8**: ตอบ 11 ข้อ งดตอบ 19 ข้อ ในข้อที่งดตอบมี 14 ข้อที่ gold ระบุว่าตอบได้
+- Abstention decision accuracy **0.5333**, citation primary-evidence hit rate **0.3200**, character F1 **0.1319** ไม่ใช่ clinical accuracy
+- เพิ่ม structured review แยกประเด็น ตรวจ quote จากคำตอบและ evidence, bounded repair ภายใน 4 calls และตรวจคำถามที่ถาม “กี่” แต่ไม่มีจำนวนในคำตอบ
+- ระงับคำตอบผิดเดิม q113/q080 และคำตอบไม่ครบ q120 ได้ แต่ทำให้คำตอบเดิมที่ตรง reference 4 ข้อถูกงดตอบเพิ่ม จึง **ไม่อ้างว่า overall accuracy ดีขึ้น** ดู [ผลตรวจทั้ง 30 ข้อ](docs/ANSWER_REVIEW_TH.md)
+- คำตอบที่ยังต้องทบทวนคือ q041 (alternative source/คำถามกำกวม) และ q076 (ช่วงจำนวนไม่ครบและต่างบริบท)
+- UI โทนฟ้า–ขาวตาม Hallmark, mascot หนังสือ, copy/clear/help/source disclosure และ reduced motion มีการแยกสถานะ “ยังยืนยันคำตอบไม่ได้” ออกจากการไม่พบหลักฐาน
+- Browser ทดสอบ success q045 และการระงับ q113/q120 บน v8; model completions ใช้ cache จริง ส่วน retrieval ทำงานจริง
+- Frozen retrieval metrics ตรงเดิมทั้ง 6 runs; hashes ต้นทาง 48 ไฟล์ไม่เปลี่ยน
 
-อ่าน [สถานะงาน](docs/IMPLEMENTATION_STATUS_TH.md) และ [ผลตรวจดีไซน์](docs/UI_REVIEW_TH.md) รายงาน PDF สร้างจาก artifacts จริงด้วย `.venv312\Scripts\python scripts/build_report.py` ที่ `output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf` ยังต้องเติมผู้จัดทำและ demo URL ก่อนส่ง
+| Dev 30 ข้อเดิม | v5 ก่อนเพิ่ม checks | v6 checks ยังไม่มี repair | v7 เพิ่ม repair | v8 ปัจจุบัน |
+|---|---:|---:|---:|---:|
+| ตอบ / งดตอบ | 18 / 12 | 4 / 26 | 12 / 18 | 11 / 19 |
+| Abstention decision accuracy | 0.7000 | 0.3000 | 0.5000 | 0.5333 |
+| Citation primary-evidence hit rate | 0.5200 | 0.1200 | 0.3200 | 0.3200 |
+| Character F1 | 0.2344 | 0.0329 | 0.1319 | 0.1319 |
+| ตอบข้อที่ label เป็น unanswerable | 1 | 1 | 1 | 0 |
+
+ผลนี้สะท้อน trade-off: ต้นแบบปัจจุบันยืนยันได้ยากขึ้นและงดตอบมากขึ้น ไม่ใช่การพิสูจน์ว่าระบบมีคุณภาพโดยรวมสูงขึ้น รุ่น v6–v8 ใช้ candidate responses ที่ cache ไว้เมื่อ payload ตรงกัน; new API calls ที่บันทึกคือ 21, 15 และ 0 ตามลำดับ เก็บ raw runs และผลเก่าครบ เปรียบเทียบด้วย `python scripts/compare_agent_runs.py`
+
+อ่าน [สถานะตาม rubric และงานส่งที่เหลือ](docs/PROJECT_READINESS_TH.md) และ [ผลตรวจดีไซน์](docs/UI_REVIEW_TH.md) รายงาน PDF สร้างจาก artifacts จริงด้วย `.venv312\Scripts\python scripts/build_report.py` ที่ `output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf` ยังต้องเติมผู้จัดทำและ demo URL ก่อนส่ง
 
 ## ข้อสังเกตจาก class proxy
 
 Proxy ส่ง Gemma native syntax อยู่ใน `function.arguments` บางครั้ง จึง parse รูปแบบที่อนุญาตด้วย parser ที่ไม่ใช้ eval แล้วส่งกลับเป็น JSON ที่ผ่าน schema ก่อนทำ tool call รอบถัดไป Raw response ยังอยู่ใน cache
 
-รอบตรวจคำตอบแยกใช้ Gemma ตัวเดิมเปรียบเทียบ question/answer/evidence โดยไม่รับ gold label ต้องละ `tools` และ `tool_choice` เมื่อไม่ใช้ tools เพราะ proxy ปฏิเสธ empty tools + tool_choice คำตอบที่ตรวจไม่ได้จะงดตอบ รอบตรวจนี้นับรวมใน budget 4 model calls และ 150 วินาที ไม่ใช่ independent verifier และยังปล่อยคำตอบผิดบางข้อ
+รอบตรวจคำตอบแยกใช้ Gemma ตัวเดิมเปรียบเทียบ question/answer/evidence โดยไม่รับ gold label ผู้ตรวจต้องแยกประเด็นและระบุข้อความอ้างอิงตรงตัว หากรูปแบบหรือ quote ไม่ผ่านซ่อมได้หนึ่งครั้งภายใน budget เดิม ต้องละ `tools` และ `tool_choice` เมื่อไม่ใช้ tools เพราะ proxy ปฏิเสธ empty tools + tool_choice คำตอบที่ตรวจไม่ได้จะงดตอบ รอบตรวจนี้นับรวมใน budget 4 model calls และ 150 วินาที ไม่ใช่ independent verifier และยังปล่อยคำตอบผิดบางข้อ
 
 แหล่ง protocol: [Google Gemma 4 function calling](https://ai.google.dev/gemma/docs/capabilities/text/function-calling-gemma4) พฤติกรรม HTTP 400 ข้างต้นตรวจพบจาก class proxy จริง ไม่ได้อนุมานว่าใช้ server implementation ใด
 

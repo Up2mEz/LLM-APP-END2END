@@ -17,3 +17,7 @@
 Pre-emit critique: Philosophy 4, Hierarchy 4, Execution 4, Specificity 4, Restraint 4, Variety 4
 
 หลักฐานภาพอยู่ใน output/ui/ (Git ignore เพราะภาพคำตอบอาจมีข้อความ corpus ภายใน) รายงาน browser_layout.json และ ui_contrast.json เก็บเฉพาะข้อมูลการทดสอบ layout/สี
+
+## ตรวจซ้ำกับ backend v8
+
+ทดสอบ success q045 และการระงับคำตอบ q113/q120 ผ่าน UI รุ่นใหม่ แยกข้อความ “ยังยืนยันคำตอบไม่ได้” เมื่อมี evidence แต่คำตอบไม่ผ่านตรวจ พบปุ่มล้างกว้าง 38.31 px จึงแก้ min-width เป็น 44 px และตรวจ 320/375/414/768 px ซ้ำพร้อมคำตอบจริงแล้วผ่านทั้ง overflow และ touch targets ดู reports/browser_layout_v8.json ไม่พบ console errors ในรอบนี้

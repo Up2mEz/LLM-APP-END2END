@@ -2,6 +2,10 @@
 const $ = id => document.getElementById(id);
 const text = (tag, value, cls) => { const el = document.createElement(tag); el.textContent = value; if (cls) el.className = cls; return el; };
 const labels = {answered:'พบหลักฐานประกอบ',insufficient_evidence:'หลักฐานยังไม่เพียงพอ',error:'บริการขัดข้อง'};
+function resultLabel(data) {
+  return data.status === 'insufficient_evidence' && data.stop_reason !== 'completed'
+    ? 'ยังยืนยันคำตอบไม่ได้' : labels[data.status] || 'ตรวจสอบคำตอบ';
+}
 let busy = false;
 let copyText = '';
 const emptySources = $('sources').firstElementChild.cloneNode(true);
@@ -50,7 +54,11 @@ function showSources(data) {
     link.addEventListener('click', () => card.focus({preventScroll:true})); $('citation-links').append(link);
   }
   if (!data.citations.length) {
-    const empty = text('div', '', 'empty'); empty.append(text('h3', 'ยังไม่มีหลักฐานที่ยืนยันคำตอบ'), text('p', 'ลองระบุรายละเอียดเพิ่ม เช่น ชื่อเรื่อง กลุ่มคน หรือช่วงอายุที่สนใจ')); $('sources').append(empty);
+    const empty = text('div', '', 'empty');
+    const hint = data.sources?.length && data.stop_reason !== 'completed'
+      ? 'ค้นพบข้อความแล้ว แต่คำตอบยังไม่ผ่านการตรวจ จึงยังไม่แสดงเป็นคำตอบที่ยืนยันได้'
+      : 'ลองระบุรายละเอียดเพิ่ม เช่น ชื่อเรื่อง กลุ่มคน หรือช่วงอายุที่สนใจ';
+    empty.append(text('h3', 'ยังไม่มีหลักฐานที่ยืนยันคำตอบ'), text('p', hint)); $('sources').append(empty);
   }
 }
 function showTrace(data) {
@@ -84,12 +92,12 @@ $('ask-form').addEventListener('submit', async event => {
     const data = await response.json();
     if (!response.ok && !data.answer) throw Error(typeof data.detail === 'string' ? data.detail : 'คำถามไม่ผ่านการตรวจสอบ ลองปรับคำถามแล้วค้นใหม่');
     $('result').hidden = false; $('answer').textContent = data.answer;
-    $('answer-status').textContent = labels[data.status] || 'ตรวจสอบคำตอบ';
+    $('answer-status').textContent = resultLabel(data);
     $('answer-status').className = `badge ${data.status === 'answered' ? 'ok' : data.status === 'error' ? 'error' : 'warn'}`;
     $('stats').textContent = `ค้น ${data.stats.searches} ครั้ง · ${(data.stats.elapsed_ms / 1000).toFixed(1)} วินาที`;
     showSources(data); showTrace(data);
     copyText = `${question}\n\n${data.answer}` + data.citations.map(c => `\n\n[${c.source_id}] ${c.document_id} · หน้า PDF ${c.pdf_page_start}–${c.pdf_page_end}\n${c.quote}`).join('');
-    $('announcement').textContent = `${labels[data.status]} อ่านได้ที่ส่วนคำตอบจากเอกสาร`;
+    $('announcement').textContent = `${resultLabel(data)} อ่านได้ที่ส่วนคำตอบจากเอกสาร`;
   } catch (error) {
     $('error').textContent = error.name === 'AbortError' ? 'รอนานกว่าปกติ กรุณาลองค้นใหม่อีกครั้ง' : error.message || 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่'; $('error').hidden = false;
   } finally {

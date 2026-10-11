@@ -142,6 +142,7 @@ add("รุ่น " + agent["plan_id"] + ": เก็บผลรุ่นก่
 add("การตีความ metric", "h2")
 add("Abstention decision accuracy ตรวจว่าระบบตอบหรือเว้นตอบสอดคล้องกับ answerable label หรือไม่ ไม่ใช่คะแนนความถูกต้องของเนื้อหาคำตอบ Citation primary-evidence hit rate ตรวจ source ที่อ้างกับ primary evidence เดิม ส่วน character F1 วัดเพียงสัดส่วนอักษรร่วมกับ reference answer จึงไม่ใช้แทนการตรวจความหมายหรือความถูกต้องทางคลินิก")
 add("ไม่มี reference answer ถูกส่งให้ model ระหว่าง serving หรือ evaluation แอปได้รับเฉพาะคำถามและหลักฐานจาก retrieval ส่วน labels ถูกใช้ภายหลังเพื่อคำนวณ metric ผลดิบและ cache อยู่ในโฟลเดอร์ private เพื่อเก็บ trace และกลับมาตรวจ failure ได้")
+add("เทียบ v5 → v8: ตอบ 18 → 11 ข้อ, abstention decision accuracy 0.7000 → 0.5333 ระงับคำตอบผิดเดิม q113/q080 และคำตอบไม่ครบ q120 ได้ แต่มี false abstention เพิ่ม จึงไม่อ้างว่า overall accuracy ดีขึ้น ใช้ completions ที่ cache เมื่อ payload ตรงกัน; v8 ไม่เรียก API ใหม่", "small")
 
 section(5, "ผลการทดสอบและ failure analysis")
 add("การทดสอบขอบเขตระบบ", "h2")
@@ -153,7 +154,7 @@ else:
 answers_path = ROOT / f"private/runs/{plan['id']}/answers.jsonl"
 answers = [json.loads(s) for s in answers_path.read_text(encoding="utf-8").splitlines()] if answers_path.exists() else []
 success = next((r for r in answers if r["prediction"]["status"] == "answered"), None)
-failure = next((r for r in answers if r["qid"] == "q113"), None)
+failure = next((r for r in answers if r["qid"] == "q076"), None)
 for title, item in [("ตัวอย่างที่ตอบพร้อมหลักฐานได้",success),("ตัวอย่างข้อจำกัดที่พบจริง",failure)]:
     add(title,"h2")
     if item:
@@ -162,11 +163,11 @@ for title, item in [("ตัวอย่างที่ตอบพร้อม�
         add(item["question"])
         add(prediction["answer"][:500])
         if title.startswith("ตัวอย่างข้อจำกัด"):
-            add("Reference: " + str(item["reference_answer"]) + " ผลนี้อ่านค่าจากตารางผิดและตอบไม่ครบ แม้ same-model verifier อนุมัติ", "small")
+            add("Reference: " + str(item["reference_answer"]) + " คำตอบใช้ค่า 150 นาทีจาก guideline ความดัน ขณะที่คำถามเรื่องไขมันและ reference ระบุช่วง 150–300 นาที จึงยังต้องตรวจความตรงบริบท แม้ verifier อนุมัติ", "small")
     else:
         add("ยังไม่มีตัวอย่างประเภทนี้ในไฟล์ผลรันที่ใช้สร้างรายงาน ไม่สร้างตัวอย่างผลสำเร็จหรือความผิดพลาดขึ้นเอง")
 add("สิ่งที่ยังต้องตรวจด้วยคน", "h2")
-add("ผู้ประเมินต้องกลับไปดูว่าคำตอบสรุปเงื่อนไข ตัวเลข และกลุ่มประชากรครบหรือไม่ โดยเฉพาะคำถามจากตารางและหลายหน้า การมี quote จริงเพียงอย่างเดียวอาจยังไม่รองรับข้อสรุปที่ model เขียน ต้องแยก retrieval miss ออกจากการสรุปผิดและการงดตอบมากเกินไป")
+add("ผู้ประเมินต้องตรวจเงื่อนไข ตัวเลข กลุ่มประชากร และคำถามหลายส่วน ใน v8 มี 14 false abstentions และคำตอบ q041/q076 ที่ยังต้องทบทวน ข้อ q113/q080 ถูกระงับ ไม่ได้แปลว่าแก้การอ่านตารางถูกแล้ว การตรวจ quote แยกประเด็นและซ่อมผลตรวจยังใช้ Gemma ตัวเดิม จึงไม่เป็น independent verification")
 
 section(6, "การทำซ้ำ ข้อจำกัด และสิ่งที่ต้องส่ง")
 add("วิธีตรวจผลงาน", "h2")

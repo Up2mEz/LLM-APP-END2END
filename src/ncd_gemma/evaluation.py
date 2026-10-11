@@ -73,7 +73,7 @@ def make_dev_plan(limit=30):
         for kind in sorted(buckets):
             if buckets[kind] and len(selected) < limit:
                 selected.append(buckets[kind].pop(0))
-    plan = {"id": "gemma-dev-v5", "split": "dev", "scope": "development evaluation, not a held-out test",
+    plan = {"id": "gemma-dev-v8", "split": "dev", "scope": "development evaluation, not a held-out test",
             "qids": [q["qid"] for q in selected], "type_counts": dict(Counter(q["type"] for q in selected)),
             "question_hash": file_hash(ROOT / "data/gold/questions_all_reviewed.jsonl"),
             "prompt_version": PROMPT_VERSION, "prompt_sha256": hashlib.sha256((SEARCH_SYSTEM_PROMPT + SYSTEM_PROMPT + VERIFY_SYSTEM_PROMPT).encode()).hexdigest(),
@@ -81,11 +81,15 @@ def make_dev_plan(limit=30):
             "temperature": 0, "maximum_model_requests": limit * 4,
             "metrics": ["completion rate", "abstention decision accuracy", "citation primary-evidence coverage", "character F1 (lexical proxy only)"],
             "frozen_at_utc": datetime.now(timezone.utc).isoformat()}
+    plan["implementation_sha256"] = {
+        name: file_hash(Path(__file__).parent / name)
+        for name in ("agent.py", "verification.py", "llm.py", "schemas.py", "config.py", "retrieval.py")
+    }
     path = ROOT / "reports/gemma_dev_plan.json"
     if path.exists():
         previous = json.loads(path.read_text(encoding="utf-8"))
-        for key in ("qids", "question_hash", "prompt_sha256", "model"):
-            if previous[key] != plan[key]:
+        for key in ("id", "qids", "question_hash", "prompt_sha256", "prompt_version", "model", "implementation_sha256"):
+            if previous.get(key) != plan[key]:
                 raise ValueError("Existing plan differs; create a new version explicitly before evaluating")
         plan = previous
     else:
@@ -111,6 +115,8 @@ def evaluate_agent(agent, limit=30):
     completed = {r["qid"]: r for r in rows(output)} if output.exists() else {}
     if not set(completed) <= set(plan["qids"]):
         raise ValueError("Saved answers do not belong to evaluation plan")
+    if any(r["prediction"].get("prompt_version") != plan["prompt_version"] for r in completed.values()):
+        raise ValueError("Saved answers belong to a different agent version")
     for i, q in enumerate(selected, 1):
         if q["qid"] not in completed:
             prediction = agent.run(q["question"])

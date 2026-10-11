@@ -25,6 +25,7 @@ textarea:user-invalid{border-color:var(--color-error)}
 #question-tip{min-height:1lh}
 .intro{padding-top:var(--space-xl);padding-bottom:var(--space-2xl)}
 .primary-button,#submit,.skip-link{color:var(--color-accent-ink)}
+#clear-question{min-width:44px}
 #answer,.subtitle{max-width:70ch}
 @media(max-width:780px){.intro{padding-top:var(--space-lg);padding-bottom:var(--space-xl)}}
 textarea[aria-invalid="true"]{border-color:var(--color-error)}

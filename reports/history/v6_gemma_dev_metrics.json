@@ -1,0 +1,26 @@
+{
+  "plan_id": "gemma-dev-v6",
+  "split": "dev",
+  "n": 30,
+  "answerable": 25,
+  "status_counts": {
+    "insufficient_evidence": 26,
+    "answered": 4
+  },
+  "stop_reasons": {
+    "verification_invalid": 15,
+    "completed": 15
+  },
+  "completed_rate": 0.5,
+  "abstention_decision_accuracy": 0.3,
+  "citation_primary_evidence_hit_rate_answerable": 0.12,
+  "mean_character_f1_answerable": 0.0329,
+  "new_api_calls_recorded": 21,
+  "limitations": [
+    "Development sample, not held-out validation.",
+    "Character F1 measures text overlap, not clinical correctness.",
+    "Citation page/quote validity does not prove that every generated claim is entailed.",
+    "Primary evidence metric can miss valid alternative pages.",
+    "Human answer review is still required."
+  ]
+}
