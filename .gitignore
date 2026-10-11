@@ -12,3 +12,5 @@ private/
 *.egg-info/
 dist/
 build/
+output/pdf/
+tmp/

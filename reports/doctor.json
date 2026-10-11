@@ -1,0 +1,11 @@
+{
+  "proxy_configured": true,
+  "model": "gemma-4-E4B-it",
+  "data_present": true,
+  "proxy_probe": {
+    "native_tool_call": true,
+    "finish_reason": "tool_calls",
+    "cached": false,
+    "latency_ms": 12982.2
+  }
+}

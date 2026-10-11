@@ -1,0 +1,34 @@
+{
+  "recorded_at_utc": "2026-10-11T14:06:58.725694+00:00",
+  "python": "3.12.13",
+  "tests": {
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 32.538
+  },
+  "tests_passed": 30,
+  "pytest_passed": true,
+  "source_file_hash_check": {
+    "scope": "48 original files read by this task; not a whole-repository clean-tree claim",
+    "compared": 48,
+    "changed": []
+  },
+  "frozen_runs_verified": 6,
+  "actual_retrieval_probe": {
+    "hits": 3,
+    "chunk_ids": [
+      "ckd-guideline-2565-revised:p048-p049:063",
+      "DDC-NCD-SERVICE-INDICATOR-REVIEW-2563-2566:p033-p033:038",
+      "DDC-NCD-SERVICE-INDICATOR-REVIEW-2563-2566:p069-p070:096"
+    ]
+  },
+  "actual_proxy_native_tool_probe": {
+    "native_tool_call": true,
+    "finish_reason": "tool_calls",
+    "cached": false,
+    "latency_ms": 12982.2
+  },
+  "scope": "Unit/API tests use fake model and retriever. Real retrieval and proxy probes are separate checks, not end-to-end answer evaluation."
+}

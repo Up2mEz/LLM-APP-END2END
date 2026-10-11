@@ -11,11 +11,11 @@ cd D:\KMITL\LLMapp\ncd-gemma
 .\run.ps1
 ```
 
-เปิด `http://127.0.0.1:8765` การถามครั้งแรกจะโหลด bge-m3 และ index เข้า memory ครั้งต่อไปใช้ instance เดิม API รับคำถามครั้งละหนึ่งคำถามเพื่อจำกัดทรัพยากร
+เปิด `http://127.0.0.1:8765` การถามครั้งแรกจะโหลด bge-m3 และ index เข้า memory ครั้งต่อไปใช้ instance เดิม API รับคำถามครั้งละหนึ่งคำถามเพื่อจำกัดทรัพยากร การตรวจครั้งแรกบนเครื่องนี้ใช้เวลาโหลดประมาณ 298 วินาที และค้นหลักฐานจริงได้ 3 รายการ หากต้องการดูขั้นตอนโหลด ให้ตั้ง `$env:NCD_DEBUG_STARTUP='1'` ก่อนรัน
 
 ## ติดตั้งใน environment ใหม่
 
-Environment ที่ทดสอบใช้ Python 3.12.13และ CPU RAM เพียงพอสำหรับ bge-m3/index ไม่ต้องมี GPU
+Environment ที่ทดสอบใช้ Python 3.12.13 และ CPU RAM เพียงพอสำหรับ bge-m3/index ไม่ต้องมี GPU
 
 ```powershell
 py -3.12 -m venv .venv312
@@ -117,6 +117,18 @@ B เพิ่ม Recall@5 7.69 percentage points และ MRR@10 0.1193 เม
 | 6 Served interface | FastAPI REST API + Thai browser UI |
 
 มี incremental Git commits สำหรับงานนี้ อ่าน proposal และ demo script ใน `docs/` และรายงานผลจริงใน `reports/` ยังต้องตรวจความพร้อมของ public corpus/repository และส่ง PDF/demo URL ตามรายการส่งจริง
+
+## สถานะการตรวจล่าสุด
+
+- Unit/API tests ผ่าน 30 ข้อ ครอบคลุม protocol, validation, budget, error และ HTTP boundaries ด้วย model/retriever จำลอง
+- เรียก Gemma ผ่าน class proxy จริงได้ และได้ native `search_docs` tool call กลับมา การตรวจนี้ยังไม่ได้ส่ง corpus ให้ model
+- โหลด BGE-M3/index จากสำเนาในโปรเจคนี้และค้นหลักฐานจริงได้
+- คำนวณ strict retrieval metrics จาก frozen ranked hits ได้ตรงเดิมทั้ง 6 runs
+- SHA-256 ของไฟล์ต้นทางทั้ง 48 ไฟล์ที่อ่านยังตรงกับก่อนคัดลอก ดู `reports/source_integrity.json`
+- Dev evaluation 30 ข้อยังไม่เริ่ม: ระบบอนุมัติการทำงานปฏิเสธการส่งคำถามและข้อความ corpus ไปยัง class proxy โดยขอสิทธิ์ส่งข้อมูลที่ชัดเจนเพิ่ม ยังไม่มีผล Gemma answer quality ให้สรุป
+- API health ผ่าน แต่การเปิดแท็บใน Codex ติด webview attach timeout จึงยังไม่ได้ยืนยันหน้าเว็บด้วยภาพหรือการใช้งาน end-to-end
+
+รายงาน PDF เป็นฉบับร่าง 6 หน้า สร้างได้ด้วย `.venv312\Scripts\python scripts/build_report.py` และเก็บที่ `output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf` ต้องรัน agent evaluation แล้วสร้างใหม่ก่อนใช้เป็นฉบับส่ง ข้อมูลผู้จัดทำและ public demo link ยังต้องเติม
 
 ## การเผยแพร่และข้อจำกัด
 

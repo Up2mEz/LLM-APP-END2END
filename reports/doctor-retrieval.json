@@ -1,0 +1,13 @@
+{
+  "proxy_configured": true,
+  "model": "gemma-4-E4B-it",
+  "data_present": true,
+  "retrieval": {
+    "hits": 3,
+    "chunk_ids": [
+      "ckd-guideline-2565-revised:p048-p049:063",
+      "DDC-NCD-SERVICE-INDICATOR-REVIEW-2563-2566:p033-p033:038",
+      "DDC-NCD-SERVICE-INDICATOR-REVIEW-2563-2566:p069-p070:096"
+    ]
+  }
+}
