@@ -1,0 +1,9 @@
+{
+  "source_pdfs_checked": 33,
+  "changed": [],
+  "candidate_pages": 407,
+  "tables": 29,
+  "table_context_sha256": "33fc8745cba04bbfa39ceccfe88de3df149ec38bfc2332044a9080f568038c3b",
+  "matches_build": true,
+  "scope": "Only source PDFs used by this table builder; not a whole-repository clean-tree claim"
+}

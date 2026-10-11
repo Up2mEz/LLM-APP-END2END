@@ -1,6 +1,6 @@
 {
   "scope": "Same exposed development sample; cached completions reused when payloads match. Not independent validation.",
-  "selection": "More conservative prototype; not an improvement in overall answer accuracy or coverage.",
+  "selection": "Report all iterations, including failures. Read the semantic audit alongside these automatic metrics.",
   "runs": [
     {
       "plan_id": "gemma-dev-v5",
@@ -28,6 +28,9 @@
         "Primary evidence metric can miss valid alternative pages.",
         "Human answer review is still required."
       ],
+      "max_model_calls_per_question": 4,
+      "model_rounds_total": 85,
+      "searches_total": 30,
       "false_abstentions": [
         "q126",
         "q079",
@@ -73,6 +76,9 @@
         "Primary evidence metric can miss valid alternative pages.",
         "Human answer review is still required."
       ],
+      "max_model_calls_per_question": 4,
+      "model_rounds_total": 85,
+      "searches_total": 30,
       "false_abstentions": [
         "q014",
         "q017",
@@ -131,6 +137,9 @@
         "Primary evidence metric can miss valid alternative pages.",
         "Human answer review is still required."
       ],
+      "max_model_calls_per_question": 4,
+      "model_rounds_total": 100,
+      "searches_total": 30,
       "false_abstentions": [
         "q017",
         "q113",
@@ -184,6 +193,9 @@
         "Primary evidence metric can miss valid alternative pages.",
         "Human answer review is still required."
       ],
+      "max_model_calls_per_question": 4,
+      "model_rounds_total": 97,
+      "searches_total": 30,
       "false_abstentions": [
         "q017",
         "q113",
@@ -199,6 +211,219 @@
         "q101",
         "q061",
         "q106"
+      ],
+      "answered_unanswerable": [],
+      "correct_abstentions": [
+        "q125",
+        "q116",
+        "q120",
+        "q119",
+        "q118"
+      ]
+    },
+    {
+      "plan_id": "gemma-dev-v9",
+      "split": "dev",
+      "n": 30,
+      "answerable": 25,
+      "status_counts": {
+        "answered": 19,
+        "insufficient_evidence": 11
+      },
+      "stop_reasons": {
+        "completed": 28,
+        "answer_missing_quantity": 1,
+        "unsupported_answer": 1
+      },
+      "completed_rate": 0.9333,
+      "abstention_decision_accuracy": 0.8,
+      "citation_primary_evidence_hit_rate_answerable": 0.68,
+      "mean_character_f1_answerable": 0.2871,
+      "new_api_calls_recorded": 53,
+      "limitations": [
+        "Development sample, not held-out validation.",
+        "Character F1 measures text overlap, not clinical correctness.",
+        "Citation page/quote validity does not prove that every generated claim is entailed.",
+        "Primary evidence metric can miss valid alternative pages.",
+        "Human answer review is still required."
+      ],
+      "max_model_calls_per_question": 4,
+      "model_rounds_total": 83,
+      "searches_total": 30,
+      "false_abstentions": [
+        "q126",
+        "q041",
+        "q099",
+        "q075",
+        "q083",
+        "q076"
+      ],
+      "answered_unanswerable": [],
+      "correct_abstentions": [
+        "q125",
+        "q116",
+        "q120",
+        "q119",
+        "q118"
+      ]
+    },
+    {
+      "plan_id": "gemma-dev-v10",
+      "split": "dev",
+      "n": 30,
+      "answerable": 25,
+      "status_counts": {
+        "answered": 18,
+        "insufficient_evidence": 7,
+        "error": 5
+      },
+      "stop_reasons": {
+        "completed": 19,
+        "answer_validation_failed": 5,
+        "verification_unavailable": 1,
+        "proxy_http_429": 5
+      },
+      "completed_rate": 0.6333,
+      "abstention_decision_accuracy": 0.7333,
+      "citation_primary_evidence_hit_rate_answerable": 0.56,
+      "mean_character_f1_answerable": 0.2423,
+      "new_api_calls_recorded": 71,
+      "limitations": [
+        "Development sample, not held-out validation.",
+        "Character F1 measures text overlap, not clinical correctness.",
+        "Citation page/quote validity does not prove that every generated claim is entailed.",
+        "Primary evidence metric can miss valid alternative pages.",
+        "Human answer review is still required."
+      ],
+      "max_model_calls_per_question": 6,
+      "model_rounds_total": 101,
+      "searches_total": 37,
+      "false_abstentions": [
+        "q113",
+        "q068",
+        "q081"
+      ],
+      "answered_unanswerable": [],
+      "correct_abstentions": [
+        "q125",
+        "q116",
+        "q119",
+        "q118"
+      ]
+    },
+    {
+      "plan_id": "gemma-dev-v11",
+      "split": "dev",
+      "n": 30,
+      "answerable": 25,
+      "status_counts": {
+        "answered": 8,
+        "insufficient_evidence": 3,
+        "error": 19
+      },
+      "stop_reasons": {
+        "completed": 9,
+        "answer_validation_failed": 2,
+        "proxy_http_429": 19
+      },
+      "completed_rate": 0.3,
+      "abstention_decision_accuracy": 0.3,
+      "citation_primary_evidence_hit_rate_answerable": 0.16,
+      "mean_character_f1_answerable": 0.0855,
+      "new_api_calls_recorded": 47,
+      "limitations": [
+        "Development sample, not held-out validation.",
+        "Character F1 measures text overlap, not clinical correctness.",
+        "Citation page/quote validity does not prove that every generated claim is entailed.",
+        "Primary evidence metric can miss valid alternative pages.",
+        "Human answer review is still required."
+      ],
+      "max_model_calls_per_question": 6,
+      "model_rounds_total": 78,
+      "searches_total": 33,
+      "false_abstentions": [
+        "q079",
+        "q080"
+      ],
+      "answered_unanswerable": [],
+      "correct_abstentions": [
+        "q125"
+      ]
+    },
+    {
+      "plan_id": "gemma-dev-v12",
+      "split": "dev",
+      "n": 30,
+      "answerable": 25,
+      "status_counts": {
+        "answered": 23,
+        "insufficient_evidence": 7
+      },
+      "stop_reasons": {
+        "completed": 27,
+        "answer_validation_failed": 2,
+        "answer_missing_quantity": 1
+      },
+      "completed_rate": 0.9,
+      "abstention_decision_accuracy": 0.9333,
+      "citation_primary_evidence_hit_rate_answerable": 0.56,
+      "mean_character_f1_answerable": 0.2805,
+      "new_api_calls_recorded": 48,
+      "limitations": [
+        "Development sample, not held-out validation.",
+        "Character F1 measures text overlap, not clinical correctness.",
+        "Citation page/quote validity does not prove that every generated claim is entailed.",
+        "Primary evidence metric can miss valid alternative pages.",
+        "Human answer review is still required."
+      ],
+      "max_model_calls_per_question": 6,
+      "model_rounds_total": 108,
+      "searches_total": 39,
+      "false_abstentions": [
+        "q075",
+        "q061"
+      ],
+      "answered_unanswerable": [],
+      "correct_abstentions": [
+        "q125",
+        "q116",
+        "q120",
+        "q119",
+        "q118"
+      ]
+    },
+    {
+      "plan_id": "gemma-dev-v13",
+      "split": "dev",
+      "n": 30,
+      "answerable": 25,
+      "status_counts": {
+        "answered": 23,
+        "insufficient_evidence": 7
+      },
+      "stop_reasons": {
+        "completed": 27,
+        "answer_validation_failed": 2,
+        "answer_missing_quantity": 1
+      },
+      "completed_rate": 0.9,
+      "abstention_decision_accuracy": 0.9333,
+      "citation_primary_evidence_hit_rate_answerable": 0.56,
+      "mean_character_f1_answerable": 0.2805,
+      "new_api_calls_recorded": 0,
+      "limitations": [
+        "Development sample, not held-out validation.",
+        "Character F1 measures text overlap, not clinical correctness.",
+        "Citation page/quote validity does not prove that every generated claim is entailed.",
+        "Primary evidence metric can miss valid alternative pages.",
+        "Human answer review is still required."
+      ],
+      "max_model_calls_per_question": 6,
+      "model_rounds_total": 108,
+      "searches_total": 39,
+      "false_abstentions": [
+        "q075",
+        "q061"
       ],
       "answered_unanswerable": [],
       "correct_abstentions": [

@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .agent import PROMPT_VERSION, SYSTEM_PROMPT, SEARCH_SYSTEM_PROMPT, VERIFY_SYSTEM_PROMPT
-from .config import ROOT
+from .config import ROOT, Settings
 from .retrieval import file_hash
 
 
@@ -73,22 +73,27 @@ def make_dev_plan(limit=30):
         for kind in sorted(buckets):
             if buckets[kind] and len(selected) < limit:
                 selected.append(buckets[kind].pop(0))
-    plan = {"id": "gemma-dev-v8", "split": "dev", "scope": "development evaluation, not a held-out test",
+    plan = {"id": "gemma-dev-v13", "split": "dev", "scope": "development evaluation, not a held-out test",
             "qids": [q["qid"] for q in selected], "type_counts": dict(Counter(q["type"] for q in selected)),
             "question_hash": file_hash(ROOT / "data/gold/questions_all_reviewed.jsonl"),
             "prompt_version": PROMPT_VERSION, "prompt_sha256": hashlib.sha256((SEARCH_SYSTEM_PROMPT + SYSTEM_PROMPT + VERIFY_SYSTEM_PROMPT).encode()).hexdigest(),
             "model": "gemma-4-E4B-it", "selection": "round-robin types; SHA256(ncd-gemma-dev-v1:qid) order",
-            "temperature": 0, "maximum_model_requests": limit * 4,
+            "temperature": 0, "maximum_model_requests": limit * Settings.from_env().max_steps * 2,
+            "maximum_model_rounds": limit * Settings.from_env().max_steps,
+            "http_429_retry_limit": 1,
+            "max_steps": Settings.from_env().max_steps,
+            "table_context_sha256": (file_hash(ROOT / "data/table_context/tables.jsonl")
+                                     if (ROOT / "data/table_context/tables.jsonl").is_file() else None),
             "metrics": ["completion rate", "abstention decision accuracy", "citation primary-evidence coverage", "character F1 (lexical proxy only)"],
             "frozen_at_utc": datetime.now(timezone.utc).isoformat()}
     plan["implementation_sha256"] = {
         name: file_hash(Path(__file__).parent / name)
-        for name in ("agent.py", "verification.py", "llm.py", "schemas.py", "config.py", "retrieval.py")
+        for name in ("agent.py", "verification.py", "evidence.py", "pdf_tables.py", "json_protocol.py", "question_scope.py", "llm.py", "schemas.py", "config.py", "retrieval.py")
     }
     path = ROOT / "reports/gemma_dev_plan.json"
     if path.exists():
         previous = json.loads(path.read_text(encoding="utf-8"))
-        for key in ("id", "qids", "question_hash", "prompt_sha256", "prompt_version", "model", "implementation_sha256"):
+        for key in ("id", "qids", "question_hash", "prompt_sha256", "prompt_version", "model", "implementation_sha256", "max_steps", "table_context_sha256"):
             if previous.get(key) != plan[key]:
                 raise ValueError("Existing plan differs; create a new version explicitly before evaluating")
         plan = previous

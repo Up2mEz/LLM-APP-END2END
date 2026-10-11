@@ -1,27 +1,27 @@
-# สถานะงาน 11 ตุลาคม 2026
+# สถานะงาน 12 ตุลาคม 2026
 
-แอปและ evaluation อยู่ใน D:\KMITL\LLMapp\ncd-gemma ใช้สำเนาข้อมูลจากต้นทาง ตรวจ SHA-256 ของไฟล์ต้นทางที่นำมาใช้ 48 ไฟล์แล้วไม่เปลี่ยน ไม่ใช่การยืนยันว่า repo ต้นทางทั้งชุดไม่มีงานของผู้อื่น
+แอปอยู่ใน D:\KMITL\LLMapp\ncd-gemma ใช้สำเนา gold/index เดิม ไม่แก้ repo ต้นทาง ตรวจ frozen source 48 ไฟล์และ PDF ที่อ่านเพิ่ม 33 ไฟล์ด้วย SHA-256 แล้วไม่เปลี่ยน ไม่ใช่การยืนยัน clean tree ทั้ง repo
 
 ## ทำแล้ว
 
-- Gemma ผ่าน class proxy/OpenAI SDK, native search_docs, safe arguments parser และแก้ HTTP 400 จาก tool history/empty tools
-- Structured answer/citation validation, ตรวจคำตอบแยกประเด็นพร้อม evidence quotes และซ่อมผลตรวจได้หนึ่งครั้ง ภายใน 4 model calls/150 วินาที
-- Quantity guard สำหรับคำถาม “กี่” ที่ไม่มีจำนวนในคำตอบ โดยไม่นับ source marker เป็นจำนวน ไม่มี qid/gold hard-code ใน serving
-- ล็อก evaluation plan กับ qids, gold/prompt hashes และ hashes ของ implementation ป้องกัน resume ผลต่างรุ่นปนกัน
-- UI ตาม Hallmark โทนฟ้า–ขาว, mascot หนังสือ, เงาและ motion, responsive, copy/clear/help/source disclosure, สถานะยังยืนยันคำตอบไม่ได้
-- Unit/API tests 68 passed, 0 failed/error/skipped มี Starlette deprecation warning 1 รายการ
-- Dev 30 ข้อเดิมครบ รุ่น v8: ตอบ 11 งดตอบ 19; completed 22, verification_invalid 5, unsupported_answer 2, answer_missing_quantity 1
-- Abstention decision accuracy 0.5333, citation primary-evidence hit rate 0.3200, character F1 0.1319 ไม่ใช่ clinical accuracy
-- Browser v8: success q045, ระงับ q113/q120, responsive 320/375/414/768 px ไม่มี overflow หรือ targets ต่ำกว่า 44×44 px หลังแก้ปุ่มล้าง; ไม่พบ console errors
-- Frozen retrieval metrics ตรงเดิมทั้ง 6 runs: B Recall@5 0.8846, MRR@10 0.7374 บน answerable test 52 ข้อ
-- รายงาน PDF 6 หน้าอัปเดตจากผลจริงและตรวจภาพครบทุกหน้าแล้ว
+- Gemma class proxy/OpenAI SDK และ native search_docs agent loop
+- PDF table transcription จากตำแหน่งเซลล์ เก็บ merged headers/row labels และ provenance; ไม่สร้าง retrieval index ใหม่
+- โมเดลเลือกเซลล์ ระบบแสดงชื่อคอลัมน์คู่ค่าจริง แก้การสลับค่ารวมกับอาหารใน q113/q079/q080
+- Citation/reviewer ใช้ line selection, bounded evidence recovery, narrow duplicate-quote JSON repair และ rate-limit retry หนึ่งครั้งภายใต้ deadline
+- Local configuration 6 model rounds, 3 searches, 150 วินาที และ HTTP attempts นับจริง แผน dev ล็อก implementation/table/gold/prompt hashes
+- คำถามโรคไตแบบกว้างตอบคำแนะนำทั่วไปพร้อมถามระยะโรค ไม่เหมารวมอาหารที่ต้องงดทั้งหมด
+- UI คลินิกเดิม เพิ่มข้อความสถานะที่แยกไม่พบเอกสารกับยังยืนยันคำตอบไม่ได้ และ label สำหรับข้อมูลตารางจัดรูป
+- Tests 103 passed, 0 failed/error/skipped, Starlette deprecation warning 1 รายการ
+- Dev 30 ข้อเดิม v13: ตอบ 23 งด 7; false abstention 2, answered-unanswerable 0; ไม่มี transport error
+- Abstention decision accuracy 0.9333, citation hit 0.5600, character F1 0.2805 ไม่ใช่ clinical accuracy
+- ตรวจเนื้อหา: สาระหลักตรง 14 ข้อ, ผิด/ไม่ครบชัดเจน 4, ต้องตรวจบริบท/ความครบถ้วน 5, false abstention 2, งดตรง label 5
 
-## ข้อจำกัดที่ยังเปิดอยู่
+## ข้อจำกัด
 
-v8 ระงับคำตอบผิด/ไม่ครบเดิม q113/q080/q120 ได้ แต่ยังมี false abstention 14 ข้อ และ q041/q076 ที่ต้องทบทวนบริบทหรือความครบถ้วน รุ่นใหม่ตอบน้อยกว่า v5 จึงไม่อ้างว่า overall accuracy ดีขึ้น ความเข้มงวดของ reviewer ยังมีต้นทุนต่อ coverage
+v8 มี false abstention 14 ข้อ รุ่นปัจจุบันตอบเพิ่ม 12 แต่เพียง 6 ข้อกลับมาตอบสาระหลักครบ อีก 6 ข้อยังมีปัญหา ตัวเลขตอบได้มากขึ้นจึงไม่ใช่หลักฐานว่าแก้คำตอบถูกทั้งหมด อ่าน DEV_COMPARISON_TH.md
 
-รอบ v6–v8 ใช้ cached candidates เมื่อ payload ตรงกัน และเรียก proxy ใหม่ 21, 15, 0 ครั้งตามลำดับ เก็บผลเดิมและรอบที่แย่ลงไว้ครบ ดู reports/agent_comparison.json และ docs/ANSWER_REVIEW_TH.md
+v13 dev ใช้ cached payload เหมือน v12 และคำตอบ/citations ตรงกันทั้ง 30 ข้อ ไม่อ้างว่าเป็น independent repeat generation เก็บ v9–v11 ที่ยังผิดและติด HTTP 429 ครบ
 
 ## งานส่ง
 
-มี capability families 1/2/3/4/6, baseline และ measured retrieval improvement ตาม rubric แต่ยังไม่ใช่การส่ง Project เสร็จ: public corpus/reproduction, push GitHub, ข้อมูลผู้จัดทำใน PDF, demo video/deployed URL และ Submit ยังเหลือ ตามขอบเขตที่ผู้ใช้เลือกให้ใช้ corpus ในเครื่องก่อน อ่าน PROJECT_READINESS_TH.md สำหรับสถานะแต่ละ deliverable
+มี capability families 1/2/3/4/6 และ measured retrieval baseline ตาม rubric แต่ยังไม่ส่ง Project: public corpus/reproduction, push GitHub, ผู้จัดทำใน PDF, demo video/deployed URL และ Submit ยังเหลือ ตามขอบเขตใช้ corpus ในเครื่องก่อน

@@ -27,7 +27,7 @@ class SearchArgs(StrictModel):
 
 class CitationDraft(StrictModel):
     source_id: str = Field(pattern=r"^S[1-9][0-9]?$", max_length=3)
-    quote: Annotated[Nonblank, Field(min_length=8, max_length=800)]
+    quote: Annotated[Nonblank, Field(min_length=8, max_length=1800)]
 
 
 class AnswerDraft(StrictModel):

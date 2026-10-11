@@ -1,5 +1,5 @@
 {
-  "id": "gemma-dev-v8",
+  "id": "gemma-dev-v13",
   "split": "dev",
   "scope": "development evaluation, not a held-out test",
   "qids": [
@@ -43,25 +43,33 @@
     "unanswerable": 5
   },
   "question_hash": "680a752e738d7a60f463345c08e3e098934ab945df2183a8bb1e0d97b1f6ddea",
-  "prompt_version": "ncd-gemma-v8",
-  "prompt_sha256": "a41576b998464e5174adc8861c5940d7ebb1354d70a12a42fe93c22f2ee2b962",
+  "prompt_version": "ncd-gemma-v13",
+  "prompt_sha256": "8f7b96e71bd72f63efdf57a7ac242463ec12572f10ebee8f7f4bedd4724d6957",
   "model": "gemma-4-E4B-it",
   "selection": "round-robin types; SHA256(ncd-gemma-dev-v1:qid) order",
   "temperature": 0,
-  "maximum_model_requests": 120,
+  "maximum_model_requests": 360,
+  "maximum_model_rounds": 180,
+  "http_429_retry_limit": 1,
+  "max_steps": 6,
+  "table_context_sha256": "33fc8745cba04bbfa39ceccfe88de3df149ec38bfc2332044a9080f568038c3b",
   "metrics": [
     "completion rate",
     "abstention decision accuracy",
     "citation primary-evidence coverage",
     "character F1 (lexical proxy only)"
   ],
-  "frozen_at_utc": "2026-10-11T16:23:09.678176+00:00",
+  "frozen_at_utc": "2026-10-11T17:20:23.198450+00:00",
   "implementation_sha256": {
-    "agent.py": "2b4f883709e03cd6034137109014548bc6a2e97238a0d00358e5252def250e45",
-    "verification.py": "963372a33157d66b33fde424c833bfa29aaa8cda2e2e9726b97c60c4c43b9678",
-    "llm.py": "17fb690782d3b01520e73945b1be296075e7a480c1eea7be38e279e5642b4d7d",
-    "schemas.py": "41eaa796f34f9c61163d51fb7a50dfc7bfe38920d12e4f5c2da94e5965d06a65",
+    "agent.py": "77394c98eda31f4759c4b54247fdf8c0313edd210ada915ef069eb7a65a4cd14",
+    "verification.py": "696693c470c60e4f4772d574c4b8db56d95670695223e1251ecb7a0201717602",
+    "evidence.py": "f4fa0baa7e9db290c8505daccb3afb93a11c71cb894d550d3c90a5e5cec582ec",
+    "pdf_tables.py": "19297489a2581f3ffd68870895d905391f4fb41e29d4eab41cd5ee16568f146e",
+    "json_protocol.py": "959e60dc65f69d50946b4bf3ca1834a32a02426f3b69a0491e6a5e869050505a",
+    "question_scope.py": "a68aba3625107f6f8d061f8677a323d299e7e555e5eb483eb43be6766644f1ba",
+    "llm.py": "813ba6c39fa1cfe747b453971a574ca81c44a5c66d30289a079a471ddd07a828",
+    "schemas.py": "8c92828a16fa9694ac68c99186a097e1870fbe0b3a5302f7c586eb0079df93dc",
     "config.py": "ee8f11138fc94c9a0c22740b1d64ed1969efeaf00042a6066107e132f93b231b",
-    "retrieval.py": "deae7e987096bdc7dec87020c72fe96d8631d664da28089074129026bb94ac6d"
+    "retrieval.py": "9f29fe9c8ca39e9e28e472fa3a1b4676c0f2edbbde0981250a116737f7f19b63"
   }
 }

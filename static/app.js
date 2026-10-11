@@ -3,7 +3,7 @@ const $ = id => document.getElementById(id);
 const text = (tag, value, cls) => { const el = document.createElement(tag); el.textContent = value; if (cls) el.className = cls; return el; };
 const labels = {answered:'พบหลักฐานประกอบ',insufficient_evidence:'หลักฐานยังไม่เพียงพอ',error:'บริการขัดข้อง'};
 function resultLabel(data) {
-  return data.status === 'insufficient_evidence' && data.stop_reason !== 'completed'
+  return data.status === 'insufficient_evidence' && (data.sources?.length || data.stop_reason !== 'completed')
     ? 'ยังยืนยันคำตอบไม่ได้' : labels[data.status] || 'ตรวจสอบคำตอบ';
 }
 let busy = false;
@@ -45,6 +45,7 @@ function showSources(data) {
     const card = text('article', '', 'source-card'); card.id = `source-${citation.source_id}`; card.tabIndex = -1;
     const page = citation.pdf_page_start === citation.pdf_page_end ? `${citation.pdf_page_start}` : `${citation.pdf_page_start}–${citation.pdf_page_end}`;
     card.append(text('h3', `[${citation.source_id}] หลักฐานประกอบคำตอบ`), text('p', `หน้า PDF ${page}`, 'source-location'), text('blockquote', citation.quote));
+    if (citation.quote_format === 'structured_pdf_cells') card.append(text('p', 'ข้อความตารางจัดตามหัวคอลัมน์จาก PDF เพื่อให้อ่านคู่กับค่าได้ชัดขึ้น', 'source-id'));
     const details = text('details', ''); details.append(text('summary', 'ดูเอกสารและบริบทเพิ่มเติม'));
     details.append(text('p', `เอกสาร: ${citation.document_id}`, 'source-id'), text('p', `ฉบับ: ${citation.edition_id}`, 'source-id'));
     const source = evidence.get(citation.source_id);
@@ -55,7 +56,7 @@ function showSources(data) {
   }
   if (!data.citations.length) {
     const empty = text('div', '', 'empty');
-    const hint = data.sources?.length && data.stop_reason !== 'completed'
+    const hint = data.sources?.length
       ? 'ค้นพบข้อความแล้ว แต่คำตอบยังไม่ผ่านการตรวจ จึงยังไม่แสดงเป็นคำตอบที่ยืนยันได้'
       : 'ลองระบุรายละเอียดเพิ่ม เช่น ชื่อเรื่อง กลุ่มคน หรือช่วงอายุที่สนใจ';
     empty.append(text('h3', 'ยังไม่มีหลักฐานที่ยืนยันคำตอบ'), text('p', hint)); $('sources').append(empty);

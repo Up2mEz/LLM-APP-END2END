@@ -1,5 +1,7 @@
 # ตรวจคำตอบ dev v8 เทียบ reference
 
+เอกสารนี้เก็บประวัติ v8 ผลปัจจุบันอยู่ใน [DEV_COMPARISON_TH.md](DEV_COMPARISON_TH.md)
+
 ตรวจจากผลจริงทั้ง 30 ข้อโดย coding agent ไม่ใช่แพทย์หรือ independent clinical validation ชุดนี้ใช้พัฒนาแล้ว จึงไม่ใช่ held-out test ไม่ส่ง reference ให้ Gemma และไม่ได้แก้ gold หรือ retrieval เพื่อเพิ่มคะแนน
 
 ## ผลล่าสุดและ trade-off

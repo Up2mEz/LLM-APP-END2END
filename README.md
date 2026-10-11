@@ -31,6 +31,15 @@ Copy-Item .env.example .env
 python scripts/import_source.py --source "D:\KMITL\NLP\NLP-Year3\team-project\thai-ncd-guideline-qa"
 ```
 
+สำหรับ context ตารางรุ่นปัจจุบัน ติดตั้ง dev dependencies แล้วรันตัวสร้างตารางหนึ่งครั้ง โดยอ่าน PDF ต้นทางอย่างเดียว:
+
+```powershell
+.venv312\Scripts\python -B scripts/build_table_context.py --source "D:\KMITL\NLP\NLP-Year3\team-project\thai-ncd-guideline-qa"
+.venv312\Scripts\python -B scripts/verify_table_sources.py
+```
+
+Derived table artifact อยู่ใต้ data/table_context และถูก ignore; serving ไม่อ่าน repo ต้นทาง แผน dev ล็อก table hash เพิ่มด้วย
+
 สคริปต์อ่าน allow-list 48 ไฟล์ ตรวจ SHA-256 ก่อนและหลัง copy และปฏิเสธการเขียนทับไฟล์ปลายทางที่เปลี่ยนไป ข้อมูลอยู่ใต้ `data/` ซึ่ง Git ignore ไว้ทั้งหมด ไม่มี secret ถูกคัดลอกด้วยสคริปต์นี้ ดูรายการต้นทางและ hashes ใน `provenance/source_snapshot.json`
 
 ต้องมี Hugging Face cache ของ `BAAI/bge-m3` revision `5617a9f61b028005a4858fdac845db406aefb181` และ `refs/main` ของ cache ต้องตรง revision นี้ แอปตั้ง offline mode โดย default เพื่อไม่เปลี่ยน weights ระหว่างรัน หากติดตั้งเครื่องใหม่ ให้เตรียม cache revision นี้จากผู้ให้บริการโมเดลด้วยกระบวนการที่บันทึก version ชัดเจนก่อน การเปลี่ยน answer LLM ไม่ต้องสร้าง document vectors ใหม่
@@ -89,7 +98,7 @@ flowchart LR
 
 Gold ไม่ถูกโหลดโดย serving layer และไม่มี reference answers ถูกส่งให้ Gemma ฝั่ง retrieval ใช้ child 128 tokens, parent 512 tokens, bge-m3, BM25 char3, k1=2.18, b=0.86 และ min-max convex fusion alpha=0.6, pool=100 ตาม frozen config เดิม
 
-Agent บังคับเริ่มด้วย `search_docs` จากนั้นเลือกค้นเพิ่มหรือตอบได้เอง เก็บ assistant tool calls และส่ง tool result กลับพร้อม `tool_call_id` ที่ตรงกัน จำกัด 4 model rounds รวม verification, 3 searches, top_k ไม่เกิน 8 และ context รวม 18,000 ตัวอักษร ปฏิเสธ query/filter ซ้ำ ชื่อ tool อื่น และ filter ที่ไม่มีใน metadata รอบสุดท้ายปิดการเรียก tools มี request timeout และ agent deadline
+Agent บังคับเริ่มด้วย `search_docs` จากนั้นเลือกค้นเพิ่มหรือตอบได้เอง เก็บ assistant tool calls และส่ง tool result กลับพร้อม `tool_call_id` ที่ตรงกัน configuration ที่ทดสอบจำกัด 6 model rounds รวม verification, 3 searches, top_k ไม่เกิน 8 และ context รวม 18,000 ตัวอักษร ปฏิเสธ query/filter ซ้ำ ชื่อ tool อื่น และ filter ที่ไม่มีใน metadata รอบสุดท้ายปิดการเรียก tools มี request timeout และ agent deadline
 
 Final answer ผ่าน Pydantic schema มีสถานะ answered หรือ insufficient_evidence ทุก citation ต้องอ้าง source ID ที่ tool ส่งมาจริง quote ต้องอยู่ในข้อความที่ model เห็น และ citation markers ในคำตอบต้องตรงกับรายการอ้างอิง ถ้าผิดให้แก้ได้หนึ่งรอบ แล้วหยุดอย่างชัดเจน การตรวจนี้ยืนยันที่มาของ quote ไม่ได้พิสูจน์ความหมายของคำตอบทุกประโยค
 
@@ -119,35 +128,38 @@ B เพิ่ม Recall@5 7.69 percentage points และ MRR@10 0.1193 เม
 
 มี incremental Git commits สำหรับงานนี้ อ่าน proposal และ demo script ใน `docs/` และรายงานผลจริงใน `reports/` ตั้ง origin เป็น https://github.com/Up2mEz/LLM-APP-END2END แล้ว ยังไม่ได้ push ตามขอบเขตใช้ corpus ในเครื่องก่อน ต้องตรวจความพร้อมของ public corpus/repository และส่ง PDF/demo URL ตามรายการส่งจริง
 
-## สถานะการตรวจล่าสุด
+## สถานะการตรวจล่าสุด 12 ตุลาคม 2026
 
-- Unit/API tests ผ่าน **68 ข้อ** ไม่มี failed/error/skipped มี Starlette deprecation warning 1 รายการ
-- Gemma dev ชุดเดิม 30 ข้อ รุ่น **v8**: ตอบ 11 ข้อ งดตอบ 19 ข้อ ในข้อที่งดตอบมี 14 ข้อที่ gold ระบุว่าตอบได้
-- Abstention decision accuracy **0.5333**, citation primary-evidence hit rate **0.3200**, character F1 **0.1319** ไม่ใช่ clinical accuracy
-- เพิ่ม structured review แยกประเด็น ตรวจ quote จากคำตอบและ evidence, bounded repair ภายใน 4 calls และตรวจคำถามที่ถาม “กี่” แต่ไม่มีจำนวนในคำตอบ
-- ระงับคำตอบผิดเดิม q113/q080 และคำตอบไม่ครบ q120 ได้ แต่ทำให้คำตอบเดิมที่ตรง reference 4 ข้อถูกงดตอบเพิ่ม จึง **ไม่อ้างว่า overall accuracy ดีขึ้น** ดู [ผลตรวจทั้ง 30 ข้อ](docs/ANSWER_REVIEW_TH.md)
-- คำตอบที่ยังต้องทบทวนคือ q041 (alternative source/คำถามกำกวม) และ q076 (ช่วงจำนวนไม่ครบและต่างบริบท)
-- UI โทนฟ้า–ขาวตาม Hallmark, mascot หนังสือ, copy/clear/help/source disclosure และ reduced motion มีการแยกสถานะ “ยังยืนยันคำตอบไม่ได้” ออกจากการไม่พบหลักฐาน
-- Browser ทดสอบ success q045 และการระงับ q113/q120 บน v8; model completions ใช้ cache จริง ส่วน retrieval ทำงานจริง
-- Frozen retrieval metrics ตรงเดิมทั้ง 6 runs; hashes ต้นทาง 48 ไฟล์ไม่เปลี่ยน
+- Unit/API tests **103 passed**, ไม่มี failed/error/skipped; Starlette deprecation warning 1 รายการ
+- รุ่น **v13** ทดสอบ dev 30 ข้อเดิมครบ: ตอบ 23 งดตอบ 7 ข้อ ไม่มี transport error ในรอบสุดท้าย
+- False abstention ลดจาก v8 **14 → 2 ข้อ** แต่ใน 12 ข้อที่ตอบเพิ่ม มีเพียง 6 ข้อที่กลับมาตอบสาระหลักได้ครบ อีก 6 ข้อยังมีปัญหา
+- แก้ตาราง q113/q079/q080: แยกค่ารวม นม และอาหารได้; ใช้ชื่อคอลัมน์คู่ค่าจาก PDF แทนให้โมเดลตั้งความหมายตัวเลขใหม่
+- ตรวจคำตอบพบสาระหลักตรง reference 14 ข้อ; อีก 9 คำตอบยังผิด/ไม่ครบ/ต้องตรวจบริบท และยังงดเกินจำเป็น q075/q061 ดู [ผลรายข้อและคำถามโรคไต](docs/DEV_COMPARISON_TH.md)
+- คำถาม “เป็นโรคไต ควรงดกินไร” ตอบคำแนะนำลดเค็มทั่วไปพร้อมหลักฐาน และถามข้อมูลระยะโรคเพิ่มเติม ผ่าน API และ browser จริง
+- เพิ่ม line selection, PDF table transcription, bounded evidence recovery, narrow JSON repair และ HTTP 429 retry ตาม deadline อ่าน [รายละเอียดวิธีแก้](docs/TABLE_AND_ABSTENTION_TH.md)
+- UI แยกการค้นพบเอกสารแต่ยังยืนยันคำตอบไม่ได้จากการค้นไม่พบ พร้อมแสดงว่า citation ตารางเป็นข้อความจัดรูปจากเซลล์ PDF
+- SHA-256 ของ frozen source 48 ไฟล์และ PDF ที่อ่านเพิ่ม 33 ไฟล์ไม่เปลี่ยน gold เดิมไม่ถูกแก้ Frozen retrieval metrics ตรงเดิม 6 runs
 
-| Dev 30 ข้อเดิม | v5 ก่อนเพิ่ม checks | v6 checks ยังไม่มี repair | v7 เพิ่ม repair | v8 ปัจจุบัน |
-|---|---:|---:|---:|---:|
-| ตอบ / งดตอบ | 18 / 12 | 4 / 26 | 12 / 18 | 11 / 19 |
-| Abstention decision accuracy | 0.7000 | 0.3000 | 0.5000 | 0.5333 |
-| Citation primary-evidence hit rate | 0.5200 | 0.1200 | 0.3200 | 0.3200 |
-| Character F1 | 0.2344 | 0.0329 | 0.1319 | 0.1319 |
-| ตอบข้อที่ label เป็น unanswerable | 1 | 1 | 1 | 0 |
+| Dev 30 ข้อเดิม | v5 | v8 | v13 |
+|---|---:|---:|---:|
+| ตอบ / งดตอบ | 18 / 12 | 11 / 19 | 23 / 7 |
+| False abstentions | 8 | 14 | 2 |
+| การเลือกตอบ/งดตรง label | 0.7000 | 0.5333 | 0.9333 |
+| Citation primary-evidence hit rate | 0.5200 | 0.3200 | 0.5600 |
+| Character F1 | 0.2344 | 0.1319 | 0.2805 |
+| สาระหลักตรง reference จากการตรวจ | 13 | 9 | 14 |
 
-ผลนี้สะท้อน trade-off: ต้นแบบปัจจุบันยืนยันได้ยากขึ้นและงดตอบมากขึ้น ไม่ใช่การพิสูจน์ว่าระบบมีคุณภาพโดยรวมสูงขึ้น รุ่น v6–v8 ใช้ candidate responses ที่ cache ไว้เมื่อ payload ตรงกัน; new API calls ที่บันทึกคือ 21, 15 และ 0 ตามลำดับ เก็บ raw runs และผลเก่าครบ เปรียบเทียบด้วย `python scripts/compare_agent_runs.py`
+93.33% เป็นการเลือกตอบ/งด ไม่ใช่ความถูกต้องของคำตอบ Character F1 เป็นเพียง text overlap และ citation metric เปลี่ยนตาม runtime context ที่ขยายหน้า ไม่ใช่ retriever improvement ชุดนี้เป็น exposed dev ไม่มีการอ้าง independent clinical validation
 
-อ่าน [สถานะตาม rubric และงานส่งที่เหลือ](docs/PROJECT_READINESS_TH.md) และ [ผลตรวจดีไซน์](docs/UI_REVIEW_TH.md) รายงาน PDF สร้างจาก artifacts จริงด้วย `.venv312\Scripts\python scripts/build_report.py` ที่ `output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf` ยังต้องเติมผู้จัดทำและ demo URL ก่อนส่ง
+เก็บผล v5–v13 รวมรอบที่ผิดและติด rate limit ไว้ครบใน reports/history กับ private/runs v13 ให้คำตอบเหมือน v12 ทุกข้อและใช้ cached completions 0 HTTP attempts ใหม่; v12 ใช้ 48 attempts ใหม่ แยก kidney probe v13 อีก 2 calls ไม่อ้างว่าเป็น independent repeat generation
+
+อ่าน [สถานะตาม rubric](docs/PROJECT_READINESS_TH.md), [ผล UI](docs/UI_REVIEW_TH.md) และรายงาน PDF ที่ output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf ยังต้องเติมผู้จัดทำและ demo URL ก่อนส่ง
 
 ## ข้อสังเกตจาก class proxy
 
 Proxy ส่ง Gemma native syntax อยู่ใน `function.arguments` บางครั้ง จึง parse รูปแบบที่อนุญาตด้วย parser ที่ไม่ใช้ eval แล้วส่งกลับเป็น JSON ที่ผ่าน schema ก่อนทำ tool call รอบถัดไป Raw response ยังอยู่ใน cache
 
-รอบตรวจคำตอบแยกใช้ Gemma ตัวเดิมเปรียบเทียบ question/answer/evidence โดยไม่รับ gold label ผู้ตรวจต้องแยกประเด็นและระบุข้อความอ้างอิงตรงตัว หากรูปแบบหรือ quote ไม่ผ่านซ่อมได้หนึ่งครั้งภายใน budget เดิม ต้องละ `tools` และ `tool_choice` เมื่อไม่ใช้ tools เพราะ proxy ปฏิเสธ empty tools + tool_choice คำตอบที่ตรวจไม่ได้จะงดตอบ รอบตรวจนี้นับรวมใน budget 4 model calls และ 150 วินาที ไม่ใช่ independent verifier และยังปล่อยคำตอบผิดบางข้อ
+รอบตรวจคำตอบแยกใช้ Gemma ตัวเดิมเปรียบเทียบ question/answer/evidence โดยไม่รับ gold label ผู้ตรวจแยกประเด็นและเลือกเลขบรรทัดอ้างอิง ระบบคัดข้อความให้เอง หากรูปแบบหรือ quote ไม่ผ่านซ่อมได้หนึ่งครั้งภายใน budget เดิม ต้องละ `tools` และ `tool_choice` เมื่อไม่ใช้ tools เพราะ proxy ปฏิเสธ empty tools + tool_choice คำตอบที่ตรวจไม่ได้จะงดตอบ รอบตรวจนี้นับรวมใน budget 6 model rounds และ 150 วินาที (HTTP 429 retry แยกนับ attempts) ไม่ใช่ independent verifier และยังปล่อยคำตอบผิดบางข้อ
 
 แหล่ง protocol: [Google Gemma 4 function calling](https://ai.google.dev/gemma/docs/capabilities/text/function-calling-gemma4) พฤติกรรม HTTP 400 ข้างต้นตรวจพบจาก class proxy จริง ไม่ได้อนุมานว่าใช้ server implementation ใด
 

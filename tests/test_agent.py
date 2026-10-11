@@ -130,6 +130,26 @@ def test_empty_retrieval_can_abstain():
     assert result["status"] == "insufficient_evidence"
 
 
+def test_early_abstention_gets_one_bounded_evidence_recovery():
+    result, llm, retrieval = run([call(), abstain(), call({"query": "ประเด็นที่ขาด"}, call_id="next"), answered()], max_steps=6)
+    assert result['status'] == 'answered'
+    assert len(retrieval.calls) == 2
+    assert result['stats']['model_rounds'] == 5
+    assert sum(t['event'] == 'evidence_recovery' for t in result['trace']) == 1
+
+
+def test_repeated_abstention_does_not_start_unbounded_recovery():
+    result, _, _ = run([call(), abstain(), abstain()], max_steps=6)
+    assert result['status'] == 'insufficient_evidence'
+    assert result['stats']['model_rounds'] == 3
+
+
+def test_no_recovery_is_spent_on_empty_evidence():
+    result, _, _ = run([call(), abstain()], FakeRetriever([]), max_steps=6)
+    assert result['stats']['model_rounds'] == 2
+    assert 'ยังค้นไม่พบ' in result['answer']
+
+
 def test_searches_stop_at_last_model_round():
     result, llm, retriever = run([call(), call({"query": "อื่น"}, call_id="call_2")], max_steps=2)
     assert llm.requests[-1]["choice"] == "none"
@@ -231,7 +251,7 @@ def test_verification_fails_closed(verdict, reason):
         def complete(self, messages, tools, tool_choice, remaining):
             if not tools:
                 assert "reference_answer" not in messages[1]["content"]
-                assert json.loads(messages[1]["content"])["evidence"][0]["text"] == EVIDENCE["text"]
+                assert json.loads(messages[1]["content"])["evidence"][0]["numbered_text"] == '1: ' + EVIDENCE["text"]
                 return {"message": {"content": verdict}, "cached": False}
             return super().complete(messages, tools, tool_choice, remaining)
     result = Agent(Reviewer([call(), answered()]), FakeRetriever(), Settings()).run("คำถามทดสอบ")

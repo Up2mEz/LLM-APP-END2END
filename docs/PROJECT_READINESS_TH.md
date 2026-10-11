@@ -12,8 +12,8 @@
 | Curated evaluation ราว 30 ข้อ | เลือก dev 30 จาก gold เดิม ล็อก qids/hash/implementation ก่อนรัน; ไม่ส่ง gold ให้ model |
 | Baseline และ measured improvement | Dense A เทียบ Hybrid B: Recall@5 0.8077 → 0.8846 บน 52 answerable frozen test; MRR 0.6181 → 0.7374 |
 | ผลทำซ้ำได้ในเครื่องที่มีข้อมูล | evaluate retrieval ตรวจ hashes และคำนวณ saved hits; evaluate agent resume จาก version ที่ตรง; compare_agent_runs ตรวจชุดคำถามเดียวกัน |
-| Tool boundaries | ชื่อ tool/arguments allow-list, safe native parser, timeout, จำกัด 4 calls/3 searches, source/quote validation |
-| ผลลัพธ์และ failure analysis | README, reports/agent_comparison.json, docs/ANSWER_REVIEW_TH.md เก็บผลที่แย่ลงด้วย ไม่คัดเฉพาะรอบที่ดี |
+| Tool boundaries | ชื่อ tool/arguments allow-list, safe native parser, timeout, configuration ทดสอบ 6 model rounds/3 searches, source/quote validation |
+| ผลลัพธ์และ failure analysis | README, reports/agent_comparison.json, docs/DEV_COMPARISON_TH.md เก็บผลที่แย่ลงด้วย ไม่คัดเฉพาะรอบที่ดี |
 | PDF 4–8 หน้า | scripts/build_report.py สร้างรายงาน 6 หน้า พร้อม architecture, baseline, development metrics, failure และข้อจำกัด |
 
 ## ยังไม่พร้อมถือว่าส่งครบ
@@ -29,6 +29,6 @@ Public repo ที่มีเพียงโค้ดและ import script �
 
 ## สิ่งที่ควรพัฒนาก่อนขยายการใช้งาน
 
-ลำดับแรกคือแก้การเก็บบริบทตารางและการตอบหลายประเด็น แล้วลด false abstention ของ reviewer ที่คัด quote ไม่ตรง ปัจจุบัน v8 ตอบ 11/30 และงดตอบ 19/30 โดยงดเกินจำเป็น 14 ข้อ แม้จะระงับคำตอบผิดบางกรณีได้ จึงยังไม่พร้อมอ้างว่าเป็นระบบตอบสุขภาพที่เชื่อถือได้ทั่วไป
+v13 แก้ตารางหลักและลด false abstention 14 → 2 แล้ว แต่ 23 คำตอบมีเพียง 14 ข้อที่สาระหลักตรง reference จากการตรวจ อีก 9 ข้อยังผิด/ไม่ครบ/ต่างบริบท จึงต้องปรับ query decomposition, population/condition matching และความครบถ้วนของ citation ก่อนเพิ่มฟีเจอร์อื่น
 
-การปรับถัดไปควรทำเป็น experiment แยก: ใช้ header/row/column context หรือเลือก evidence span ด้วย ID/offset แล้วเทียบกับ v5 และ v8 บน dev เดิม พร้อมประเมิน claim correctness ด้วยผู้มีความรู้ จากนั้นใช้ชุดใหม่ก่อนอ้าง generalization การเพิ่ม SQL/MCP หรือ tool อื่นยังไม่จำเป็นต่อ rubric เพราะมี agentic family #4 แล้ว
+ต้องมี independent review และชุดคำถามใหม่ก่อนอ้าง generalization การเพิ่ม SQL/MCP ยังไม่จำเป็นต่อ rubric เพราะมี agentic family #4 แล้ว แผนพัฒนาถัดไปควรตั้งเกณฑ์ correctness ควบคู่กับ coverage เพื่อไม่ปล่อยคำตอบผิดเพียงเพราะต้องการลด abstention

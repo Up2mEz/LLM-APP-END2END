@@ -108,7 +108,7 @@ add("เส้นทางจากคำถามถึงคำตอบ", "h2
 add("เมื่อรับคำถาม ระบบบังคับให้ Gemma เริ่มด้วย search_docs ผ่าน native function calling โค้ดตรวจชื่อ tool และ arguments ก่อนเรียก retrieval ผลค้นถูกส่งกลับเป็น tool message พร้อม tool_call_id ที่ตรงกับ assistant message จากนั้น model เลือกค้นเพิ่มหรือสรุปคำตอบเป็น JSON ได้")
 add("Retrieval ใช้ child chunks ขนาด 128 tokens เพื่อค้น dense แล้วคืน parent chunks ขนาด 512 tokens รวมกับ BM25 char3 ด้วย convex fusion ค่า alpha=0.6 และ candidate pool=100 ตาม frozen config เดิม แอปใช้ variant B เป็นค่าเดียวในการตอบ จึงไม่เพิ่มภาระ reranker ของ variant C")
 add("การจำกัดและตรวจผล", "h2")
-add("กำหนดไม่เกิน 4 model rounds รวมรอบตรวจคำตอบ และ 3 searches ต่อคำถาม จำกัด top_k ที่ 8 และข้อความ context รวม 18,000 ตัวอักษร ปฏิเสธการค้น query/filter ซ้ำ มี request timeout และ deadline ของ agent ก่อนแสดงคำตอบให้ Gemma ตรวจความตรงกับคำถามและหลักฐานอีกหนึ่งรอบ หากตรวจไม่ได้จะงดตอบ Tool ที่อนุญาตมีเพียง search_docs จึงไม่มีเส้นทางเรียก shell หรืออ่านไฟล์ตามคำสั่งจาก model")
+add("Configuration ที่ทดสอบจำกัด 6 model rounds รวม verification และ 3 searches ต่อคำถาม top_k ไม่เกิน 8 context รวม 18,000 ตัวอักษร มี deadline 150 วินาทีและ HTTP 429 retry หนึ่งครั้งเมื่อเวลาเหลือพอ ใช้ line selection ให้ระบบคัด quote และอ่านตำแหน่งเซลล์ PDF เพื่อแสดงชื่อคอลัมน์คู่ค่าจริง ไม่เปิด shell หรืออ่านไฟล์ตามคำสั่ง model")
 add("คำตอบที่สถานะ answered ต้องมี source ID ที่ปรากฏในผลค้นจริง quote ต้องอยู่ในข้อความที่ model ได้รับ และ citation markers ต้องตรงกับรายการอ้างอิง หาก validation ไม่ผ่านให้แก้ได้หนึ่งรอบ ถ้ายังผิดหรือครบ budget จะหยุดโดยแสดงสถานะชัดเจน ทั้งนี้ quote ที่มีอยู่จริงยังไม่รับรองว่าคำตอบทุกประโยคสอดคล้องกับความหมายของหลักฐาน")
 add("การเรียกโมเดล", "h2")
 add("ใช้ from openai import OpenAI และ OpenAI() อ่าน OPENAI_API_KEY/OPENAI_BASE_URL จาก environment กำหนด model เป็น gemma-4-E4B-it และ temperature=0 เก็บ cache ของ response รวม tool calls โดยผูกกับ endpoint, model, messages และ parameters ไม่มี API key ถูกส่งให้ frontend")
@@ -138,11 +138,11 @@ if agent:
         ("Status counts",json.dumps(agent["status_counts"],ensure_ascii=False))], [105,60])
 else:
     add("ยังไม่มีผล aggregate ของ Gemma evaluation ใน artifacts ที่ใช้สร้าง PDF รอบนี้ จึงยังไม่ใส่ค่าความแม่นยำหรืออ้างว่าผ่านการประเมิน end-to-end ให้รัน evaluate agent แล้วสร้างรายงานใหม่ก่อนใช้เป็นฉบับส่ง")
-add("รุ่น " + agent["plan_id"] + ": เก็บผลรุ่นก่อนหน้ารวมรอบที่ล้มเหลวไว้ครบใน reports/history และ private/runs; รายการตรวจทั้ง 30 ข้ออยู่ใน docs/ANSWER_REVIEW_TH.md", "small")
+add("รุ่น " + agent["plan_id"] + ": เก็บผลรุ่นก่อนหน้ารวมรอบที่ล้มเหลวไว้ครบใน reports/history และ private/runs; ตรวจทั้ง 30 ข้อใน docs/DEV_COMPARISON_TH.md", "small")
 add("การตีความ metric", "h2")
 add("Abstention decision accuracy ตรวจว่าระบบตอบหรือเว้นตอบสอดคล้องกับ answerable label หรือไม่ ไม่ใช่คะแนนความถูกต้องของเนื้อหาคำตอบ Citation primary-evidence hit rate ตรวจ source ที่อ้างกับ primary evidence เดิม ส่วน character F1 วัดเพียงสัดส่วนอักษรร่วมกับ reference answer จึงไม่ใช้แทนการตรวจความหมายหรือความถูกต้องทางคลินิก")
 add("ไม่มี reference answer ถูกส่งให้ model ระหว่าง serving หรือ evaluation แอปได้รับเฉพาะคำถามและหลักฐานจาก retrieval ส่วน labels ถูกใช้ภายหลังเพื่อคำนวณ metric ผลดิบและ cache อยู่ในโฟลเดอร์ private เพื่อเก็บ trace และกลับมาตรวจ failure ได้")
-add("เทียบ v5 → v8: ตอบ 18 → 11 ข้อ, abstention decision accuracy 0.7000 → 0.5333 ระงับคำตอบผิดเดิม q113/q080 และคำตอบไม่ครบ q120 ได้ แต่มี false abstention เพิ่ม จึงไม่อ้างว่า overall accuracy ดีขึ้น ใช้ completions ที่ cache เมื่อ payload ตรงกัน; v8 ไม่เรียก API ใหม่", "small")
+add("เทียบ v5 / v8 / v13: ตอบ 18 / 11 / 23 ข้อ; false abstention 8 / 14 / 2; สาระหลักตรง reference จากการตรวจ 13 / 9 / 14 ข้อ การตอบเพิ่มไม่ใช่การตอบถูกทั้งหมด v13 ใช้ outputs จาก cached payload ตรงกับ v12 ทั้ง 30 ข้อ ไม่มี API calls ใหม่ใน dev; v12 มี 48 HTTP attempts ใหม่", "small")
 
 section(5, "ผลการทดสอบและ failure analysis")
 add("การทดสอบขอบเขตระบบ", "h2")
@@ -163,11 +163,11 @@ for title, item in [("ตัวอย่างที่ตอบพร้อม�
         add(item["question"])
         add(prediction["answer"][:500])
         if title.startswith("ตัวอย่างข้อจำกัด"):
-            add("Reference: " + str(item["reference_answer"]) + " คำตอบใช้ค่า 150 นาทีจาก guideline ความดัน ขณะที่คำถามเรื่องไขมันและ reference ระบุช่วง 150–300 นาที จึงยังต้องตรวจความตรงบริบท แม้ verifier อนุมัติ", "small")
+            add("Reference: " + str(item["reference_answer"]) + " คำตอบใช้ค่า 150 นาทีจากบริบทป้องกันเบาหวาน ขณะที่คำถามเรื่องไขมันและ reference ระบุช่วง 150–300 นาที จึงผิดบริบทและช่วงไม่ครบ แม้ verifier อนุมัติ", "small")
     else:
         add("ยังไม่มีตัวอย่างประเภทนี้ในไฟล์ผลรันที่ใช้สร้างรายงาน ไม่สร้างตัวอย่างผลสำเร็จหรือความผิดพลาดขึ้นเอง")
 add("สิ่งที่ยังต้องตรวจด้วยคน", "h2")
-add("ผู้ประเมินต้องตรวจเงื่อนไข ตัวเลข กลุ่มประชากร และคำถามหลายส่วน ใน v8 มี 14 false abstentions และคำตอบ q041/q076 ที่ยังต้องทบทวน ข้อ q113/q080 ถูกระงับ ไม่ได้แปลว่าแก้การอ่านตารางถูกแล้ว การตรวจ quote แยกประเด็นและซ่อมผลตรวจยังใช้ Gemma ตัวเดิม จึงไม่เป็น independent verification")
+add("รุ่นปัจจุบันแก้ค่าตาราง q113/q079/q080 ได้ แต่ยังผิด/ไม่ครบ q099/q111/q101/q076 และมี q041/q126/q108/q098/q106 ที่ต้องตรวจบริบทหรือข้อมูลเสริม ยังงดเกินจำเป็น q075/q061 การตรวจด้วย Gemma ตัวเดิมไม่ใช่ independent verification และการขยาย context หน้าเอกสารเปลี่ยนขอบเขต citation metric")
 
 section(6, "การทำซ้ำ ข้อจำกัด และสิ่งที่ต้องส่ง")
 add("วิธีตรวจผลงาน", "h2")

@@ -11,7 +11,7 @@ def read(path):
 
 active = read(ROOT / "reports/gemma_dev_plan.json")
 runs = []
-for version in ("v5", "v6", "v7", "v8"):
+for version in ("v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"):
     current = active["id"] == f"gemma-dev-{version}"
     prefix = ROOT / "reports" if current else ROOT / "reports/history"
     stem = "" if current else version + "_"
@@ -23,11 +23,14 @@ for version in ("v5", "v6", "v7", "v8"):
     if len(records) != 30 or {r["qid"] for r in records} != set(active["qids"]):
         raise ValueError("Incomplete or duplicate result set")
     runs.append({**metrics,
+        "max_model_calls_per_question": plan.get("max_steps", 4),
+        "model_rounds_total": sum(r["prediction"]["stats"]["model_rounds"] for r in records),
+        "searches_total": sum(r["prediction"]["stats"]["searches"] for r in records),
         "false_abstentions": [r["qid"] for r in records if r["answerable"] and r["prediction"]["status"] == "insufficient_evidence"],
         "answered_unanswerable": [r["qid"] for r in records if not r["answerable"] and r["prediction"]["status"] == "answered"],
         "correct_abstentions": [r["qid"] for r in records if not r["answerable"] and r["prediction"]["status"] == "insufficient_evidence"]})
 report = {"scope": "Same exposed development sample; cached completions reused when payloads match. Not independent validation.",
-          "selection": "More conservative prototype; not an improvement in overall answer accuracy or coverage.",
+          "selection": "Report all iterations, including failures. Read the semantic audit alongside these automatic metrics.",
           "runs": runs}
 (ROOT / "reports/agent_comparison.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(json.dumps({"versions": len(runs), "current_false_abstentions": len(runs[-1]["false_abstentions"]),

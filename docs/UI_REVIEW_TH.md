@@ -21,3 +21,9 @@ Pre-emit critique: Philosophy 4, Hierarchy 4, Execution 4, Specificity 4, Restra
 ## ตรวจซ้ำกับ backend v8
 
 ทดสอบ success q045 และการระงับคำตอบ q113/q120 ผ่าน UI รุ่นใหม่ แยกข้อความ “ยังยืนยันคำตอบไม่ได้” เมื่อมี evidence แต่คำตอบไม่ผ่านตรวจ พบปุ่มล้างกว้าง 38.31 px จึงแก้ min-width เป็น 44 px และตรวจ 320/375/414/768 px ซ้ำพร้อมคำตอบจริงแล้วผ่านทั้ง overflow และ touch targets ดู reports/browser_layout_v8.json ไม่พบ console errors ในรอบนี้
+
+## ตรวจซ้ำกับ backend v13 วันที่ 12 ตุลาคม 2026
+
+ทดสอบผ่าน browser จริง: คำถามโรคไตแบบกว้างตอบได้พร้อมหลักฐานและถามระยะโรค; q113 แสดงค่าพลังงาน 219 และโปรตีน 5.4 พร้อม label ว่าเป็นตารางจัดรูปจาก PDF; q075 ยังงดตอบแต่แสดงว่าค้นพบเอกสารแล้ว ไม่ทำให้เข้าใจว่าไม่มี corpus
+
+ตรวจ q113 ที่ viewport 375×812: scrollWidth 360 ไม่ล้นแนวนอน ตรวจภาพแล้วข้อความตัดบรรทัดอยู่ใน card คืน viewport เดิมแล้ว ไม่พบ browser console errors ในรอบนี้ ภาพหลักฐานอยู่ output/ui/kidney-v13.png และ output/ui/table-v13-mobile.png (local only) UI ใช้ cached model completions และค้น retrieval จริง

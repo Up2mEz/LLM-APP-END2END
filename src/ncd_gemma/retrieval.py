@@ -9,6 +9,7 @@ from threading import Lock
 
 from .config import ROOT
 from .schemas import SearchArgs
+from .evidence import TableContext
 
 
 def file_hash(path: Path):
@@ -51,6 +52,9 @@ class EvidenceRetriever:
         progress("load bge-m3 and index")
         from ncdqa.retrieval.search import Retriever
         self.raw = Retriever(ROOT / "configs/retrieval/serve_v1.json", device="cpu")
+        table_path = ROOT / 'data/table_context/tables.jsonl'
+        tables = [json.loads(s) for s in table_path.read_text(encoding='utf-8').splitlines()] if table_path.is_file() else []
+        self.table_context = TableContext(self.raw.parents, tables)
         progress("ready")
         self.lock = Lock()
         self.allowed = {key: {str(c.get(key, "general" if key == "population" else ""))
@@ -63,4 +67,5 @@ class EvidenceRetriever:
             if value not in self.allowed[key]:
                 raise ValueError(f"Unknown filter value for {key}")
         with self.lock:
-            return self.raw.search(args.query, variant=variant, k=args.top_k, filters=filters)
+            hits = self.raw.search(args.query, variant=variant, k=args.top_k, filters=filters)
+            return [self.table_context.enrich(hit) for hit in hits]

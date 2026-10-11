@@ -13,9 +13,10 @@ from .config import Settings, proxy_ready
 
 
 class ProxyError(RuntimeError):
-    def __init__(self, category: str):
+    def __init__(self, category: str, attempts: int = 1):
         super().__init__(category)
         self.category = category
+        self.attempts = attempts
 
 
 class ProxyClient:
@@ -45,12 +46,25 @@ class ProxyClient:
             except (ValueError, KeyError):
                 pass
         start = time.monotonic()
-        try:
-            response = self.client.chat.completions.create(**payload, timeout=min(self.settings.request_timeout, remaining))
-        except Exception as exc:
-            # Do not persist raw SDK exceptions: they may include credentials or proxy response bodies.
-            status = getattr(exc, "status_code", None)
-            raise ProxyError(f"proxy_http_{status}" if status else type(exc).__name__) from None
+        attempts = 0
+        for attempt in range(2):
+            attempts += 1
+            budget = remaining - (time.monotonic() - start)
+            try:
+                response = self.client.chat.completions.create(**payload, timeout=min(self.settings.request_timeout, budget))
+                break
+            except Exception as exc:
+                # Never persist raw exceptions, which can contain secrets.
+                status = getattr(exc, "status_code", None)
+                headers = getattr(getattr(exc, 'response', None), 'headers', {})
+                try:
+                    delay = max(15.0, float(headers.get('retry-after', '15')))
+                except (ValueError, TypeError):
+                    delay = 15.0
+                if status == 429 and attempt == 0 and delay <= 60 and remaining - (time.monotonic() - start) - delay > 5:
+                    time.sleep(delay)
+                    continue
+                raise ProxyError(f"proxy_http_{status}" if status else type(exc).__name__, attempts) from None
         if not response.choices:
             raise ProxyError("empty_model_response")
         message = response.choices[0].message
@@ -60,7 +74,7 @@ class ProxyClient:
         result = {"cache_key": key, "message": {"role": "assistant", "content": message.content},
                   "usage": response.usage.model_dump() if response.usage else {},
                   "finish_reason": response.choices[0].finish_reason,
-                  "cached": False, "latency_ms": round((time.monotonic() - start) * 1000, 1)}
+                  "cached": False, "api_attempts": attempts, "latency_ms": round((time.monotonic() - start) * 1000, 1)}
         if calls:
             result["message"]["tool_calls"] = calls
         temp = path.with_name(f"{key}.{uuid4().hex}.tmp")

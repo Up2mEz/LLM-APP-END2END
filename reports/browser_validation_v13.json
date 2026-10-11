@@ -1,0 +1,21 @@
+{
+  "version": "v13",
+  "tested_cases": {
+    "kidney_general": "answered; scope clarification; PDF page 69",
+    "q113": "answered; 219 kcal and 5.4 g; structured table label visible",
+    "q075": "abstained; documents found but answer not confirmed"
+  },
+  "mobile": {
+    "width": 375,
+    "height": 812,
+    "scroll_width": 360,
+    "horizontal_overflow": false
+  },
+  "console_errors": [],
+  "viewport_restored": true,
+  "model_responses": "cached; retrieval executed",
+  "screenshots": [
+    "output/ui/kidney-v13.png",
+    "output/ui/table-v13-mobile.png"
+  ]
+}

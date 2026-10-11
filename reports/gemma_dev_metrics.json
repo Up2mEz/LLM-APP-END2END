@@ -1,22 +1,21 @@
 {
-  "plan_id": "gemma-dev-v8",
+  "plan_id": "gemma-dev-v13",
   "split": "dev",
   "n": 30,
   "answerable": 25,
   "status_counts": {
-    "answered": 11,
-    "insufficient_evidence": 19
+    "answered": 23,
+    "insufficient_evidence": 7
   },
   "stop_reasons": {
-    "completed": 22,
-    "verification_invalid": 5,
-    "unsupported_answer": 2,
+    "completed": 27,
+    "answer_validation_failed": 2,
     "answer_missing_quantity": 1
   },
-  "completed_rate": 0.7333,
-  "abstention_decision_accuracy": 0.5333,
-  "citation_primary_evidence_hit_rate_answerable": 0.32,
-  "mean_character_f1_answerable": 0.1319,
+  "completed_rate": 0.9,
+  "abstention_decision_accuracy": 0.9333,
+  "citation_primary_evidence_hit_rate_answerable": 0.56,
+  "mean_character_f1_answerable": 0.2805,
   "new_api_calls_recorded": 0,
   "limitations": [
     "Development sample, not held-out validation.",
