@@ -8,12 +8,12 @@
 - ทดสอบจาก GitHub จริงด้วย fresh clone, ดาวน์โหลด release asset และตรวจ hash ได้ครบ 34 ไฟล์ จากนั้น replay frozen retrieval 6 runs ได้ B−A Recall@5 `0.0769`, MRR@10 `0.1193` ตรงกับผลในเครื่อง ชุดนี้ทดสอบการดาวน์โหลด/ประเมิน saved hits; ยังไม่ได้พิสูจน์ว่า Docker image build หรือ model weights ดาวน์โหลดและรันบน Linux host สำเร็จ
 - `pytest -q` ล่าสุด **170 passed, 1 Starlette deprecation warning** และ Linux dependency resolver หา PyTorch `2.14.1+cpu` กับ package graph ที่ไม่มี CUDA/NVIDIA dependencies ได้ แต่ Docker engine ในเครื่องนี้ไม่พร้อม จึงยังไม่มี container runtime test
 - ผู้จัดทำแจ้งว่ามีหลักฐานสิทธิ์เผยแพร่ corpus และโค้ดที่ใช้แล้ว เอกสาร/ขอบเขตยังไม่แนบให้ตรวจ; manifest ต้นทางที่บันทึกไว้ด้านล่างเป็น snapshot เก่า ไม่ถูกแก้หรืออ้างว่าอนุมัติในตัวไฟล์
-- Q3: local app ตั้ง Basic Auth แล้ว ทดสอบ unauthenticated `401` และ authenticated `200`; คำถาม NCD จริงตอบ HTTP `200`, มี 1 citation และ 1 search ใน 35.7 วินาทีหลังการลองซ้ำ ครั้งแรกเจอ `APIConnectionError` จาก class proxy จึงเพิ่ม retry เพียง 1 ครั้งเมื่อเป็น connection failure และเวลาเหลือ ผล dev v30 เดิมเกิดก่อน transport change นี้ จึงยังไม่อ้างว่าเป็นผล evaluation ของ adapter รุ่นใหม่ ยังไม่มี URL ภายนอกที่ตรวจว่าใช้งานได้ Cloudflare Quick Tunnel ต้องมีการอนุญาตเฉพาะปลายทางก่อน เพราะเป็นบริการ third-party และ URL ชั่วคราวไม่มี uptime guarantee
+- Q3: หลังได้รับอนุญาตเฉพาะ Cloudflare เปิด Quick Tunnel HTTPS ถึง local app ที่มี Basic Auth แล้ว ทดสอบจาก URL ภายนอกได้ health `200`, หน้าเว็บไม่มีรหัสผ่าน `401` และมีรหัสผ่าน `200`; POST greeting แบบ browser Origin ได้ `200/out_of_scope` และคำถาม NCD จริงได้ `200/answered`, 1 citation, 1 search ใน 46.1 วินาที (model completion มาจาก cache, API calls ใหม่ 0) ก่อนหน้านี้ local fresh call เจอ `APIConnectionError` ครั้งหนึ่ง แล้วลองซ้ำตอบได้ใน 35.7 วินาที จึงเพิ่ม retry เพียง 1 ครั้งสำหรับ connection failure เมื่อยังมีเวลา ผล dev v30 เดิมเกิดก่อน transport change นี้ จึงยังไม่อ้างว่าเป็นผล evaluation ของ adapter รุ่นใหม่ URL และรหัสผ่านเก็บในเครื่องผู้จัดทำ ไม่ commit; Quick Tunnel เปลี่ยน hostname เมื่อเริ่มใหม่และไม่มี uptime guarantee จึงยังไม่ใช่ deployment ถาวรสำหรับส่งโดยไม่เฝ้าเครื่อง
 - Q2 PDF ยังคงไม่ตรวจหรือแก้ตามคำขอผู้จัดทำ
 
 ขอบเขตการตรวจครั้งนี้: โค้ด, dependency, tests, API/UI ในเครื่อง, ผลประเมิน, GitHub, สิทธิ์ข้อมูล และความเป็นไปได้ของ live URL **ไม่ตรวจหรือแก้ PDF ตามคำขอผู้จัดทำ** ไม่ได้สร้างคลิปหรือกด Submit ในเว็บรายวิชา
 
-## ข้อสรุป
+## Snapshot ก่อนเผยแพร่
 
 **ยังไม่พร้อมส่งครบสามช่อง** ตัวแอปในเครื่องใช้งานได้ แต่ public GitHub repo ยังว่างและข้อมูลที่จำเป็นต่อการรันซ้ำยังอยู่ในเครื่องเท่านั้น Live URL ทำได้ทางเทคนิคหลังเลือก corpus ที่มีสิทธิ์เผยแพร่/โฮสต์และเตรียม deployment ที่ป้องกัน proxy key กับการเรียก API โดยไม่จำกัด
 
