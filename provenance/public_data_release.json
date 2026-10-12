@@ -3,7 +3,7 @@
   "asset_url": "https://github.com/Up2mEz/LLM-APP-END2END/releases/download/data-v12/ncd-data-v12.zip",
   "archive_sha256": "c78d40139f628fb6c9ef1bf93e62a55be331d64327db1a4c98cfa5f0e8faa731",
   "archive_bytes": 63572296,
-  "source_snapshot_sha256": "72e3b46bf81470a73d3e1efc608fa7b056377f6559da9ce04219e1853ba9a1c6",
+  "source_snapshot_sha256": "60e6f9616208f6f1fe394989c2458508ed9c9e26c7d094b565014206df329a3e",
   "files": [
     {
       "path": "data/frozen/dev-A/config.json",

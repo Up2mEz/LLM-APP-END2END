@@ -29,6 +29,9 @@ def test_release_bundle_round_trip_and_existing_data_guard(tmp_path, monkeypatch
     result = public_data.package()
     assert result['files'] == 5
     assert public_data.fetch()['status'] == 'already_present'
+    canonical_json = public_data.PROVENANCE.read_text(encoding='utf-8')
+    public_data.PROVENANCE.write_bytes(canonical_json.replace('\n', '\r\n').encode('utf-8'))
+    assert public_data.fetch()['status'] == 'already_present'
     shutil.rmtree(root / 'data')
     assert public_data.fetch() == {'status': 'downloaded', 'files': 5}
     assert (root / 'data/index/sample.txt').read_text() == 'index\n'

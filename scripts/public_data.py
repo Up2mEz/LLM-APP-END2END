@@ -32,6 +32,13 @@ def digest(path: Path) -> str:
     return sha.hexdigest()
 
 
+def provenance_digest() -> str:
+    """Hash JSON meaning, so Git checkout line endings do not affect it."""
+    content = json.loads(PROVENANCE.read_text(encoding="utf-8"))
+    canonical = json.dumps(content, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def selected_files() -> list[Path]:
     files = sorted(path for path in DATA.rglob("*") if path.is_file() and path.relative_to(DATA).parts[0] in CATEGORIES)
     if not files or {path.relative_to(DATA).parts[0] for path in files} != CATEGORIES:
@@ -63,7 +70,7 @@ def package() -> dict:
         "asset_url": ASSET_URL,
         "archive_sha256": digest(ARCHIVE),
         "archive_bytes": ARCHIVE.stat().st_size,
-        "source_snapshot_sha256": digest(PROVENANCE),
+        "source_snapshot_sha256": provenance_digest(),
         "files": records,
     }
     MANIFEST.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -73,7 +80,7 @@ def package() -> dict:
 
 def fetch() -> dict:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    if digest(PROVENANCE) != manifest["source_snapshot_sha256"]:
+    if provenance_digest() != manifest["source_snapshot_sha256"]:
         raise ValueError("Release manifest does not match this code snapshot")
     records = manifest["files"]
     expected = {record["path"] for record in records}
