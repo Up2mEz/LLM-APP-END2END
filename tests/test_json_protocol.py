@@ -25,3 +25,7 @@ def test_other_malformed_content_is_not_guessed(text):
 
 def test_repair_does_not_relax_schema_or_convert_types():
     assert load_json('{"x":1,""end_line":"8"}')['end_line'] == '8'
+def test_redundant_closed_array_bracket_is_removed_without_changing_values():
+    from ncd_gemma.json_protocol import load_json
+    assert load_json('{"checks":[{"covered":true}]],"supported":true}') == {'checks':[{'covered':True}],'supported':True}
+    assert load_json('{"value":[[1,2],[3]],"text":"]]"}') == {'value':[[1,2],[3]],'text':']]'}

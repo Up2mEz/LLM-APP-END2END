@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import time
 from pathlib import Path
 from threading import Lock
@@ -55,6 +56,10 @@ class EvidenceRetriever:
         table_path = ROOT / 'data/table_context/tables.jsonl'
         tables = [json.loads(s) for s in table_path.read_text(encoding='utf-8').splitlines()] if table_path.is_file() else []
         self.table_context = TableContext(self.raw.parents, tables)
+        from .focus import PassageFocus
+        self.focus = PassageFocus(self.raw.parents)
+        from .passage_rerank import PassageReranker
+        self.passage_reranker = PassageReranker()
         progress("ready")
         self.lock = Lock()
         self.allowed = {key: {str(c.get(key, "general" if key == "population" else ""))
@@ -67,5 +72,32 @@ class EvidenceRetriever:
             if value not in self.allowed[key]:
                 raise ValueError(f"Unknown filter value for {key}")
         with self.lock:
-            hits = self.raw.search(args.query, variant=variant, k=args.top_k, filters=filters)
-            return [self.table_context.enrich(hit) for hit in hits]
+            hits, raw_seen = [], set()
+            for hit in self.raw.search(args.query, variant=variant, k=args.top_k, filters=filters):
+                hits.append(hit)
+                raw_seen.add(hit['chunk_id'])
+            # For an explicit "keep X and Y separate?" question, admit a
+            # frozen parent only when it literally states that pair. This
+            # complements semantic search without guessing another field or
+            # changing the source index.
+            if 'แยก' in args.query:
+                fields = [word for word in ('น้ำหนัก', 'ส่วนสูง', 'รอบเอว', 'รอบสะโพก') if word in args.query]
+                fields.sort(key=args.query.index)
+                if len(fields) >= 2:
+                    phrase = 'แยก' + fields[0] + 'และ' + fields[1]
+                    for parent in self.raw.parents:
+                        if parent['chunk_id'] in raw_seen or not phrase in re.sub(r'\s+', '', parent['text']):
+                            continue
+                        if filters and any(str(parent.get(key, 'general' if key == 'population' else '')) != value for key,value in filters.items()):
+                            continue
+                        hits.append({**parent, 'score': 0.0, 'lexical_exact': True})
+                        raw_seen.add(parent['chunk_id'])
+            evidence, seen = [], set()
+            for hit in hits:
+                for window in self.focus.select(self.table_context.enrich(hit), args.query):
+                    fingerprint = (window['document_id'], window['edition_id'], window['text'])
+                    if fingerprint not in seen:
+                        seen.add(fingerprint)
+                        evidence.append(window)
+            ranked = self.passage_reranker.rank(args.query,evidence)
+            return sorted(ranked, key=lambda hit: not hit.get('lexical_exact', False))

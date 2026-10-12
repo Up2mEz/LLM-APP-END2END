@@ -73,7 +73,7 @@ def make_dev_plan(limit=30):
         for kind in sorted(buckets):
             if buckets[kind] and len(selected) < limit:
                 selected.append(buckets[kind].pop(0))
-    plan = {"id": "gemma-dev-v13", "split": "dev", "scope": "development evaluation, not a held-out test",
+    plan = {"id": "gemma-dev-v30", "split": "dev", "scope": "development evaluation, not a held-out test",
             "qids": [q["qid"] for q in selected], "type_counts": dict(Counter(q["type"] for q in selected)),
             "question_hash": file_hash(ROOT / "data/gold/questions_all_reviewed.jsonl"),
             "prompt_version": PROMPT_VERSION, "prompt_sha256": hashlib.sha256((SEARCH_SYSTEM_PROMPT + SYSTEM_PROMPT + VERIFY_SYSTEM_PROMPT).encode()).hexdigest(),
@@ -88,7 +88,7 @@ def make_dev_plan(limit=30):
             "frozen_at_utc": datetime.now(timezone.utc).isoformat()}
     plan["implementation_sha256"] = {
         name: file_hash(Path(__file__).parent / name)
-        for name in ("agent.py", "verification.py", "evidence.py", "pdf_tables.py", "json_protocol.py", "question_scope.py", "llm.py", "schemas.py", "config.py", "retrieval.py")
+        for name in ("agent.py", "prompts.py", "claims.py", "copy_alignment.py", "focus.py", "passage_rerank.py", "table_prompts.py", "verification.py", "evidence.py", "pdf_tables.py", "json_protocol.py", "question_scope.py", "grounded_routes.py", "scope_guard.py", "llm.py", "schemas.py", "config.py", "retrieval.py")
     }
     path = ROOT / "reports/gemma_dev_plan.json"
     if path.exists():

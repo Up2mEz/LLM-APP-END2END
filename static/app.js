@@ -1,7 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const text = (tag, value, cls) => { const el = document.createElement(tag); el.textContent = value; if (cls) el.className = cls; return el; };
-const labels = {answered:'พบหลักฐานประกอบ',insufficient_evidence:'หลักฐานยังไม่เพียงพอ',error:'บริการขัดข้อง'};
+const labels = {answered:'พบหลักฐานประกอบ',insufficient_evidence:'หลักฐานยังไม่เพียงพอ',out_of_scope:'เริ่มต้นถามได้เลย',error:'บริการขัดข้อง'};
 function resultLabel(data) {
   return data.status === 'insufficient_evidence' && (data.sources?.length || data.stop_reason !== 'completed')
     ? 'ยังยืนยันคำตอบไม่ได้' : labels[data.status] || 'ตรวจสอบคำตอบ';
@@ -55,6 +55,12 @@ function showSources(data) {
     link.addEventListener('click', () => card.focus({preventScroll:true})); $('citation-links').append(link);
   }
   if (!data.citations.length) {
+    if (data.status === 'out_of_scope') {
+      const empty = text('div', '', 'empty');
+      empty.append(text('h3', 'ลองถามเรื่องสุขภาพจากเอกสาร'), text('p', 'เช่น เป้าหมาย HbA1c หรือวิธีลดโซเดียมในอาหาร'));
+      $('sources').append(empty);
+      return;
+    }
     const empty = text('div', '', 'empty');
     const hint = data.sources?.length
       ? 'ค้นพบข้อความแล้ว แต่คำตอบยังไม่ผ่านการตรวจ จึงยังไม่แสดงเป็นคำตอบที่ยืนยันได้'
@@ -92,10 +98,10 @@ $('ask-form').addEventListener('submit', async event => {
     const response = await fetch('/api/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({question}), signal:controller.signal});
     const data = await response.json();
     if (!response.ok && !data.answer) throw Error(typeof data.detail === 'string' ? data.detail : 'คำถามไม่ผ่านการตรวจสอบ ลองปรับคำถามแล้วค้นใหม่');
-    $('result').hidden = false; $('answer').textContent = data.answer;
+    $('result').hidden = false; $('answer-heading').textContent = data.status === 'out_of_scope' ? 'ยินดีต้อนรับ' : 'คำตอบจากเอกสาร'; $('answer').textContent = data.answer;
     $('answer-status').textContent = resultLabel(data);
-    $('answer-status').className = `badge ${data.status === 'answered' ? 'ok' : data.status === 'error' ? 'error' : 'warn'}`;
-    $('stats').textContent = `ค้น ${data.stats.searches} ครั้ง · ${(data.stats.elapsed_ms / 1000).toFixed(1)} วินาที`;
+    $('answer-status').className = `badge ${['answered','out_of_scope'].includes(data.status) ? 'ok' : data.status === 'error' ? 'error' : 'warn'}`;
+    $('stats').textContent = data.status === 'out_of_scope' ? 'คำทักทาย · ไม่ต้องค้นเอกสารหรือเรียกโมเดล' : `ค้น ${data.stats.searches} ครั้ง · ${(data.stats.elapsed_ms / 1000).toFixed(1)} วินาที`;
     showSources(data); showTrace(data);
     copyText = `${question}\n\n${data.answer}` + data.citations.map(c => `\n\n[${c.source_id}] ${c.document_id} · หน้า PDF ${c.pdf_page_start}–${c.pdf_page_end}\n${c.quote}`).join('');
     $('announcement').textContent = `${resultLabel(data)} อ่านได้ที่ส่วนคำตอบจากเอกสาร`;

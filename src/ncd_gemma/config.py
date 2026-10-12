@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -9,12 +10,16 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
 MODEL = "gemma-4-E4B-it"
+LOCAL_HOSTS = ["127.0.0.1", "localhost", "testserver"]
 
 
 def load_environment():
     # This project's explicit .env wins over unrelated inherited OpenAI credentials.
     # Production can omit the file and supply the same variables in the environment.
     load_dotenv(ROOT / ".env", override=True)
+    project_hf_cache = ROOT / ".cache/hf_public"
+    if project_hf_cache.is_dir():
+        os.environ.setdefault("HF_HOME", str(project_hf_cache))
     os.environ.setdefault("HF_HUB_OFFLINE", "1")
     os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
     os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
@@ -30,7 +35,7 @@ class Settings:
     agent_timeout: float = 150.0
     max_output_tokens: int = 1400
     context_chars: int = 18000
-    max_sources: int = 12
+    max_sources: int = 20
     cache_dir: Path = ROOT / ".cache/llm"
 
     @classmethod
@@ -48,3 +53,19 @@ class Settings:
 def proxy_ready() -> bool:
     url = urlsplit(os.getenv("OPENAI_BASE_URL", ""))
     return bool(os.getenv("OPENAI_API_KEY")) and url.scheme == "https" and url.hostname == "llm.nat-d.uk" and not (url.username or url.password or url.query)
+
+
+def allowed_hosts() -> list[str]:
+    """Require an exact public hostname and access password for a remote demo."""
+    public_host = os.getenv("NCD_PUBLIC_HOST", "").strip().lower()
+    if not public_host:
+        return LOCAL_HOSTS.copy()
+    labels = public_host.split(".")
+    if len(labels) < 2 or any(
+        len(label) > 63 or not re.fullmatch(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", label)
+        for label in labels
+    ):
+        raise ValueError("NCD_PUBLIC_HOST must be one exact DNS hostname without scheme, port or wildcard")
+    if len(os.getenv("NCD_DEMO_PASSWORD", "")) < 12:
+        raise ValueError("A remote demo requires NCD_DEMO_PASSWORD of at least 12 characters")
+    return [*LOCAL_HOSTS, public_host]

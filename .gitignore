@@ -16,3 +16,4 @@ output/pdf/
 tmp/
 # Local UI screenshots may contain private corpus quotations.
 output/ui/
+output/public_data/

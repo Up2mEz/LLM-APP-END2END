@@ -11,12 +11,22 @@ def read(path):
 
 active = read(ROOT / "reports/gemma_dev_plan.json")
 runs = []
-for version in ("v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"):
+versions = {p.name.split('_')[0] for p in (ROOT/'reports/history').glob('v*_gemma_dev_plan.json')}
+versions.add(active['id'].replace('gemma-dev-',''))
+partial = []
+for version in sorted(versions, key=lambda v:int(v[1:])):
     current = active["id"] == f"gemma-dev-{version}"
     prefix = ROOT / "reports" if current else ROOT / "reports/history"
     stem = "" if current else version + "_"
     plan = read(prefix / (stem + "gemma_dev_plan.json"))
-    metrics = read(prefix / (stem + "gemma_dev_metrics.json"))
+    metrics_path = prefix / (stem + "gemma_dev_metrics.json")
+    if not metrics_path.exists():
+        receipt = ROOT/'reports/history'/f'{version}_aborted_run.json'
+        if receipt.exists():
+            partial.append(read(receipt))
+            continue
+        raise ValueError(f'Missing metrics without an aborted-run receipt: {version}')
+    metrics = read(metrics_path)
     if plan["qids"] != active["qids"] or plan["question_hash"] != active["question_hash"]:
         raise ValueError("Question identity differs between runs")
     records = [json.loads(s) for s in (ROOT / f"private/runs/{plan['id']}/answers.jsonl").read_text(encoding="utf-8").splitlines()]
@@ -31,7 +41,7 @@ for version in ("v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"):
         "correct_abstentions": [r["qid"] for r in records if not r["answerable"] and r["prediction"]["status"] == "insufficient_evidence"]})
 report = {"scope": "Same exposed development sample; cached completions reused when payloads match. Not independent validation.",
           "selection": "Report all iterations, including failures. Read the semantic audit alongside these automatic metrics.",
-          "runs": runs}
+          "runs": runs, 'partial_runs':partial}
 (ROOT / "reports/agent_comparison.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(json.dumps({"versions": len(runs), "current_false_abstentions": len(runs[-1]["false_abstentions"]),
                   "current_answered_unanswerable": len(runs[-1]["answered_unanswerable"])}))

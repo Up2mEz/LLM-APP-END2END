@@ -1,5 +1,5 @@
 {
-  "id": "gemma-dev-v13",
+  "id": "gemma-dev-v30",
   "split": "dev",
   "scope": "development evaluation, not a held-out test",
   "qids": [
@@ -43,8 +43,8 @@
     "unanswerable": 5
   },
   "question_hash": "680a752e738d7a60f463345c08e3e098934ab945df2183a8bb1e0d97b1f6ddea",
-  "prompt_version": "ncd-gemma-v13",
-  "prompt_sha256": "8f7b96e71bd72f63efdf57a7ac242463ec12572f10ebee8f7f4bedd4724d6957",
+  "prompt_version": "ncd-gemma-v30",
+  "prompt_sha256": "0f8c3c375afdee2e2629609fd0cac938e5c6bd74fedc44d47b02421430e2216d",
   "model": "gemma-4-E4B-it",
   "selection": "round-robin types; SHA256(ncd-gemma-dev-v1:qid) order",
   "temperature": 0,
@@ -59,17 +59,25 @@
     "citation primary-evidence coverage",
     "character F1 (lexical proxy only)"
   ],
-  "frozen_at_utc": "2026-10-11T17:20:23.198450+00:00",
+  "frozen_at_utc": "2026-10-12T02:52:10.326243+00:00",
   "implementation_sha256": {
-    "agent.py": "77394c98eda31f4759c4b54247fdf8c0313edd210ada915ef069eb7a65a4cd14",
-    "verification.py": "696693c470c60e4f4772d574c4b8db56d95670695223e1251ecb7a0201717602",
-    "evidence.py": "f4fa0baa7e9db290c8505daccb3afb93a11c71cb894d550d3c90a5e5cec582ec",
-    "pdf_tables.py": "19297489a2581f3ffd68870895d905391f4fb41e29d4eab41cd5ee16568f146e",
-    "json_protocol.py": "959e60dc65f69d50946b4bf3ca1834a32a02426f3b69a0491e6a5e869050505a",
-    "question_scope.py": "a68aba3625107f6f8d061f8677a323d299e7e555e5eb483eb43be6766644f1ba",
+    "agent.py": "c90b27eb6dbdb4090744e49a1eef1cb68c7eb23b957074c4d131e3a810007454",
+    "prompts.py": "6e2b652505ea7d2ac743553191eeefc51b38e18a9937e8015f889f05ec52a3d6",
+    "claims.py": "9c767a3b3a931d4d0c21a93d67058211e45e5cd62fa5fef1b1a65feb21bf3850",
+    "copy_alignment.py": "5b1287e1f14f6d6b086fcaa6556e9a5db1f90b67bf82eb3cea0b0c10c5f6b8e5",
+    "focus.py": "6dc1528ddfb7ccd97ee157f96644b86c870ef51186e78441b9a9232ada309012",
+    "passage_rerank.py": "5e9d9e3cfa53b146bb48b9576509e5e29497a0c9a3bcfe61391f88452d8a170a",
+    "table_prompts.py": "38ef128a239f48aa0b94aef51fb262e1e93c0b7030cd573ba8c383a4a902b352",
+    "verification.py": "1ecfa91a1414e6ec14ed88d569d6d88d6ec682ef047621e7307ae075ef27c58b",
+    "evidence.py": "82e860705f078818e817a86b5b31317090922a901fe14b034e238441fd8c15ba",
+    "pdf_tables.py": "50c5958685447798e0e8619571a601a8285ebb642fedc255642d8720c1f52f18",
+    "json_protocol.py": "41b5614fc9cde4ac9d886adfe5ad86494a81b00deddeeccec1f3148790413f73",
+    "question_scope.py": "46b6877a90bda21eb9ea9bea40973f3c3f32e49e604470a4e08c542cd22f819f",
+    "grounded_routes.py": "f6db1506d9b020dd16f4fa8faace2dfb2e767117d14e21c916db96d32baecacf",
+    "scope_guard.py": "a3d5b22989c8376275ac0bac935695b1dbf34bb873b93ee0afe9f402cddd268e",
     "llm.py": "813ba6c39fa1cfe747b453971a574ca81c44a5c66d30289a079a471ddd07a828",
     "schemas.py": "8c92828a16fa9694ac68c99186a097e1870fbe0b3a5302f7c586eb0079df93dc",
-    "config.py": "ee8f11138fc94c9a0c22740b1d64ed1969efeaf00042a6066107e132f93b231b",
-    "retrieval.py": "9f29fe9c8ca39e9e28e472fa3a1b4676c0f2edbbde0981250a116737f7f19b63"
+    "config.py": "ccb45169207d3ab80aacd048b8e16fe7625d50d167abe29db9754017b43c9a4b",
+    "retrieval.py": "873160e3ebe35ab9079bfb681d5d08dd124b59a0ab6bc91848d26a3062bfb05f"
   }
 }

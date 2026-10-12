@@ -10,6 +10,7 @@
 | อย่างน้อย 3 families รวม #3 และ agentic | มี #1 schema, #2 RAG, #3 retrieval evaluation, #4 native agent loop, #6 FastAPI/UI |
 | Corpus ของโดเมนตัวเอง | NCD ภาษาไทย 66 เอกสารใน snapshot แยกจาก corpus ของ reference app; ระบุ attribution ส่วนที่ reuse |
 | Curated evaluation ราว 30 ข้อ | เลือก dev 30 จาก gold เดิม ล็อก qids/hash/implementation ก่อนรัน; ไม่ส่ง gold ให้ model |
+| ผลตอบคำถาม v30 | coding-agent review บน exposed dev 30 เดิม: สาระครบ 25/25 answerable และงดตรง label 5/5; extra-dev 30 เริ่ม v26 ถูกหรืองดถูก 19/30, v28 27/30, v29–v30 30/30 หลังใช้ผลปรับระบบแล้ว จึงแยก regression ออกจากผลก่อนปรับอย่างชัดเจน |
 | Baseline และ measured improvement | Dense A เทียบ Hybrid B: Recall@5 0.8077 → 0.8846 บน 52 answerable frozen test; MRR 0.6181 → 0.7374 |
 | ผลทำซ้ำได้ในเครื่องที่มีข้อมูล | evaluate retrieval ตรวจ hashes และคำนวณ saved hits; evaluate agent resume จาก version ที่ตรง; compare_agent_runs ตรวจชุดคำถามเดียวกัน |
 | Tool boundaries | ชื่อ tool/arguments allow-list, safe native parser, timeout, configuration ทดสอบ 6 model rounds/3 searches, source/quote validation |
@@ -29,6 +30,6 @@ Public repo ที่มีเพียงโค้ดและ import script �
 
 ## สิ่งที่ควรพัฒนาก่อนขยายการใช้งาน
 
-v13 แก้ตารางหลักและลด false abstention 14 → 2 แล้ว แต่ 23 คำตอบมีเพียง 14 ข้อที่สาระหลักตรง reference จากการตรวจ อีก 9 ข้อยังผิด/ไม่ครบ/ต่างบริบท จึงต้องปรับ query decomposition, population/condition matching และความครบถ้วนของ citation ก่อนเพิ่มฟีเจอร์อื่น
+ผลล่าสุดและ failure analysis อยู่ใน docs/DEV_COMPARISON_TH.md และ docs/EXTRA_DEV_V26_REVIEW_TH.md แยกจำนวนตอบได้ออกจากความถูกต้องจริง ชุด dev เดิมถูกใช้ปรับระบบหลายรอบแล้ว ส่วน extra-dev ก็เปิดผลเพื่อแก้ v27–v30 จึงต้องมีคำถามใหม่และผู้ตรวจอิสระก่อนอ้างผลทั่วไป
 
-ต้องมี independent review และชุดคำถามใหม่ก่อนอ้าง generalization การเพิ่ม SQL/MCP ยังไม่จำเป็นต่อ rubric เพราะมี agentic family #4 แล้ว แผนพัฒนาถัดไปควรตั้งเกณฑ์ correctness ควบคู่กับ coverage เพื่อไม่ปล่อยคำตอบผิดเพียงเพราะต้องการลด abstention
+ต้องมี independent review และชุดคำถามใหม่ก่อนอ้าง generalization การเพิ่ม SQL/MCP ยังไม่จำเป็นต่อ rubric เพราะมี agentic family #4 แล้ว งานที่มีผลต่อคะแนนส่งจริงมากกว่าคือสิทธิ์เผยแพร่ corpus/reproducibility, PDF ฉบับตรวจชื่อผู้จัดทำ และ demo URL วิดีโอหรือ deployment

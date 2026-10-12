@@ -1,0 +1,55 @@
+{
+  "scope": "Live local HTTP API smoke on restarted v25 server; original dev questions, no fresh generation claimed if cached",
+  "checks": [
+    {
+      "case": "greeting",
+      "status": "out_of_scope",
+      "stop_reason": "greeting",
+      "citations": 0,
+      "searches": 0,
+      "api_calls": 0,
+      "model_rounds": 0,
+      "answer_sha256": "419a933ed0c9759edf736387d782f9c80524fe8785f283537a54d5ae724be5b0"
+    },
+    {
+      "case": "q111",
+      "status": "answered",
+      "stop_reason": "grounded_route",
+      "citations": 2,
+      "searches": 1,
+      "api_calls": 0,
+      "model_rounds": 1,
+      "answer_sha256": "55a2c444414b013f6c45b0eb867e365d5e9f51c8dffec5977bbb9434e00a8aaa"
+    },
+    {
+      "case": "q115",
+      "status": "answered",
+      "stop_reason": "grounded_route",
+      "citations": 1,
+      "searches": 1,
+      "api_calls": 0,
+      "model_rounds": 1,
+      "answer_sha256": "38b33c0e1dfda7be0cb0002ccebb623aaf5024950ef25208402abfa3c7e34460"
+    },
+    {
+      "case": "q061",
+      "status": "answered",
+      "stop_reason": "grounded_route",
+      "citations": 1,
+      "searches": 1,
+      "api_calls": 0,
+      "model_rounds": 1,
+      "answer_sha256": "c63d7224cb70f966482bee8d30b3167c521bb9c20699d81df1c0738938b61c07"
+    },
+    {
+      "case": "q106",
+      "status": "answered",
+      "stop_reason": "grounded_route",
+      "citations": 1,
+      "searches": 1,
+      "api_calls": 0,
+      "model_rounds": 1,
+      "answer_sha256": "dc9d14f72df6c2cbbb58e8d34bd90749274247a44ac1d4cf6e98969587c94eb8"
+    }
+  ]
+}

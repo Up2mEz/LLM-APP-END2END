@@ -1,0 +1,14 @@
+{
+  "plan_id": "gemma-dev-v27",
+  "comparison": "gemma-dev-v26",
+  "scope": "Manual semantic review of the same exposed 30-question development set",
+  "answerable": 25,
+  "core_correct_answerable": 24,
+  "partial_answerable": ["q108"],
+  "wrong_answerable": [],
+  "false_abstentions": [],
+  "correct_abstentions": 5,
+  "changed_response_qids": ["q126", "q041", "q068", "q108", "q111", "q075", "q083", "q115", "q118"],
+  "finding": "q108 retained the MSG sodium fact but replaced the canned-food salt/preservative mechanism with a generic canned-food list and juice-preservative sentence. Other changed answers retained the requested core fact.",
+  "limitation": "This set was used repeatedly for development, so 24/25 does not estimate generalization."
+}

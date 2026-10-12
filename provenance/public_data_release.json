@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "asset_url": "https://github.com/Up2mEz/LLM-APP-END2END/releases/download/data-v12/ncd-data-v12.zip",
+  "archive_sha256": "c78d40139f628fb6c9ef1bf93e62a55be331d64327db1a4c98cfa5f0e8faa731",
+  "archive_bytes": 63572296,
+  "source_snapshot_sha256": "72e3b46bf81470a73d3e1efc608fa7b056377f6559da9ce04219e1853ba9a1c6",
+  "files": [
+    {
+      "path": "data/frozen/dev-A/config.json",
+      "bytes": 766,
+      "sha256": "f87f47d2bcc0c5d73b59a98a12a90214491075d1e4e376c866940f159165a107"
+    },
+    {
+      "path": "data/frozen/dev-A/metrics.json",
+      "bytes": 1795,
+      "sha256": "286f510a1e9cd43f1831b7f12189e2f6ad2140df5f21bda02f03aba30fa36372"
+    },
+    {
+      "path": "data/frozen/dev-A/results.jsonl",
+      "bytes": 299473,
+      "sha256": "b94b90edcbf1ff9559a7a8ff9604840cc8c620b5c516fa9c226797dabbe25a4c"
+    },
+    {
+      "path": "data/frozen/dev-A/run_manifest.json",
+      "bytes": 1498,
+      "sha256": "a388543194341db9d754b6e1cf575f37fcbe8d268d2c17af5883292cb3dcc2f8"
+    },
+    {
+      "path": "data/frozen/dev-B/config.json",
+      "bytes": 760,
+      "sha256": "d7c0721c51c911f97cfa3c2e6939b04df9517faf29473d499a284b66cc312210"
+    },
+    {
+      "path": "data/frozen/dev-B/metrics.json",
+      "bytes": 1807,
+      "sha256": "606285628b52796ef56def30129a408ae78ac2cdeb4bbc36241182c4129bff1d"
+    },
+    {
+      "path": "data/frozen/dev-B/results.jsonl",
+      "bytes": 302496,
+      "sha256": "e61104c5d13d1491289287d0db9d7e9a7ad08e71f810dd911e9f3b5de8964240"
+    },
+    {
+      "path": "data/frozen/dev-B/run_manifest.json",
+      "bytes": 1738,
+      "sha256": "9eae7711d5c201da903871b00026d1e9e9afb1bc88c413ee2831d34772aa680a"
+    },
+    {
+      "path": "data/frozen/dev-C/config.json",
+      "bytes": 995,
+      "sha256": "fcb88cc725bb5619d8796628222c48c3b84ee28bb1154ced044328f6a3406687"
+    },
+    {
+      "path": "data/frozen/dev-C/metrics.json",
+      "bytes": 1809,
+      "sha256": "5cf07e4d0af96614a9ad08abd3155405fc9221b9001bd26f76384f67e331dc41"
+    },
+    {
+      "path": "data/frozen/dev-C/results.jsonl",
+      "bytes": 301385,
+      "sha256": "381917fa93e06bf84920d01c93eb22119372f3fe5a321653d7f9e83b036e69af"
+    },
+    {
+      "path": "data/frozen/dev-C/run_manifest.json",
+      "bytes": 1712,
+      "sha256": "7639e904a65b0442ab7cf798ff86c4f2a7c29575f7879640e2636c9658fbc96b"
+    },
+    {
+      "path": "data/frozen/test-A/config.json",
+      "bytes": 800,
+      "sha256": "0273d47da63c9499f397ed293d8e1343efe71e5026e556fcbd21930740f667d9"
+    },
+    {
+      "path": "data/frozen/test-A/metrics.json",
+      "bytes": 1794,
+      "sha256": "fd595f704cb8d270d7825fa80eea2616a3f976a11153b1e00b2705935805c6f0"
+    },
+    {
+      "path": "data/frozen/test-A/results.jsonl",
+      "bytes": 157394,
+      "sha256": "ab928831091b130ae9b3cd58ed4a883262403980e17567a8f24ce4cf35e46005"
+    },
+    {
+      "path": "data/frozen/test-A/run_manifest.json",
+      "bytes": 1519,
+      "sha256": "927f5f4fe8ebf5aa2e7f7f13183937c1b62c3ffad8795a00385eca406395aeef"
+    },
+    {
+      "path": "data/frozen/test-B/config.json",
+      "bytes": 782,
+      "sha256": "4edf6f628a3606ab03ddf7fd0ead941cf907a0b3e0223ff2337d9dc887908066"
+    },
+    {
+      "path": "data/frozen/test-B/metrics.json",
+      "bytes": 1796,
+      "sha256": "365c2131f31258a28a149e55ed6ae8d69aabf2b23a6bbb634f2d15ed4b9b3674"
+    },
+    {
+      "path": "data/frozen/test-B/results.jsonl",
+      "bytes": 157986,
+      "sha256": "c588946442a010e1e8ddfc70507a0e3d150aa6c769ea999d1c31324f7147a223"
+    },
+    {
+      "path": "data/frozen/test-B/run_manifest.json",
+      "bytes": 1740,
+      "sha256": "278a5eca8e40e89882ae77642d514e6229885864e905d139886f46634e93afbe"
+    },
+    {
+      "path": "data/frozen/test-C/config.json",
+      "bytes": 997,
+      "sha256": "70bffba0bd84e222a5a0bbaccc8dc9d1af0313f2ca3d666f8072a5ad767b9941"
+    },
+    {
+      "path": "data/frozen/test-C/metrics.json",
+      "bytes": 1811,
+      "sha256": "a62426005dc994e59b0245ef395b2b3a8f3458c8e64785afe47c178234d3a7f2"
+    },
+    {
+      "path": "data/frozen/test-C/results.jsonl",
+      "bytes": 158181,
+      "sha256": "29ede06911fd607afdb0a12beb7528c8f7c4dc11ae40acc907484d2411706f66"
+    },
+    {
+      "path": "data/frozen/test-C/run_manifest.json",
+      "bytes": 1713,
+      "sha256": "3777de028fc5cc7355debdcd1fe66a77edfe6a74ea95263926a00c3ff0b15947"
+    },
+    {
+      "path": "data/gold/questions_all_reviewed.jsonl",
+      "bytes": 210340,
+      "sha256": "680a752e738d7a60f463345c08e3e098934ab945df2183a8bb1e0d97b1f6ddea"
+    },
+    {
+      "path": "data/index/chunks-v12-t128/chunk_stats.json",
+      "bytes": 685,
+      "sha256": "33f3d2f8c8f37af88bd17cf2d96cd74278bff3574a696ae4cf5fc7f160649fee"
+    },
+    {
+      "path": "data/index/chunks-v12-t128/chunks.jsonl",
+      "bytes": 41014454,
+      "sha256": "2db734d48d9384305051288d30cc765e0c67f23b13576d617c8f01c7124e550e"
+    },
+    {
+      "path": "data/index/chunks-v12-t512/chunk_stats.json",
+      "bytes": 680,
+      "sha256": "1e85991dc08312ae95b520a282b52545e32634335d2b4f0f18d93543d3629c7b"
+    },
+    {
+      "path": "data/index/chunks-v12-t512/chunks.jsonl",
+      "bytes": 19124532,
+      "sha256": "4beb721e181b5ef344754b37479fecda1874657b889bdeca4502d4e8ec31088c"
+    },
+    {
+      "path": "data/index/dense-bge-m3-t128-v12/chunk_ids.json",
+      "bytes": 1266015,
+      "sha256": "0a849c51cca54bec8287e9107e76f1da2db8e3be5892988e9dad98ac2c49020d"
+    },
+    {
+      "path": "data/index/dense-bge-m3-t128-v12/index_manifest.json",
+      "bytes": 783,
+      "sha256": "7dc3e5482abf27abf8987ce0e3d1db4316d00930f22ec2271152471c3126083e"
+    },
+    {
+      "path": "data/index/dense-bge-m3-t128-v12/vectors.npy",
+      "bytes": 97562752,
+      "sha256": "ff5effce8de382f81cd9071515306f887003fba49a92ff1d91636799a9bef09a"
+    },
+    {
+      "path": "data/manifests/corpus_normalized-v12_inventory.json",
+      "bytes": 33852,
+      "sha256": "1862de303a1a44797a9d02697fffbf74efc3695ce540feba017d40d911ec42b9"
+    },
+    {
+      "path": "data/table_context/tables.jsonl",
+      "bytes": 147976,
+      "sha256": "33fc8745cba04bbfa39ceccfe88de3df149ec38bfc2332044a9080f568038c3b"
+    }
+  ]
+}

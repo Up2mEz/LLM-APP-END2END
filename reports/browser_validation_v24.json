@@ -1,0 +1,21 @@
+{
+  "recorded_at_utc": "2026-10-11T19:08:37.903415+00:00",
+  "backend": "ncd-gemma-v24",
+  "url": "http://127.0.0.1:8765/#ask-form",
+  "cases": [
+    {
+      "qid": "q075",
+      "status": "answered",
+      "observed": "Correct primary-prevention answer plus source S1 and PDF pages shown",
+      "screenshot": "output/ui/q075-v24.png"
+    },
+    {
+      "qid": "q061",
+      "status": "insufficient_evidence",
+      "observed": "UI accurately reports retrieved text exists but answer did not pass validation",
+      "screenshot": "output/ui/q061-v24.png"
+    }
+  ],
+  "console_errors_observed": [],
+  "scope": "Real browser form submissions, real retrieval with cached model completions. No new layout audit this turn."
+}

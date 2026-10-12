@@ -4,7 +4,7 @@ import argparse
 import json
 import sys
 
-from .config import ROOT, Settings, load_environment, proxy_ready
+from .config import ROOT, Settings, allowed_hosts, load_environment, proxy_ready
 
 
 def main():
@@ -12,6 +12,7 @@ def main():
     commands = parser.add_subparsers(dest="command", required=True)
     serve = commands.add_parser("serve")
     serve.add_argument("--port", type=int, default=8765)
+    serve.add_argument("--host", choices=["127.0.0.1", "0.0.0.0"], default="127.0.0.1")
     doctor = commands.add_parser("doctor")
     doctor.add_argument("--live", action="store_true")
     doctor.add_argument("--retrieval", action="store_true")
@@ -25,7 +26,9 @@ def main():
     load_environment()
     if args.command == "serve":
         import uvicorn
-        uvicorn.run("ncd_gemma.server:app", host="127.0.0.1", port=args.port)
+        if args.host == "0.0.0.0" and len(allowed_hosts()) == 3:
+            parser.error("Set NCD_PUBLIC_HOST and NCD_DEMO_PASSWORD before binding a remote demo")
+        uvicorn.run("ncd_gemma.server:app", host=args.host, port=args.port)
         return
     from .evaluation import write_json
     if args.command == "doctor":

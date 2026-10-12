@@ -1,0 +1,22 @@
+{
+  "plan_id": "extra-dev-v28",
+  "n": 30,
+  "answerable": 26,
+  "status_counts": {
+    "answered": 23,
+    "insufficient_evidence": 7
+  },
+  "decision_accuracy": 0.9,
+  "false_abstentions": [
+    "q006",
+    "q107",
+    "q110"
+  ],
+  "answered_unanswerable": [],
+  "limitations": [
+    "Remaining questions come from the same original gold dev split, not a new clinical dataset.",
+    "v28 reused qids exposed in v26 and used for tuning; it is not an unseen evaluation.",
+    "This is an extra local probe, not independent clinical validation.",
+    "Answer correctness requires manual evidence review; decision accuracy alone is insufficient."
+  ]
+}

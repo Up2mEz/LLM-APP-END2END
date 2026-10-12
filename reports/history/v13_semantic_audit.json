@@ -1,0 +1,17 @@
+{
+  "scope": "Coding-agent review of exposed dev answers against references and evidence; not independent or clinical validation.",
+  "current": "gemma-dev-v13",
+  "same_outputs_as_v12": true,
+  "core_matches": ["q014", "q017", "q113", "q079", "q068", "q045", "q080", "q081", "q093", "q082", "q083", "q115", "q011", "q078"],
+  "incorrect_or_incomplete": ["q099", "q111", "q101", "q076"],
+  "partial_or_needs_context_review": ["q041", "q126", "q108", "q098", "q106"],
+  "false_abstentions": ["q075", "q061"],
+  "label_correct_abstentions": ["q125", "q116", "q120", "q119", "q118"],
+  "abstention_caveat": "q116 abstains because validation failed; a matching label does not prove correct reasoning.",
+  "v8_false_abstentions_recovered_with_core_match": ["q017", "q113", "q079", "q068", "q080", "q115"],
+  "v8_false_abstentions_now_answered_but_not_fully_correct": ["q126", "q108", "q111", "q099", "q101", "q106"],
+  "v5_core_matches_previously_audited": 13,
+  "v8_core_matches_previously_audited": 9,
+  "gold_modified": false,
+  "needs_independent_review": true
+}

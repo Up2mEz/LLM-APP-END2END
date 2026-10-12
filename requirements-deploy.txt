@@ -1,0 +1,14 @@
+# Exact direct dependencies observed in the validated Python 3.12 environment.
+torch==2.14.1+cpu
+sentence-transformers==6.1.0
+transformers==5.18.0
+numpy==2.5.3
+bm25s==0.3.12
+pythainlp==5.3.8
+openai==1.109.1
+fastapi==0.143.0
+uvicorn==0.54.0
+pydantic==2.14.0
+python-dotenv==1.2.4
+jsonschema==4.26.0
+.

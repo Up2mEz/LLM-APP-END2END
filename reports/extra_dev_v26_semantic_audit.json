@@ -1,0 +1,333 @@
+{
+  "plan_id": "extra-dev-v26",
+  "raw_answers_sha256": "36e4e75dccef212b49d66e8e4a2ef16e36cf66089d6f08bda9df93db05564b57",
+  "n": 30,
+  "verdict_counts": {
+    "correct": 17,
+    "wrong": 2,
+    "false_abstention": 6,
+    "answered_unanswerable": 2,
+    "correct_abstention": 2,
+    "partial": 1
+  },
+  "strict_correct": 19,
+  "strict_correct_rate": 0.6333,
+  "partial": 1,
+  "review_basis": "Manual comparison of each answer with gold and retrieved citation text; core factual correctness, not prose quality or clinical validation",
+  "details": [
+    {
+      "qid": "q044",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบอย่างน้อยปีละครั้งตรงหลักฐาน; ไม่กล่าวถึงการติดตามถี่ขึ้นเมื่อผิดปกติ แต่คำถามถามขั้นต่ำ",
+      "cited_documents": [
+        "dm-remission-principles-2568-september"
+      ]
+    },
+    {
+      "qid": "q065",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตรวจความดันทุกปีตั้งแต่อายุ 30 ปีตรงเอกสาร",
+      "cited_documents": [
+        "ht-siriraj-hypertension-public-1587-verified-20261005"
+      ]
+    },
+    {
+      "qid": "q033",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "wrong",
+      "note": "ตอบ 4.5 ชั่วโมงจากหลักสูตรระดับกลาง II ปี 2566 แทนระดับกลางปี 2568 ที่ gold อ้าง 5 ชั่วโมง; สลับ edition",
+      "cited_documents": [
+        "ht-ddc-dmht-elearning-intermediate-ii-2566"
+      ]
+    },
+    {
+      "qid": "q104",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ปัสสาวะกลางคืนตั้งแต่ 2 ครั้งตรงหลักฐาน",
+      "cited_documents": [
+        "ncd-ddc-health-literacy-fight-ncds-2566"
+      ]
+    },
+    {
+      "qid": "q039",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "คาร์บ 1 ส่วนประมาณ 15-18 กรัมตรงหลักฐาน",
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    },
+    {
+      "qid": "q054",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตัวอย่างอาหาร 121 ตัวอย่างตรงหลักฐาน; ไม่สับสนกับคน 124 คน",
+      "cited_documents": [
+        "ht-ddc-community-low-salt-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q127",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "หลักฐาน S1/S2 ระบุร้อยละ 95 ชัด แต่ claim exact-copy ถูกปฏิเสธ 3 รอบ",
+      "cited_documents": []
+    },
+    {
+      "qid": "q049",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบความเสี่ยงถูกตัดเท้าหรือขาตรงคำถามและหลักฐาน",
+      "cited_documents": [
+        "dm-siriraj-nursing-foot-ulcer-prevention-2559"
+      ]
+    },
+    {
+      "qid": "q064",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เริ่มยาลดความดัน 2 ชนิดเมื่อ >=150/90 ตรงเงื่อนไข; คำถามถามจำนวนยา",
+      "cited_documents": [
+        "ht-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q137",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "การผ่าตัดวุ้นตาเมื่อเลือดไม่หายหรือจอตาถูกพังผืดดึงรั้งตรงหลักฐาน",
+      "cited_documents": [
+        "dm-siriraj-retinopathy-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q024",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เกลือและน้ำคั่งทำให้คุมความดันยากและหัวใจทำงานหนัก; เนื้อหาซ้ำ citation 2 ครั้ง",
+      "cited_documents": [
+        "ckd-public-kidney-prevention-tips"
+      ]
+    },
+    {
+      "qid": "q084",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "นมไขมันต่ำสำหรับผู้สูงอายุที่ดื่มนมแล้วไม่ท้องเสียตรงหลักฐาน",
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q018",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ACEi หรือ ARB เป็นตัวเลือกแรกเมื่อมี albuminuria; ตอบซ้ำหลาย citation โดยไม่จำเป็น",
+      "cited_documents": [
+        "ckd-guideline-2565-revised"
+      ]
+    },
+    {
+      "qid": "q053",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "น้ำเปล่าหรือน้ำสมุนไพรไม่หวานตรงหลักฐาน; มีขึ้นบรรทัดกลางประโยคจาก OCR",
+      "cited_documents": [
+        "ht-ddc-community-low-salt-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q100",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ระบุโรงพยาบาลเขาสุกิมตรงหลักฐาน",
+      "cited_documents": [
+        "ncd-ddc-dmht-service-model-lessons-2568"
+      ]
+    },
+    {
+      "qid": "q058",
+      "type": "fact",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "ผลค้น 10 แหล่งไม่ดึงหน้าที่ระบุให้แยกน้ำหนักและส่วนสูง; retrieval miss",
+      "cited_documents": []
+    },
+    {
+      "qid": "q016",
+      "type": "fact",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "S1 มีเด็กและวัยทำงานตรง gold แต่ citation line range นอก passage 3 รอบ",
+      "cited_documents": []
+    },
+    {
+      "qid": "q091",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เนื้อวัวและเนื้อควายตรงหลักฐาน",
+      "cited_documents": [
+        "lipid-siriraj-trans-fat-1380"
+      ]
+    },
+    {
+      "qid": "q132",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ภาชนะทนการแทงทะลุและการกัดกร่อนตรงหลักฐาน; มีรายละเอียดฝากับฉลากเกินที่ถาม",
+      "cited_documents": [
+        "dm-siriraj-needle-disposal-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q063",
+      "type": "table",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "review ยืนยัน III B แล้ว แต่ quantity guard มอง Roman III กับ B ว่าไม่มีปริมาณ",
+      "cited_documents": []
+    },
+    {
+      "qid": "q040",
+      "type": "table",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "ผลค้นได้หัวตารางกงหราแต่ไม่ดึงแถวปี 2567 ที่มี 468 และ 98; ตาราง HTML ถูกแยกข้าม chunk",
+      "cited_documents": []
+    },
+    {
+      "qid": "q022",
+      "type": "table",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "BUN >100 หรือมีแนวโน้มถึง 100 มก./ดล.ตรงหลักฐาน; ข้อความซ้ำ",
+      "cited_documents": [
+        "ckd-hemodialysis-plasma-manual-2561"
+      ]
+    },
+    {
+      "qid": "q006",
+      "type": "table",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "S1 มี Infection Virus, parasites แต่ quantity guard อ่าน กี่ ใน เกี่ยวข้อง เป็นคำถามตัวเลข",
+      "cited_documents": []
+    },
+    {
+      "qid": "q007",
+      "type": "table",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "wrong",
+      "note": "ใช้ BMI ประชากรเอเชียทั่วไป 23-24.9 แทนตารางโรคไตเนโฟรติก S1 ที่ระบุ 25-29.9",
+      "cited_documents": [
+        "ckd-adult-renal-nutrition-guideline-2561"
+      ]
+    },
+    {
+      "qid": "q123",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "answered",
+      "verdict": "answered_unanswerable",
+      "note": "นำคำแนะนำกรณีลืมยาเบาหวานไปใช้กับ ezetimibe ทั้งที่ citation ไม่กล่าวถึงยานี้",
+      "cited_documents": [
+        "dm-dmthai-self-management-education-2568"
+      ]
+    },
+    {
+      "qid": "q121",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "เอกสารให้ปริมาณโซเดียมของน้ำปลา แต่ไม่ระบุยี่ห้อ",
+      "cited_documents": []
+    },
+    {
+      "qid": "q122",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "เอกสารชุดนี้ไม่ให้ AQI cutoff เฉพาะผู้มีความดันสูง",
+      "cited_documents": []
+    },
+    {
+      "qid": "q124",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "answered",
+      "verdict": "answered_unanswerable",
+      "note": "นำพลังงานอาหารว่างเด็กทั่วไป 140 kcal ไปใช้กับเด็กที่มีเบาหวานและ CKD โดยไม่มีหลักฐานตรงโรคร่วม",
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q107",
+      "type": "multi_page",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "partial",
+      "note": "ตอบ SLED สำหรับความดันต่ำถูก แต่ไม่ตอบ intermittent มาตรฐานสำหรับผู้ไหลเวียนคงที่",
+      "cited_documents": [
+        "ckd-hemodialysis-plasma-manual-2561"
+      ]
+    },
+    {
+      "qid": "q110",
+      "type": "multi_page",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ข้าวขาว 1 ทัพพี = 1 คาร์บ และโคล่า 1 กระป๋อง = 1.7 คาร์บครบ",
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    }
+  ]
+}

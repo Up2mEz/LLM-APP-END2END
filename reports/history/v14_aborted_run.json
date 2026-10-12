@@ -1,0 +1,16 @@
+{
+  "plan_id": "gemma-dev-v14",
+  "completed_records": 9,
+  "reason": "Stopped after repeated output protocol/empty review reason failures; all raw responses retained. Not a full benchmark.",
+  "qids": [
+    "q014",
+    "q017",
+    "q113",
+    "q126",
+    "q079",
+    "q125",
+    "q041",
+    "q068",
+    "q108"
+  ]
+}

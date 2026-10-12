@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+!.env.example
+.venv*
+.cache
+.pytest_cache
+__pycache__
+*.pyc
+data
+private
+output
+tmp
+*.log

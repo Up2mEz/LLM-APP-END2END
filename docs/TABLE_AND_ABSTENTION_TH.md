@@ -1,3 +1,5 @@
+> บันทึกการแก้ตารางในรอบ v8–v13 เก็บไว้เพื่อดูที่มา ผลปัจจุบันอ่าน [DEV_COMPARISON_TH.md](DEV_COMPARISON_TH.md) และ workflow ใหม่อ่าน [WORKFLOW_AND_REUSE_TH.md](WORKFLOW_AND_REUSE_TH.md)
+
 # การอ่านตารางและลด false abstention
 
 แก้เฉพาะแอปปลายทาง ใช้ gold และ frozen retrieval เดิม ไม่มี qid หรือ reference answer อยู่ใน serving code การเปรียบเทียบใช้ dev 30 ข้อเดิมที่เปิดใช้พัฒนาแล้ว ไม่ใช่ independent validation
@@ -39,4 +41,4 @@ Citation primary-evidence hit rate ของรุ่นใหม่ใช้บ
 
 การใช้ reviewer จาก Gemma ตัวเดียวกันไม่ใช่ independent verification ต้องตรวจแถว กลุ่มประชากร หน่วย เงื่อนไข และคำถามหลายส่วนด้วยคน ผู้ตรวจทางคลินิกและชุดคำถามใหม่ยังจำเป็นก่อนขยายการใช้งาน
 
-ผลทั้ง 30 ข้อและรายการผิดปัจจุบันอยู่ใน ANSWER_REVIEW_TH.md และ reports/agent_comparison.json
+ผลทั้ง 30 ข้อและข้อจำกัดปัจจุบันอยู่ใน DEV_COMPARISON_TH.md และ reports/agent_comparison.json ส่วน ANSWER_REVIEW_TH.md เป็นบันทึกรุ่น v8

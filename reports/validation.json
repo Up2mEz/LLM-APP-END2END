@@ -1,14 +1,14 @@
 {
-  "recorded_at_utc": "2026-10-11T17:27:54.368609+00:00",
+  "recorded_at_utc": "2026-10-12T03:02:37.306012+00:00",
   "python": "3.12.13",
   "tests": {
-    "tests": 103,
+    "tests": 164,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
-    "seconds": 0.848
+    "seconds": 1.904
   },
-  "tests_passed": 103,
+  "tests_passed": 164,
   "pytest_passed": true,
   "source_file_hash_check": {
     "scope": "48 original files read by this task; not a whole-repository clean-tree claim",

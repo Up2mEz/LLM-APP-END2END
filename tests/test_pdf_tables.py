@@ -65,3 +65,12 @@ def test_extra_model_prose_cannot_override_selected_cell_values():
     result=render_table_selection({'status':'answered','answer':'อาหาร = 900', 'citations':[],
         'table_cells':[{'source_id':'S1','line':1,'columns':[2]}]},source)
     assert result['answer'] == 'กลุ่ม = A: อาหาร = 450 [S1]'
+
+
+def test_redundant_row_label_selection_cannot_change_column_values():
+    source={'S1':{'text':'ตาราง PDF หน้า 3: C0 กลุ่ม = A; C1 รวม = 900; C2 อาหาร = 450'}}
+    def select(columns):
+        return render_table_selection({'status':'answered','table_cells':[{'source_id':'S1','line':1,'columns':columns}]},source)
+    assert select([0,2])==select([2])
+    with pytest.raises(ValueError):select([0])
+    with pytest.raises(ValueError):select([0,99])

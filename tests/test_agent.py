@@ -251,7 +251,7 @@ def test_verification_fails_closed(verdict, reason):
         def complete(self, messages, tools, tool_choice, remaining):
             if not tools:
                 assert "reference_answer" not in messages[1]["content"]
-                assert json.loads(messages[1]["content"])["evidence"][0]["numbered_text"] == '1: ' + EVIDENCE["text"]
+                assert json.loads(messages[1]["content"])["evidence"][0]["passages"][0]["text"] == '1: ' + EVIDENCE["text"]
                 return {"message": {"content": verdict}, "cached": False}
             return super().complete(messages, tools, tool_choice, remaining)
     result = Agent(Reviewer([call(), answered()]), FakeRetriever(), Settings()).run("คำถามทดสอบ")

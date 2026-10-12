@@ -1,0 +1,347 @@
+{
+  "plan_id": "extra-dev-v28",
+  "comparison": "extra-dev-v26",
+  "raw_answers_sha256": "f57f34b3d6302f8fe8df3c75e5306e56993cac81f40043b1c41419daa26bc501",
+  "n": 30,
+  "verdict_counts": {
+    "correct": 23,
+    "false_abstention": 3,
+    "correct_abstention": 4
+  },
+  "strict_correct": 27,
+  "strict_correct_rate": 0.9,
+  "strict_improved_qids": [
+    "q033",
+    "q127",
+    "q058",
+    "q016",
+    "q063",
+    "q040",
+    "q007",
+    "q123",
+    "q124"
+  ],
+  "strict_regressed_qids": [
+    "q110"
+  ],
+  "strict_net_gain": 8,
+  "review_basis": "Coding-agent semantic review of all 30 answers against unchanged gold and cited source; same exposed dev split, not blinded clinical review",
+  "details": [
+    {
+      "qid": "q044",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบอย่างน้อยปีละครั้งตรงหลักฐาน; ไม่กล่าวถึงการติดตามถี่ขึ้นเมื่อผิดปกติ แต่คำถามถามขั้นต่ำ",
+      "cited_documents": [
+        "dm-remission-principles-2568-september"
+      ]
+    },
+    {
+      "qid": "q065",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตรวจความดันทุกปีตั้งแต่อายุ 30 ปีตรงเอกสาร",
+      "cited_documents": [
+        "ht-siriraj-hypertension-public-1587-verified-20261005"
+      ]
+    },
+    {
+      "qid": "q033",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เลือกหลักสูตรระดับกลางปี 2568 ได้ระยะเวลารวม 5 ชั่วโมง ไม่สลับกับระดับกลาง II ปี 2566",
+      "cited_documents": [
+        "dm-ddc-dmht-elearning-intermediate-2568"
+      ]
+    },
+    {
+      "qid": "q104",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ปัสสาวะกลางคืนตั้งแต่ 2 ครั้งตรงหลักฐาน",
+      "cited_documents": [
+        "ncd-ddc-health-literacy-fight-ncds-2566"
+      ]
+    },
+    {
+      "qid": "q039",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "คาร์บ 1 ส่วนประมาณ 15-18 กรัมตรงหลักฐาน",
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    },
+    {
+      "qid": "q054",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตัวอย่างอาหาร 121 ตัวอย่างตรงหลักฐาน; ไม่สับสนกับคน 124 คน",
+      "cited_documents": [
+        "ht-ddc-community-low-salt-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q127",
+      "type": "number_unit",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบร้อยละ 95 จากข้อความ T2D ใน source ที่อ้าง; claim ที่คัดไม่ตรงถูกตัดออกก่อนตรวจ",
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    },
+    {
+      "qid": "q049",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบความเสี่ยงถูกตัดเท้าหรือขาตรงคำถามและหลักฐาน",
+      "cited_documents": [
+        "dm-siriraj-nursing-foot-ulcer-prevention-2559"
+      ]
+    },
+    {
+      "qid": "q064",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เริ่มยาลดความดัน 2 ชนิดเมื่อ >=150/90 ตรงเงื่อนไข; คำถามถามจำนวนยา",
+      "cited_documents": [
+        "ht-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q137",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "การผ่าตัดวุ้นตาเมื่อเลือดไม่หายหรือจอตาถูกพังผืดดึงรั้งตรงหลักฐาน",
+      "cited_documents": [
+        "dm-siriraj-retinopathy-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q024",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เกลือและน้ำคั่งทำให้คุมความดันยากและหัวใจทำงานหนัก; เนื้อหาซ้ำ citation 2 ครั้ง",
+      "cited_documents": [
+        "ckd-public-kidney-prevention-tips"
+      ]
+    },
+    {
+      "qid": "q084",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "นมไขมันต่ำสำหรับผู้สูงอายุที่ดื่มนมแล้วไม่ท้องเสียตรงหลักฐาน",
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q018",
+      "type": "condition",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ACEi หรือ ARB เป็นตัวเลือกแรกเมื่อมี albuminuria; ตอบซ้ำหลาย citation โดยไม่จำเป็น",
+      "cited_documents": [
+        "ckd-guideline-2565-revised"
+      ]
+    },
+    {
+      "qid": "q053",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "น้ำเปล่าหรือน้ำสมุนไพรไม่หวานตรงหลักฐาน; มีขึ้นบรรทัดกลางประโยคจาก OCR",
+      "cited_documents": [
+        "ht-ddc-community-low-salt-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q100",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ระบุโรงพยาบาลเขาสุกิมตรงหลักฐาน",
+      "cited_documents": [
+        "ncd-ddc-dmht-service-model-lessons-2568"
+      ]
+    },
+    {
+      "qid": "q058",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "lexical admission ดึงข้อความที่ระบุให้แยกเก็บน้ำหนักและส่วนสูง",
+      "cited_documents": [
+        "ht-ddc-dmht-elearning-intermediate-ii-2566"
+      ]
+    },
+    {
+      "qid": "q016",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบเด็กและวัยทำงานตรง citation; legacy line citation ถูกซ่อมจากข้อความที่ตรง source เพียงตำแหน่งเดียว",
+      "cited_documents": [
+        "ckd-ddc-epidemiology-prevention-review-2567"
+      ]
+    },
+    {
+      "qid": "q091",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เนื้อวัวและเนื้อควายตรงหลักฐาน",
+      "cited_documents": [
+        "lipid-siriraj-trans-fat-1380"
+      ]
+    },
+    {
+      "qid": "q132",
+      "type": "fact",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ภาชนะทนการแทงทะลุและการกัดกร่อนตรงหลักฐาน; มีรายละเอียดฝากับฉลากเกินที่ถาม",
+      "cited_documents": [
+        "dm-siriraj-needle-disposal-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q063",
+      "type": "table",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบไม่ควรใช้ ACEIs ร่วม ARBs พร้อมระดับ III และหลักฐาน B จากตาราง",
+      "cited_documents": [
+        "ht-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q040",
+      "type": "table",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "อ่านแถว HTML ปี 2567 ที่มีผู้ร่วม 468 คนและ remission 98 คน",
+      "cited_documents": [
+        "dm-remission-implementation-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q022",
+      "type": "table",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "BUN >100 หรือมีแนวโน้มถึง 100 มก./ดล.ตรงหลักฐาน; ข้อความซ้ำ",
+      "cited_documents": [
+        "ckd-hemodialysis-plasma-manual-2561"
+      ]
+    },
+    {
+      "qid": "q006",
+      "type": "table",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "การค้นรอบสองมีตาราง secondary MCD แถว Infection Virus, parasites ใน S11/S12 แต่ Gemma ยังเลือกงดตอบ",
+      "cited_documents": []
+    },
+    {
+      "qid": "q007",
+      "type": "table",
+      "answerable": true,
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เลือกช่วง Overweight 25-29.9 จากตาราง nephrotic แทนเกณฑ์ BMI เอเชียทั่วไป; คำตอบยังสั้นและไม่ระบุหน่วย",
+      "cited_documents": [
+        "ckd-adult-renal-nutrition-guideline-2561"
+      ]
+    },
+    {
+      "qid": "q123",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "ไม่ถ่ายคำแนะนำการลืมยาเบาหวานไปใช้กับ ezetimibe; หยุดเมื่อ citation ไม่มียานี้",
+      "cited_documents": []
+    },
+    {
+      "qid": "q121",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "เอกสารให้ปริมาณโซเดียมของน้ำปลา แต่ไม่ระบุยี่ห้อ",
+      "cited_documents": []
+    },
+    {
+      "qid": "q122",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "เอกสารชุดนี้ไม่ให้ AQI cutoff เฉพาะผู้มีความดันสูง",
+      "cited_documents": []
+    },
+    {
+      "qid": "q124",
+      "type": "unanswerable",
+      "answerable": false,
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "ไม่ใช้พลังงานของว่างเด็กทั่วไปกับโจทย์เด็กที่มีเบาหวานร่วมโรคไตโดยไม่มีหลักฐานตรง",
+      "cited_documents": []
+    },
+    {
+      "qid": "q107",
+      "type": "multi_page",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "S1 มี SLED สำหรับความดันต่ำและ S2 มี conventional intermittent สำหรับไหลเวียนคงที่ แต่โมเดลตอบเพียงด้านเดียวซ้ำจน completeness gate ปฏิเสธ",
+      "cited_documents": []
+    },
+    {
+      "qid": "q110",
+      "type": "multi_page",
+      "answerable": true,
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "S1/S2 มีข้าวขาว 1 ทัพพีต่อ 1 คาร์บ และ S3 มีโคล่า 1 กระป๋อง 1.7 คาร์บ แต่ prune invalid claims เหลือ 1 จาก 5 claims แล้ว reviewer เลือก claim ID ไม่ตรง",
+      "cited_documents": []
+    }
+  ]
+}

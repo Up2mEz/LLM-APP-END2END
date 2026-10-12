@@ -1,5 +1,9 @@
+import base64
+
+import pytest
 from fastapi.testclient import TestClient
 from ncd_gemma import server
+from ncd_gemma.config import allowed_hosts
 
 
 def test_ui_health_and_no_secret_in_health():
@@ -41,3 +45,49 @@ def test_runtime_configuration_error_is_sanitized(monkeypatch):
     response = TestClient(server.app).post("/api/ask", json={"question": "x"})
     assert response.status_code == 503
     assert "secret" not in response.text
+
+
+def test_greeting_needs_no_retriever_or_proxy(monkeypatch):
+    def fail():
+        raise AssertionError('A standalone greeting must not load the model')
+    monkeypatch.setattr(server, 'get_agent', fail)
+    data = TestClient(server.app).post('/api/ask', json={'question': 'hello'}).json()
+    assert data['status'] == 'out_of_scope'
+    assert data['stats']['api_calls'] == data['stats']['searches'] == 0
+    assert data['citations'] == []
+
+
+def test_remote_host_requires_exact_name_and_password(monkeypatch):
+    monkeypatch.setenv('NCD_PUBLIC_HOST', 'demo.example.org')
+    monkeypatch.delenv('NCD_DEMO_PASSWORD', raising=False)
+    with pytest.raises(ValueError, match='NCD_DEMO_PASSWORD'):
+        allowed_hosts()
+    monkeypatch.setenv('NCD_DEMO_PASSWORD', 'long-demo-secret')
+    assert allowed_hosts() == ['127.0.0.1', 'localhost', 'testserver', 'demo.example.org']
+    for bad_host in ('*', 'https://demo.example.org', 'demo.example.org:443', '*.example.org'):
+        monkeypatch.setenv('NCD_PUBLIC_HOST', bad_host)
+        with pytest.raises(ValueError, match='hostname'):
+            allowed_hosts()
+
+
+def test_demo_password_protects_page_and_ask_but_not_health(monkeypatch):
+    monkeypatch.setenv('NCD_DEMO_PASSWORD', 'long-demo-secret')
+    monkeypatch.setenv('NCD_DEMO_USER', 'grader')
+    client = TestClient(server.app)
+    assert client.get('/api/health').status_code == 200
+    denied = client.get('/')
+    assert denied.status_code == 401
+    assert denied.headers['www-authenticate'] == 'Basic realm="NCD demo"'
+    assert client.post('/api/ask', json={'question': 'hello'}).status_code == 401
+    value = base64.b64encode(b'grader:long-demo-secret').decode()
+    headers = {'Authorization': f'Basic {value}'}
+    assert client.get('/', headers=headers).status_code == 200
+    assert client.post('/api/ask', json={'question': 'hello'}, headers=headers).json()['status'] == 'out_of_scope'
+    assert client.get('/', headers={'Authorization': 'Basic broken'}).status_code == 401
+
+
+def test_same_host_https_origin_works_behind_tls_proxy():
+    client = TestClient(server.app)
+    response = client.post('/api/ask', json={'question': 'hello'}, headers={'Origin': 'https://testserver'})
+    assert response.status_code == 200
+    assert response.json()['status'] == 'out_of_scope'

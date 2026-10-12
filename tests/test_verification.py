@@ -71,3 +71,19 @@ def test_missing_answer_quote_may_be_null_only_when_not_covered():
 def test_source_markers_do_not_satisfy_an_explicit_quantity_question(answer, missing):
     assert misses_explicit_quantity("จบกิจกรรมได้กี่คะแนน", answer) is missing
     assert not misses_explicit_quantity("จบกิจกรรมได้รับอะไร", answer)
+
+
+def test_repeating_a_year_does_not_answer_a_requested_count():
+    assert misses_explicit_quantity('ปี 2550 มีจำนวนเท่าไร','ในปี 2550 พบผู้เข้าร่วมกิจกรรม [S1]')
+    assert not misses_explicit_quantity('ปี 2550 มีจำนวนเท่าไร','มีผู้เข้าร่วม 18 คนในปี 2550 [S1]')
+
+
+def test_related_does_not_contain_a_quantity_question():
+    assert not misses_explicit_quantity('เกี่ยวข้องกับเชื้อกลุ่มใดบ้าง', 'Virus และ parasite [S1]')
+    assert misses_explicit_quantity('มีเชื้อกี่กลุ่ม', 'Virus และ parasite [S1]')
+
+
+def test_guideline_roman_grade_counts_as_requested_value():
+    question = 'การใช้ยาถูกจัดระดับคำแนะนำและหลักฐานไว้เท่าไร'
+    assert not misses_explicit_quantity(question, 'ไม่ควรใช้ร่วมกัน III B [S1]')
+    assert misses_explicit_quantity(question, 'ไม่ควรใช้ร่วมกัน [S1]')

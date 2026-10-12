@@ -82,6 +82,10 @@ def render_table_selection(raw, sources):
         line = resolve_table_line(sources[sid], line)
         quote = line_quote(sources[sid], line, line)
         cells = re.split(r'; (?=C\d+ )', quote.split(': ', 1)[1])
+        if isinstance(columns,list):
+            # C0 is the row label and already always included in the output.
+            # A redundant request for it changes no selected value or meaning.
+            columns = [c for c in columns if not (type(c) is int and c == 0)]
         if (not isinstance(columns, list) or not 1 <= len(columns) <= 4
                 or any(type(c) is not int or not 1 <= c < len(cells) for c in columns)
                 or len(set(columns)) != len(columns)):

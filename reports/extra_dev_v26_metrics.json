@@ -1,0 +1,27 @@
+{
+  "plan_id": "extra-dev-v26",
+  "n": 30,
+  "answerable": 26,
+  "status_counts": {
+    "answered": 22,
+    "insufficient_evidence": 8
+  },
+  "decision_accuracy": 0.7333,
+  "false_abstentions": [
+    "q127",
+    "q058",
+    "q016",
+    "q063",
+    "q040",
+    "q006"
+  ],
+  "answered_unanswerable": [
+    "q123",
+    "q124"
+  ],
+  "limitations": [
+    "Remaining questions come from the same original gold dev split, not a new clinical dataset.",
+    "This is an extra local probe, not independent clinical validation.",
+    "Answer correctness requires manual evidence review; decision accuracy alone is insufficient."
+  ]
+}

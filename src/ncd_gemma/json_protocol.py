@@ -34,6 +34,23 @@ def load_json(text):
         if not c.isspace():
             previous = c
         i += 1
-    if not 1 <= changes <= 4:
-        return json.loads(text)  # Preserve a parse error for all other defects.
-    return json.loads(''.join(out))
+    candidate = ''.join(out) if 1 <= changes <= 4 else text
+    # Remove only a redundant consecutive ']' after its array has already
+    # closed. Track strings and nesting; valid nested arrays remain unchanged.
+    result, stack, inside, escaped, previous, removed = [], [], False, False, '', 0
+    for c in candidate:
+        if not inside:
+            if c == ']' and previous == ']' and (not stack or stack[-1] != '['):
+                removed += 1
+                continue
+            if c in '[{':stack.append(c)
+            elif c in ']}' and stack and stack[-1] == ( '[' if c == ']' else '{'):
+                stack.pop()
+        result.append(c)
+        if inside:
+            if escaped:escaped=False
+            elif c=='\\':escaped=True
+            elif c=='"':inside=False
+        elif c=='"':inside=True
+        if not c.isspace():previous=c
+    return json.loads(''.join(result) if 1 <= removed <= 2 else candidate)

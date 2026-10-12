@@ -3,7 +3,7 @@ import json
 import pytest
 
 from ncd_gemma.agent import parse_answer
-from ncd_gemma.evidence import TableContext, numbered_text, line_quote
+from ncd_gemma.evidence import TableContext, numbered_text, line_quote, table_like
 from ncd_gemma.verification import parse_review
 
 
@@ -28,6 +28,16 @@ def test_distant_page_is_not_injected_into_a_table():
     old = chunk("old", 1, "OLD HEADER")
     data = chunk("rows", 30, "1 80 30 50\n2 90 40 50")
     assert "OLD HEADER" not in TableContext([old, data]).enrich(data)["text"]
+
+
+def test_html_header_hit_includes_neighboring_data_row():
+    header = chunk('header', 17, 'ผลลัพธ์ปี 2567 <table><tr><th>ปี</th><th>เข้าร่วม</th><th>Remission</th></tr>')
+    row = chunk('row', 18, '<tr><td>2567</td><td>468 คน</td><td>98 คน</td></tr></table>')
+    other = chunk('other', 18, '<tr><td>WRONG</td></tr>', 'older')
+    assert table_like(header['text'])
+    result = TableContext([header, row, other]).enrich(header)
+    assert '468 คน' in result['text'] and '98 คน' in result['text']
+    assert 'WRONG' not in result['text']
 
 
 def test_citation_lines_are_copied_from_source_not_generated_by_the_model():
