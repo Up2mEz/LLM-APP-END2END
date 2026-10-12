@@ -1,6 +1,8 @@
 from types import SimpleNamespace
 
 import pytest
+from httpx import Request
+from openai import APIConnectionError
 
 from ncd_gemma.config import Settings
 from ncd_gemma.llm import ProxyClient
@@ -59,3 +61,21 @@ def test_rate_limit_cannot_sleep_past_request_deadline(tmp_path, monkeypatch):
     with pytest.raises(ProxyError) as error:
         client.complete([{'role':'user','content':'synthetic'}], [], 'none', 10)
     assert error.value.attempts == 1 and not waits
+
+
+def test_transient_proxy_connection_failure_retries_once(tmp_path, monkeypatch):
+    waits, requests = [], []
+    monkeypatch.setattr('ncd_gemma.llm.time.sleep', waits.append)
+    def create(**kwargs):
+        requests.append(kwargs)
+        if len(requests) == 1:
+            raise APIConnectionError(request=Request('POST', 'https://llm.nat-d.uk/v1/chat/completions'))
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content='{}',tool_calls=[]),
+                                                       finish_reason='stop')], usage=None)
+    client = ProxyClient.__new__(ProxyClient)
+    client.settings = Settings(cache_dir=tmp_path)
+    client.endpoint_identity = 'test-endpoint'
+    client.client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=create)))
+    result = client.complete([{'role':'user','content':'synthetic'}], [], 'none', 15)
+    assert result['api_attempts'] == 2 and waits == [2.0]
+    assert len(requests) == 2

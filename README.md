@@ -39,6 +39,8 @@ $env:PYTHONPATH = "$PWD\src"
 
 `fetch` ดาวน์โหลด [data-v12 release](https://github.com/Up2mEz/LLM-APP-END2END/releases/tag/data-v12) และตรวจ SHA-256 ของ archive กับไฟล์ทั้ง 34 รายการตาม `provenance/public_data_release.json` ก่อนใช้ ชุดนี้มี corpus ที่ extract แล้ว, index, gold, frozen ranked hits และ table context; ไม่มี PDF ต้นฉบับ, model weights, API key หรือ private agent responses ผู้จัดทำยืนยันว่ามีสิทธิ์เผยแพร่และโฮสต์ข้อมูลชุดนี้แล้ว แต่เอกสารขอบเขตการอนุญาตไม่ได้แนบใน repository และ manifest สิทธิ์จากต้นทางยังเป็น snapshot เก่าที่ไม่ได้แก้
 
+ตรวจเส้นทาง public จริงซ้ำได้ด้วย `.venv312\Scripts\python -B scripts/smoke_remote_release.py` สคริปต์จะ clone branch `main` ลง `tmp/`, ดาวน์โหลด release asset, ตรวจ hash และ replay frozen retrieval 6 runs ก่อนลบโฟลเดอร์ชั่วคราว ผลที่ตรวจ 12 ตุลาคม 2026: B−A Recall@5 `0.0769` และ MRR@10 `0.1193`
+
 ทางเลือกสำหรับผู้มี source repository ในเครื่อง ใช้การ import แบบเดิม:
 
 ```powershell
@@ -160,7 +162,7 @@ B เพิ่ม Recall@5 7.69 percentage points และ MRR@10 0.1193 เม
 
 ## สถานะการตรวจล่าสุด 12 ตุลาคม 2026
 
-v30 ตรวจสาระครบ **25/25** ใน 25 ข้อที่ gold ระบุว่าตอบได้จาก dev 30 ข้อเดิม เทียบ v24 **21/25** เพิ่ม 4 ข้อ และงดตรง label อีก 5 ข้อ v27 เคยถอยเป็น 24/25 เพราะ q108 อธิบายอาหารกระป๋องไม่ครบ แล้ว v28 แก้กลับ v29–v30 ไม่เปลี่ยนคำตอบชุดนี้ ผลทั้งหมดเป็น exposed dev ที่ใช้ปรับระบบ ไม่ใช่หลักฐานว่าจะตอบคำถามใหม่ถูกทั้งหมด
+v30 ตรวจสาระครบ **25/25** ใน 25 ข้อที่ gold ระบุว่าตอบได้จาก dev 30 ข้อเดิม เทียบ v24 **21/25** เพิ่ม 4 ข้อ และงดตรง label อีก 5 ข้อ v27 เคยถอยเป็น 24/25 เพราะ q108 อธิบายอาหารกระป๋องไม่ครบ แล้ว v28 แก้กลับ v29–v30 ไม่เปลี่ยนคำตอบชุดนี้ ผลทั้งหมดเป็น exposed dev ที่ใช้ปรับระบบ ไม่ใช่หลักฐานว่าจะตอบคำถามใหม่ถูกทั้งหมด ภายหลังเพิ่ม retry ของ class proxy เมื่อ connection หลุด 1 ครั้ง โดยยังไม่ได้รัน dev evaluation ซ้ำกับ adapter ที่เปลี่ยนนี้
 
 | Dev 30 ชุดเดิม | v13 | v24 | v26 | v27 | v28–v30 |
 |---|---:|---:|---:|---:|---:|
@@ -172,7 +174,7 @@ v30 ตรวจสาระครบ **25/25** ใน 25 ข้อที่ gol
 | Citation primary-evidence hit rate | 0.5600 | 0.6000 | 0.6400 | 0.7200 | 0.7200 |
 | Character F1 | 0.2805 | 0.3464 | 0.4217 | 0.4265 | 0.4453 |
 
-- Tests **169 passed**, 0 failed/error/skipped; Starlette deprecation warning 1 รายการ (ตรวจซ้ำก่อน public release)
+- Tests **170 passed**, 0 failed/error/skipped; Starlette deprecation warning 1 รายการ (ตรวจซ้ำหลังเพิ่ม bounded connection retry)
 - ตรวจ SHA-256 ของ source allow-list 48 ไฟล์และ PDF ที่อ่าน 33 ไฟล์ไม่เปลี่ยน gold เดิมไม่แก้
 - v25 เพิ่ม high-precision evidence-bound routes โดยไม่ใช้ qid/เฉลยใน serving: q061 ชื่อ field ฉลาก, q115 รอบ+วงจร, q111 ความสัมพันธ์ DASH/CKD และ q106 ค่าเฉพาะเงื่อนไข
 

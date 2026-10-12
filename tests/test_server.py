@@ -6,6 +6,13 @@ from ncd_gemma import server
 from ncd_gemma.config import allowed_hosts
 
 
+@pytest.fixture(autouse=True)
+def local_test_access(monkeypatch):
+    # A developer's private .env may protect the running demo. Tests set their
+    # own auth state explicitly instead of inheriting it from that file.
+    monkeypatch.setenv('NCD_DEMO_PASSWORD', '')
+
+
 def test_ui_health_and_no_secret_in_health():
     client = TestClient(server.app)
     assert client.get("/").status_code == 200

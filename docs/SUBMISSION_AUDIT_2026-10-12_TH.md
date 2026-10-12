@@ -2,6 +2,15 @@
 
 > รายงานส่วนล่างเป็น snapshot ก่อนเตรียม public release ในวันเดียวกัน หลังจากนั้นผู้จัดทำแจ้งว่ามีหลักฐานอนุญาตให้เผยแพร่และโฮสต์ corpus เดิมแล้ว แต่ยังไม่ได้ส่งรายละเอียดหลักฐาน/ขอบเขตมาให้ตรวจใน repository จึงบันทึกเป็นคำยืนยันของผู้จัดทำ ไม่แก้สิทธิ์ manifest ต้นทาง สถานะ GitHub และ deployment ต้องตรวจซ้ำหลังเผยแพร่
 
+## อัปเดตหลังเผยแพร่ public repo
+
+- Q1: เผยแพร่โค้ดที่ [Up2mEz/LLM-APP-END2END](https://github.com/Up2mEz/LLM-APP-END2END) commit `b14b747d0879ebcb3de48414c026db9f52ec7432` และ [data-v12 release](https://github.com/Up2mEz/LLM-APP-END2END/releases/tag/data-v12) แล้ว archive มี 34 ไฟล์ ขนาด 63,572,296 bytes SHA-256 `c78d40139f628fb6c9ef1bf93e62a55be331d64327db1a4c98cfa5f0e8faa731` ไม่มี source PDF, model weights, API key หรือ private agent responses
+- ทดสอบจาก GitHub จริงด้วย fresh clone, ดาวน์โหลด release asset และตรวจ hash ได้ครบ 34 ไฟล์ จากนั้น replay frozen retrieval 6 runs ได้ B−A Recall@5 `0.0769`, MRR@10 `0.1193` ตรงกับผลในเครื่อง ชุดนี้ทดสอบการดาวน์โหลด/ประเมิน saved hits; ยังไม่ได้พิสูจน์ว่า Docker image build หรือ model weights ดาวน์โหลดและรันบน Linux host สำเร็จ
+- `pytest -q` ล่าสุด **170 passed, 1 Starlette deprecation warning** และ Linux dependency resolver หา PyTorch `2.14.1+cpu` กับ package graph ที่ไม่มี CUDA/NVIDIA dependencies ได้ แต่ Docker engine ในเครื่องนี้ไม่พร้อม จึงยังไม่มี container runtime test
+- ผู้จัดทำแจ้งว่ามีหลักฐานสิทธิ์เผยแพร่ corpus และโค้ดที่ใช้แล้ว เอกสาร/ขอบเขตยังไม่แนบให้ตรวจ; manifest ต้นทางที่บันทึกไว้ด้านล่างเป็น snapshot เก่า ไม่ถูกแก้หรืออ้างว่าอนุมัติในตัวไฟล์
+- Q3: local app ตั้ง Basic Auth แล้ว ทดสอบ unauthenticated `401` และ authenticated `200`; คำถาม NCD จริงตอบ HTTP `200`, มี 1 citation และ 1 search ใน 35.7 วินาทีหลังการลองซ้ำ ครั้งแรกเจอ `APIConnectionError` จาก class proxy จึงเพิ่ม retry เพียง 1 ครั้งเมื่อเป็น connection failure และเวลาเหลือ ผล dev v30 เดิมเกิดก่อน transport change นี้ จึงยังไม่อ้างว่าเป็นผล evaluation ของ adapter รุ่นใหม่ ยังไม่มี URL ภายนอกที่ตรวจว่าใช้งานได้ Cloudflare Quick Tunnel ต้องมีการอนุญาตเฉพาะปลายทางก่อน เพราะเป็นบริการ third-party และ URL ชั่วคราวไม่มี uptime guarantee
+- Q2 PDF ยังคงไม่ตรวจหรือแก้ตามคำขอผู้จัดทำ
+
 ขอบเขตการตรวจครั้งนี้: โค้ด, dependency, tests, API/UI ในเครื่อง, ผลประเมิน, GitHub, สิทธิ์ข้อมูล และความเป็นไปได้ของ live URL **ไม่ตรวจหรือแก้ PDF ตามคำขอผู้จัดทำ** ไม่ได้สร้างคลิปหรือกด Submit ในเว็บรายวิชา
 
 ## ข้อสรุป

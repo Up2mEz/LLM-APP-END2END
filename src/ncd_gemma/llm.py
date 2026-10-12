@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 from uuid import uuid4
 
-from openai import OpenAI
+from openai import APIConnectionError, OpenAI
 
 from .config import Settings, proxy_ready
 
@@ -55,6 +55,10 @@ class ProxyClient:
                 break
             except Exception as exc:
                 # Never persist raw exceptions, which can contain secrets.
+                if (isinstance(exc, APIConnectionError) and attempt == 0
+                        and remaining - (time.monotonic() - start) > 7):
+                    time.sleep(2.0)
+                    continue
                 status = getattr(exc, "status_code", None)
                 headers = getattr(getattr(exc, 'response', None), 'headers', {})
                 try:
