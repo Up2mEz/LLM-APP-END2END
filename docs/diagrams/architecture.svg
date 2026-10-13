@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="672" height="556" viewBox="0 0 672 556" role="img" aria-labelledby="ncd-arch-title ncd-arch-desc" id="architecture-root">
+<title id="ncd-arch-title">NCD Evidence application architecture</title>
+<desc id="ncd-arch-desc">The browser sends a Thai question to FastAPI and a bounded agent. The agent exchanges messages with Gemma through the class proxy, validates search_docs arguments, and calls hybrid retrieval. Retrieval reads the local corpus, index and table context, then returns evidence. Source-bound readers or Gemma review validate the answer and citations. The browser receives either a supported answer or an abstention. Gold is used only by the separate evaluation runner.</desc>
+<defs>
+      <style>#architecture-root { color: #18364e; font-family: Tahoma,Arial,sans-serif; }
+      #architecture-root .diagram-container { width:100%; overflow-x:auto; }
+      #architecture-root .diagram-container { overflow-x:visible; }</style>
+<marker id="architecture-ncd-arch-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#63788b"/></marker>
+<marker id="architecture-ncd-arch-api-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#0964aa"/></marker>
+</defs>
+<rect width="672" height="556" fill="#ffffff"/>
+<text x="40" y="62" font-family="Arial,sans-serif" font-size="14" font-weight="600" fill="#18364e">NCD Evidence</text>
+<text x="632" y="62" text-anchor="end" font-family="Arial,sans-serif" font-size="9" fill="#52697e">RUNTIME REQUEST PATH</text>
+<path d="M196 148 H248" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#architecture-ncd-arch-arrow)"/>
+<path d="M424 132 H472" fill="none" stroke="#0964aa" stroke-width="1.5" marker-end="url(#architecture-ncd-arch-api-arrow)"/>
+<path d="M472 164 H424" fill="none" stroke="#63788b" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#architecture-ncd-arch-arrow)"/>
+<path d="M288 196 V260" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#architecture-ncd-arch-arrow)"/>
+<path d="M384 260 V196" fill="none" stroke="#63788b" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#architecture-ncd-arch-arrow)"/>
+<path d="M472 300 H424" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#architecture-ncd-arch-arrow)"/>
+<path d="M248 180 H224 Q216 180 216 188 V436 Q216 444 224 444 H248" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#architecture-ncd-arch-arrow)"/>
+<path d="M248 468 H196" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#architecture-ncd-arch-arrow)"/>
+<rect x="297" y="218" width="61" height="16" fill="#fff"/><text x="327" y="230" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#52697e">SEARCH</text>
+<rect x="393" y="238" width="57" height="16" fill="#fff"/><text x="421" y="250" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#52697e">EVIDENCE</text>
+<g font-family="Arial,sans-serif" fill="#18364e">
+<rect x="40" y="116" width="156" height="64" rx="8" fill="#fff" stroke="#b7c9d8"/>
+<text x="56" y="144" font-size="12" font-weight="600">Thai question</text><text x="56" y="162" font-size="9" fill="#52697e">Browser interface</text>
+<rect x="248" y="100" width="176" height="96" rx="8" fill="#edf6ff" stroke="#0964aa" stroke-width="1.5"/>
+<text x="264" y="125" font-size="9" fill="#0964aa">FASTAPI</text><text x="264" y="146" font-size="12" font-weight="600">Bounded agent</text><text x="264" y="166" font-size="9" fill="#52697e">Tool arguments and budgets</text><text x="264" y="181" font-size="9" fill="#52697e">Native search_docs loop</text>
+<rect x="472" y="100" width="160" height="96" rx="8" fill="#f8fafc" stroke="#b7c9d8" stroke-dasharray="4 3"/>
+<text x="488" y="125" font-size="9" fill="#52697e">CLASS PROXY</text><text x="488" y="146" font-size="12" font-weight="600">Gemma 4 E4B</text><text x="488" y="166" font-size="9" fill="#52697e">OpenAI SDK</text><text x="488" y="181" font-size="9" fill="#52697e">llm.nat-d.uk</text>
+<rect x="248" y="260" width="176" height="80" rx="8" fill="#fff" stroke="#b7c9d8"/>
+<text x="264" y="286" font-size="12" font-weight="600">Hybrid retrieval</text><text x="264" y="306" font-size="9" fill="#52697e">Dense and BM25, variant B</text><text x="264" y="322" font-size="9" fill="#52697e">Context and passage reranking</text>
+<rect x="472" y="260" width="160" height="80" rx="2" fill="#f8fafc" stroke="#b7c9d8"/>
+<text x="488" y="286" font-size="12" font-weight="600">Local corpus</text><text x="488" y="306" font-size="9" fill="#52697e">Chunks, index, PDF tables</text><text x="488" y="322" font-size="9" fill="#52697e">Frozen source snapshot</text>
+<rect x="248" y="404" width="176" height="80" rx="8" fill="#fff" stroke="#b7c9d8"/>
+<text x="264" y="430" font-size="12" font-weight="600">Grounding checks</text><text x="264" y="450" font-size="9" fill="#52697e">Readers or Gemma review</text><text x="264" y="466" font-size="9" fill="#52697e">Schema, quotes and scope</text>
+<rect x="40" y="436" width="156" height="48" rx="8" fill="#fff" stroke="#b7c9d8"/>
+<text x="56" y="456" font-size="12" font-weight="600">Answer or abstain</text><text x="56" y="474" font-size="9" fill="#52697e">Citations and trace</text>
+</g>
+<path d="M40 508 H632" stroke="#d8e4ed" stroke-width="1"/>
+<text x="40" y="529" font-family="Arial,sans-serif" font-size="9" fill="#52697e">Gold is evaluation-only. The live answering path never loads reference answers.</text>
+</svg>

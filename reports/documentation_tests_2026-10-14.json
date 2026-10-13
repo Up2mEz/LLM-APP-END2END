@@ -1,0 +1,25 @@
+{
+  "recorded_at_utc": "2026-10-13T18:35:45.175290+00:00",
+  "python": "3.12.13",
+  "tests": {
+    "tests": 170,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "tests_passed": 170,
+  "seconds": 4.627,
+  "warnings": [
+    "StarletteDeprecationWarning: TestClient httpx integration deprecated"
+  ],
+  "command": "python -B -m pytest -q --basetemp=private/pytest-report-verified --junitxml=private/tests-report-20261014.xml",
+  "scope": "Unit and API tests use fake model/retriever; no new model evaluation or clinical review. Completed outside Windows sandbox after socketpair startup stalled inside sandbox.",
+  "frozen_retrieval_replay": {
+    "runs_verified": 6,
+    "test_B_minus_A": {
+      "recall@5": 0.0769,
+      "mrr@10": 0.1193
+    },
+    "scope": "Recomputed from saved hits on 2026-10-14; no new retrieval or LLM generation."
+  }
+}

@@ -1,31 +1,128 @@
-# NCD Evidence: Gemma ผ่าน class proxy
+# NCD Evidence
 
-แอปถามตอบจากเอกสาร NCD ภาษาไทย ใช้ gold และ retrieval snapshot จาก Thai NCD Guideline QA แล้วต่อ `gemma-4-E4B-it` ผ่าน OpenAI SDK พร้อม native `search_docs` tool และ agent loop หน้าสาธิตแสดงคำตอบ ข้อความอ้างอิง เลขหน้า และ trace
+ระบบถามตอบจากเอกสาร NCD ภาษาไทย ช่วยค้นและสรุปหลักฐานพร้อมชื่อเอกสาร ฉบับพิมพ์ เลขหน้า และข้อความอ้างอิง ผู้ใช้จึงกลับไปตรวจที่มาของคำตอบได้ ใช้ `gemma-4-E4B-it` ผ่าน class proxy ของรายวิชา โดยต่อยอด corpus, gold และ retrieval จาก [Thai NCD Guideline QA](https://github.com/Chaiporn2005/thai-ncd-guideline-qa)
 
-โปรเจคนี้อยู่แยกจากต้นทางใน `D:\KMITL\LLMapp\ncd-gemma` ข้อมูลที่นำเข้าเป็นสำเนา ไม่มี runtime import หรือ write ไปที่ repository ต้นทาง
+โครงงานรายวิชา **Building LLM-Powered Applications** จัดทำโดย **นายธนกฤต เสมอหน้า รหัสนักศึกษา 6707060** ผู้สอน **ดร. ณัฏฐ์ ดิลกธนากุล**
 
-## เริ่มใช้งานบนเครื่องนี้
+แอปมีขอบเขตเป็นผู้ช่วยอ่านเอกสาร ไม่ใช้วินิจฉัยหรือจัดแผนรักษาเฉพาะบุคคล หากหลักฐานไม่พอจะงดตอบหรือขอรายละเอียดเพิ่ม คำทักทายล้วนตอบด้วยข้อความระบุขอบเขตโดยไม่เรียกโมเดล
+
+อ่าน [วิธีรัน](#เริ่มใช้งาน), [ผลการประเมิน](#ผลการประเมิน), [รายงานโครงงาน](docs/PROJECT_REPORT_TH.md) และ [เทคนิคกับการนำงานเดิมมาใช้](docs/WORKFLOW_AND_REUSE_TH.md)
+
+## ระบบทำงานอย่างไร
+
+![สถาปัตยกรรม NCD Evidence แสดงการเชื่อม browser, agent, class proxy, retrieval และการตรวจหลักฐาน](docs/diagrams/architecture.svg)
+
+1. หน้าเว็บส่งคำถามไปยัง FastAPI และ agent บังคับให้ Gemma เริ่มด้วย native `search_docs` สำหรับคำถามในขอบเขต
+2. โค้ดตรวจชื่อ tool และ arguments จากนั้นค้นด้วย dense search และ BM25 ตาม frozen variant B ผลค้นผ่านการต่อบริบท การอ่านตาราง และ passage reranking
+3. หลักฐานที่ส่งให้โมเดลมี source IDs, passage IDs, edition และเลขหน้า ส่ง tool result กลับพร้อม `tool_call_id` ที่ตรงกับคำขอ
+4. หากพบความสัมพันธ์ที่ source bound reader ตรวจได้ครบ ระบบอ่านค่าจากหลักฐานโดยตรง หากไม่ครบจะใช้ Gemma สร้างคำตอบและตรวจอีกครั้ง ทุกเส้นทางต้องผ่าน schema และ citation validation รวมถึง guard ที่เกี่ยวข้อง
+5. หน้าเว็บแสดงคำตอบหรือเหตุผลที่งดตอบ พร้อมหลักฐานและ trace ให้ตรวจขั้นตอนย้อนหลังได้
+
+กล่อง Grounding checks ในภาพรวม source bound readers และเส้นทาง Gemma review เข้าด้วยกัน รายละเอียดอยู่ใน [workflow](docs/WORKFLOW_AND_REUSE_TH.md) **Gold และ reference answers ใช้เฉพาะ evaluation runner ไม่มีการโหลดเพื่อช่วยตอบใน serving layer**
+
+| การออกแบบ | ค่าและเหตุผล |
+|---|---|
+| LLM | OpenAI SDK, `https://llm.nat-d.uk/v1`, `gemma-4-E4B-it`, temperature 0 |
+| Retrieval หลัก | bge-m3 child 128 tokens, parent 512 tokens และ BM25 char3 |
+| การรวมคะแนน | Min-max convex fusion, alpha 0.6, pool 100, BM25 k1 2.18 และ b 0.86 จาก frozen config เดิม |
+| บริบทเพิ่มเติม | Neighbour context, PDF table cells และ short passages เรียงด้วย bge-reranker-v2-m3 |
+| ขอบเขต agent | Configuration ที่ประเมินใช้ไม่เกิน 6 model rounds รวม review, 3 searches, top_k 8 และ context 18,000 ตัวอักษร |
+| การหยุดและซ่อม | Request timeout 45 วินาที เวลารวม 150 วินาที ซ่อมภายใน budget เดิมและงดตอบเมื่อยังตรวจไม่ได้ |
+| ขอบเขต tool | อนุญาตเฉพาะ `search_docs` ตรวจ filters, arguments และ query ซ้ำ ไม่เปิด shell ให้โมเดล |
+
+## ผลการประเมิน
+
+แยกคุณภาพการค้นหลักฐานออกจากคุณภาพคำตอบ เพื่อไม่ใช้คะแนน retrieval แทนความถูกต้องของ Gemma
+
+![การประเมิน retrieval จาก frozen ranked hits และการประเมินคำตอบจาก dev สองชุด](docs/diagrams/evaluation.svg)
+
+### 1. Retrieval เทียบ baseline
+
+Corpus `normalized-v12` มี 66 เอกสารที่มี chunks, child chunks 23,819 ชิ้น และ parent chunks 4,347 ชิ้น ไฟล์คำถามมี 177 แถว ใช้ gold 162 ข้อ แบ่งเป็น dev 106 และ test 56 ข้อ อีก 15 แถวเป็น rejected และไม่ใช้ประเมิน
+
+ตารางนี้ใช้ **test ที่ตอบได้ 52 ข้อ** จากทั้งหมด 56 ข้อ กำหนด **A dense parent-child** เป็น baseline และคำนวณใหม่จาก saved ranked hits โดยตรวจ hashes ก่อนทุก run
+
+| ระบบ | Strict Recall@5 | Strict MRR@10 |
+|---|---:|---:|
+| A dense baseline | 0.8077 | 0.6181 |
+| B hybrid ที่นำมาใช้ในแอป | 0.8846 | 0.7374 |
+| C hybrid และ reranker จากการทดลองเดิม | 0.9135 | 0.7706 |
+
+B เพิ่ม Recall@5 **7.69 percentage points** และ MRR@10 **0.1193** เมื่อเทียบ A โดย Recall วัดความครอบคลุมของหลักฐาน ส่วน MRR วัดอันดับของหลักฐานที่เกี่ยวข้องรายการแรก การจับคู่แบบ strict ตรวจ edition ช่วงหน้า และ quote ตาม protocol เดิม
+
+ผลนี้เป็น **frozen retrieval replay** จากงานเดิมซึ่งทีมเคยเห็นผลแล้ว ไม่ได้รัน test retrieval ใหม่ แอปเพิ่ม passage reranking ในขั้นเตรียมบริบท ซึ่งเป็นคนละ pipeline กับ C จึงไม่อ้างคะแนน C เป็นผลของแอปหรือเป็น answer accuracy
+
+หลักฐาน: [retrieval metrics](reports/retrieval_metrics.json), [evaluation implementation](src/ncd_gemma/evaluation.py), [frozen configurations](configs)
+
+### 2. คุณภาพคำตอบใน dev ชุดเดิม 30 ข้อ
+
+ล็อกคำถามหกประเภทอย่างละ 5 ข้อ ได้แก่ condition, fact, multi_page, number_unit, table และ unanswerable ชุดนี้มีข้อที่ตอบได้ 25 ข้อและควรงดตอบ 5 ข้อ ใช้คำถามเดิมเปรียบเทียบระหว่างรุ่น และตรวจสาระกับ gold และหลักฐานโดย coding agent
+
+| ผลในกลุ่ม answerable 25 ข้อ | v13 | v24 | v26 | v27 | v30 |
+|---|---:|---:|---:|---:|---:|
+| คำตอบที่ตรวจว่าได้สาระครบ | 14 | 21 | 25 | 24 | 25 |
+| ตอบผิด ไม่ครบ หรือต้องทบทวน | 9 | 2 | 0 | 1 | 0 |
+| งดตอบเกินจำเป็น | 2 | 2 | 0 | 0 | 0 |
+| Citation primary evidence hit rate | 0.5600 | 0.6000 | 0.6400 | 0.7200 | 0.7200 |
+| Mean character F1 | 0.2805 | 0.3464 | 0.4217 | 0.4265 | 0.4453 |
+
+v30 ได้สาระครบเพิ่มจาก v13 **11 ข้อ** และงดตอบตรง label อีก **5 ข้อ** จาก 5 ข้อที่ตอบไม่ได้ Abstention decision accuracy จึงเท่ากับ **1.0000** แต่ metric นี้วัดการเลือกตอบหรืองด ไม่ได้วัดความถูกต้องทุกประโยค Citation hit วัดการอ้าง primary evidence ของ gold และอาจไม่ครอบคลุมหลักฐานทางเลือก ส่วน Character F1 วัด text overlap
+
+หลักฐาน: [metrics รุ่นปัจจุบัน](reports/gemma_dev_metrics.json), [semantic audit](reports/semantic_audit.json), [ผลรายข้อ](docs/DEV_COMPARISON_TH.md), [ประวัติทุกรุ่นรวมรุ่นที่แย่ลง](reports/history)
+
+### 3. Extra-dev อีก 30 ข้อ
+
+ชุดเพิ่มเติมไม่ซ้ำ 30 ข้อเดิม มีคำถามที่ตอบได้ 26 ข้อและควรงดตอบ 4 ข้อ v26 เป็นรอบแรกของชุดนี้ หลังเปิดผลแล้วจึงใช้ข้อผิดพลาดปรับระบบ
+
+| รุ่น | ถูกทั้งหมด รวมงดถูก | ตอบถูก | งดถูก | งดเกินจำเป็น | ผิดหรือไม่ครบประเภทอื่น |
+|---|---:|---:|---:|---:|---:|
+| v26 | 19/30 | 17 | 2 | 6 | 5 |
+| v28 | 27/30 | 23 | 4 | 3 | 0 |
+| v29 | 30/30 | 26 | 4 | 0 | 0 |
+| v30 | 30/30 | 26 | 4 | 0 | 0 |
+
+**ผลหลังปรับเป็น exposed regression ไม่ใช่ unseen test** การ replay v30 ใช้ model responses จาก cache และบันทึก API calls ใหม่เป็น 0 คำตอบ สถานะและ citations ตรงกับ v29 ทั้งสองชุด จึงไม่ใช่การทดลองสร้างคำตอบใหม่ และ semantic audit เป็นการตรวจโดย coding agent ไม่ใช่ผู้เชี่ยวชาญอิสระ ยังไม่มี ablation ที่แยกผลของแต่ละเทคนิค
+
+หลักฐาน: [v26](reports/extra_dev_v26_semantic_audit.json), [v28](reports/extra_dev_v28_semantic_audit.json), [v29](reports/extra_dev_v29_semantic_audit.json), [v30](reports/extra_dev_v30_semantic_audit.json)
+
+## ข้อผิดพลาดที่พบและสิ่งที่ยังต้องพัฒนา
+
+| กรณี | สิ่งที่พบ | วิธีแก้และผลตรวจ |
+|---|---|---|
+| q076 ใน v13 | ใช้ค่า 150 นาทีจากบริบทใกล้เคียง แทนช่วง 150 ถึง 300 นาทีที่โจทย์ถาม | รักษาช่วงค่า หน่วยและเงื่อนไขใน claim; v30 ผ่านการตรวจ dev เดิม |
+| q108 ใน v27 | อธิบายโซเดียมไม่ครบด้านอาหารกระป๋อง | ผูก reader กับหลักฐานที่มีทั้งบริบทการเติมเกลือและ MSG; แก้กลับใน v28 |
+| q006, q107, q110 ใน extra-dev v28 | พบหลักฐานแล้วแต่ยังงดตอบ | เพิ่ม reader สำหรับตารางและความสัมพันธ์ที่ตรวจได้ตรง; v29 ตอบได้ครบและ v30 ให้ผลเดิม |
+| คำถาม “เป็นโรคไต ควรงดกินอะไร” | ข้อมูลกว้างเกินกว่าจะกำหนดข้อจำกัดเฉพาะบุคคล | รองรับคำแนะนำทั่วไปที่มีหลักฐานและขอรายละเอียดเพิ่ม แยกเงื่อนไขก่อนล้างไตกับผู้ที่ล้างไตแล้ว |
+
+สิ่งที่ยังไม่ยืนยันคือคุณภาพบนคำถามใหม่ โดยเฉพาะการเปลี่ยนสำนวน ประชากร เงื่อนไขและคำปฏิเสธ การมี quote จริงไม่ได้พิสูจน์ว่าทุก claim ถูกต้อง และ reviewer ที่ใช้ Gemma ตัวเดียวกับผู้ตอบอาจผิดพร้อมกันได้ Source bound readers ช่วยในรูปแบบที่รองรับ แต่ยังไม่ใช่ตัวตรวจความหมายทั่วไป
+
+งานต่อไปคือประเมินชุดใหม่หลังล็อก implementation จัด blind review โดยผู้เชี่ยวชาญ ทำ ablation ของ reader และ reranker และวัด latency กับค่าใช้จ่ายจาก fresh requests ก่อนสรุปผลเชิงใช้งานจริง
+
+## เริ่มใช้งาน
+
+Environment ที่ตรวจคือ **Windows และ Python 3.12.13** ใช้ CPU ได้ ต้องมี RAM สำหรับ embedding model, reranker และ index ส่วน model cache ใช้พื้นที่ประมาณ 6.4 GiB การโหลดครั้งแรกบนเครื่องที่ตรวจเคยใช้เวลาประมาณ 5 นาที ซึ่งไม่ใช่ latency ต่อคำถาม
+
+### 1. Clone และติดตั้ง
 
 ```powershell
-cd D:\KMITL\LLMapp\ncd-gemma
-.\run.ps1
-```
-
-เปิด `http://127.0.0.1:8765` การถามครั้งแรกจะโหลด bge-m3 และ index เข้า memory ครั้งต่อไปใช้ instance เดิม API รับคำถามครั้งละหนึ่งคำถามเพื่อจำกัดทรัพยากร การตรวจครั้งแรกบนเครื่องนี้ใช้เวลาโหลดประมาณ 298 วินาที และค้นหลักฐานจริงได้ 3 รายการ หากต้องการดูขั้นตอนโหลด ให้ตั้ง `$env:NCD_DEBUG_STARTUP='1'` ก่อนรัน
-
-## ติดตั้งใน environment ใหม่
-
-Environment ที่ทดสอบใช้ Python 3.12.13 และ CPU RAM เพียงพอสำหรับ bge-m3/index ไม่ต้องมี GPU
-
-```powershell
+git clone https://github.com/Up2mEz/LLM-APP-END2END.git
+cd LLM-APP-END2END
 py -3.12 -m venv .venv312
 .venv312\Scripts\python -m pip install -r requirements-runtime.txt
 Copy-Item .env.example .env
 ```
 
-ตั้ง `OPENAI_API_KEY` และ `OPENAI_BASE_URL` เป็นค่าจาก class proxy ใน `.env` ไม่ส่ง key เข้า frontend และไม่ commit `.env` โมเดลถูกกำหนดเป็น `gemma-4-E4B-it` แอปตรวจ endpoint ว่าเป็น `https://llm.nat-d.uk` จึงไม่เผลอใช้ key กับบริการอื่น การอ่าน `.env` ของโปรเจคนี้จะ override ตัวแปรชื่อเดียวกันที่สืบทอดมาจาก shell
+ตั้งค่าจาก class proxy ใน `.env` โดยไม่ commit key และไม่ส่ง key เข้า frontend
 
-สำหรับ clean clone ให้ดึงชุดข้อมูล release ที่ตรึง hash ไว้ แล้วเตรียม model cache ที่ revision คงที่ (ใช้พื้นที่สำหรับ weights ประมาณ 6.4 GiB):
+```dotenv
+OPENAI_BASE_URL=https://llm.nat-d.uk/v1
+OPENAI_API_KEY=your-class-proxy-key
+NCD_MODEL=gemma-4-E4B-it
+```
+
+เก็บค่า budget อื่นตาม `.env.example` แอปตรวจ endpoint ว่าเป็น class proxy ที่กำหนด และอ่าน `.env` ของโปรเจกต์ทับตัวแปรชื่อเดียวกันที่สืบทอดจาก shell
+
+### 2. ดาวน์โหลดข้อมูลและเตรียมโมเดล
 
 ```powershell
 .venv312\Scripts\python -B scripts/public_data.py fetch
@@ -34,182 +131,96 @@ $env:HF_HUB_OFFLINE = '0'
 $env:HF_HUB_OFFLINE = '1'
 $env:PYTHONPATH = "$PWD\src"
 .venv312\Scripts\python -B -m ncd_gemma.cli doctor --retrieval
-.venv312\Scripts\python -B -m ncd_gemma.cli evaluate retrieval
 ```
 
-`fetch` ดาวน์โหลด [data-v12 release](https://github.com/Up2mEz/LLM-APP-END2END/releases/tag/data-v12) และตรวจ SHA-256 ของ archive กับไฟล์ทั้ง 34 รายการตาม `provenance/public_data_release.json` ก่อนใช้ ชุดนี้มี corpus ที่ extract แล้ว, index, gold, frozen ranked hits และ table context; ไม่มี PDF ต้นฉบับ, model weights, API key หรือ private agent responses ผู้จัดทำยืนยันว่ามีสิทธิ์เผยแพร่และโฮสต์ข้อมูลชุดนี้แล้ว แต่เอกสารขอบเขตการอนุญาตไม่ได้แนบใน repository และ manifest สิทธิ์จากต้นทางยังเป็น snapshot เก่าที่ไม่ได้แก้
+`fetch` ดาวน์โหลด [data-v12 release](https://github.com/Up2mEz/LLM-APP-END2END/releases/tag/data-v12) และตรวจ archive hash พร้อม hashes ของทั้ง 34 ไฟล์ตาม [release manifest](provenance/public_data_release.json) ชุดข้อมูลมี extracted corpus, index, gold, frozen ranked hits และ table context จึงไม่ต้องเข้าถึง repository ต้นทางในเครื่อง ไม่มี PDF ต้นฉบับ, model weights, API key หรือ private model responses ใน archive
 
-ตรวจเส้นทาง public จริงซ้ำได้ด้วย `.venv312\Scripts\python -B scripts/smoke_remote_release.py` สคริปต์จะ clone branch `main` ลง `tmp/`, ดาวน์โหลด release asset, ตรวจ hash และ replay frozen retrieval 6 runs ก่อนลบโฟลเดอร์ชั่วคราว ผลที่ตรวจ 12 ตุลาคม 2026: B−A Recall@5 `0.0769` และ MRR@10 `0.1193`
+Model revisions ที่ตรึงไว้คือ `BAAI/bge-m3` ที่ `5617a9f61b028005a4858fdac845db406aefb181` และ `BAAI/bge-reranker-v2-m3` ที่ `953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e` หลังเตรียม cache แอปใช้ offline mode เพื่อไม่เปลี่ยน weights ระหว่างรัน
 
-ทางเลือกสำหรับผู้มี source repository ในเครื่อง ใช้การ import แบบเดิม:
+### 3. เปิดแอป
 
 ```powershell
-python scripts/import_source.py --source "D:\KMITL\NLP\NLP-Year3\team-project\thai-ncd-guideline-qa"
+.\run.ps1
 ```
 
-สำหรับ context ตารางรุ่นปัจจุบัน ติดตั้ง dev dependencies แล้วรันตัวสร้างตารางหนึ่งครั้ง โดยอ่าน PDF ต้นทางอย่างเดียว:
+เปิด [แอปในเครื่อง](http://127.0.0.1:8765/) รอโหลด retrieval ในคำถามแรก คำถามถัดไปใช้ instance เดิม ระบบรับงานครั้งละหนึ่งคำถามเพื่อจำกัดทรัพยากร ลองคำถามเฉพาะ เช่น “เป้าหมาย HbA1c ตามแนวทางคือเท่าไร” แล้วตรวจว่าคำตอบอ้างกลุ่มและเงื่อนไขใดในเอกสาร
 
-```powershell
-.venv312\Scripts\python -B scripts/build_table_context.py --source "D:\KMITL\NLP\NLP-Year3\team-project\thai-ncd-guideline-qa"
-.venv312\Scripts\python -B scripts/verify_table_sources.py
-```
+## ตรวจและทำซ้ำผลการทดลอง
 
-Derived table artifact อยู่ใต้ data/table_context และถูก ignore; serving ไม่อ่าน repo ต้นทาง แผน dev ล็อก table hash เพิ่มด้วย
+| งาน | คำสั่งหลังตั้ง PYTHONPATH | สิ่งที่คำสั่งยืนยัน |
+|---|---|---|
+| Unit และ API tests | `.venv312\Scripts\python -B -m pytest -q` | พฤติกรรมโค้ดด้วย fake model และ retriever |
+| Frozen retrieval replay | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate retrieval` | คำนวณ metrics จาก saved hits และตรวจ hashes ไม่มี LLM calls |
+| ตรวจ retrieval จริง | `.venv312\Scripts\python -B -m ncd_gemma.cli doctor --retrieval` | โหลด model และค้น local index จริง |
+| ตรวจ class proxy | `.venv312\Scripts\python -B -m ncd_gemma.cli doctor --live` | เรียก class proxy จริง ต้องมี key |
+| ตรวจแผน dev | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate plan` | ตรวจ 30 ข้อและ implementation hashes; ปฏิเสธเมื่อไม่ตรงแผนที่บันทึก |
+| ประเมินคำตอบตามแผน | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate agent` | ต้องผ่านการตรวจแผนก่อน จึงเรียก class proxy หรือใช้ cache และ resume |
+| ตรวจ clean clone และ release | `.venv312\Scripts\python -B scripts/smoke_remote_release.py` | Clone main, fetch และ replay frozen retrieval 6 runs |
 
-สคริปต์อ่าน allow-list 48 ไฟล์ ตรวจ SHA-256 ก่อนและหลัง copy และปฏิเสธการเขียนทับไฟล์ปลายทางที่เปลี่ยนไป ข้อมูลอยู่ใต้ `data/` ซึ่ง Git ignore ไว้ทั้งหมด ไม่มี secret ถูกคัดลอกด้วยสคริปต์นี้ ดูรายการต้นทางและ hashes ใน `provenance/source_snapshot.json`
+ผล aggregate อยู่ใน `reports/` ส่วนคำตอบดิบพร้อมหลักฐานอยู่ใน `private/runs/` และ response cache อยู่ใน `.cache/llm/` สองส่วนหลังถูก Git ignore การประเมินซ้ำอาจ resume หรือใช้ cache จึงต้องอ่าน plan ID และ `new_api_calls_recorded` ประกอบ ไม่ตีความทุก invocation ว่าเป็นการสร้างคำตอบใหม่
 
-ต้องมี Hugging Face cache ของ [`BAAI/bge-m3`](https://huggingface.co/BAAI/bge-m3) revision `5617a9f61b028005a4858fdac845db406aefb181` และ `refs/main` ของ cache ต้องตรง revision นี้ แอปตั้ง offline mode โดย default เพื่อไม่เปลี่ยน weights ระหว่างรัน การเปลี่ยน answer LLM ไม่ต้องสร้าง document vectors ใหม่ รุ่นปัจจุบันต้องมี cache ของ [`BAAI/bge-reranker-v2-m3`](https://huggingface.co/BAAI/bge-reranker-v2-m3) revision `953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e` เพิ่มสำหรับเรียง short passages; ใช้ offline CPU และไม่สร้าง index ใหม่
+**ตรวจซ้ำ 14 ตุลาคม 2026: 170 tests passed ไม่มี failure, error หรือ skipped** มี Starlette deprecation warning หนึ่งรายการ ดู [บันทึกทดสอบรอบจัดทำรายงาน](reports/documentation_tests_2026-10-14.json) การรันใน Windows sandbox ค้างขณะสร้าง socketpair ของ TestClient จึงยืนยันผลนอก sandbox โดยไม่แก้โค้ดระบบ
 
-## การนำไปโฮสต์
+ผล fresh clone และ public release เคยตรวจครบเมื่อ 12 ตุลาคม 2026 ส่วนผลคำตอบ v30 เกิดก่อนการเพิ่ม connection retry และการตั้งค่าสำหรับ deployment ขณะนี้ hashes ของ `llm.py` และ `config.py` ไม่ตรงแผน v30 ดังนั้นคำสั่งตรวจแผนและประเมินคำตอบจะหยุดด้วย `Existing plan differs` ตาม guard ที่ตั้งใจไว้ ต้องสร้าง evaluation version ใหม่โดยเก็บแผนและผลเดิมไว้ก่อนรันใหม่ ไม่ลบแผนเพื่ออ้างว่าเป็น v30 เดิม **การทำซ้ำ frozen retrieval ยังทำได้ตามคำสั่งข้างต้น** ผล unit tests ต้องอ่านแยกจากผลคำตอบ
 
-`Dockerfile` ใช้ Python 3.12, PyTorch CPU-only, model revisions และ data release เดียวกับคำสั่งข้างบน ต้องตั้ง runtime secrets `OPENAI_API_KEY` และ `OPENAI_BASE_URL=https://llm.nat-d.uk/v1`; ตั้ง `NCD_PUBLIC_HOST` เป็น hostname จริงแบบไม่มี `https://` และตั้ง `NCD_DEMO_PASSWORD` ยาวอย่างน้อย 12 ตัวอักษร (`NCD_DEMO_USER` มีค่าเริ่มต้น `demo`) ระบบจะใช้ HTTP Basic Auth กับหน้าเว็บและ API ทุก route ยกเว้น health check จึงต้องเปิดผ่าน HTTPS เท่านั้น ส่ง username/password ให้ผู้ตรวจแยกจาก repository และอย่า commit secrets
+## ส่วนที่นำมาใช้และส่วนที่ทำเพิ่ม
 
-ตัวอย่างการสร้าง image และรันบน host ที่มี RAM/พื้นที่พอ:
-
-```sh
-docker build -t ncd-gemma:release .
-docker run --rm -p 7860:7860 --env-file .env.production ncd-gemma:release
-```
-
-ไฟล์ `.env.production` ต้องเก็บใน host และไม่ commit โปรเจคนี้ยังไม่ได้ยืนยันว่า Docker image build และแอปรันบน Linux host สำเร็จ จนกว่าจะมี Docker engine หรือ host ให้ทดสอบจริง
-
-## คำสั่งตรวจและประเมินผล
-
-```powershell
-$env:PYTHONPATH = "$PWD\src"
-.venv312\Scripts\python -B -m ncd_gemma.cli doctor
-.venv312\Scripts\python -B -m ncd_gemma.cli doctor --retrieval
-.venv312\Scripts\python -B -m ncd_gemma.cli doctor --live
-.venv312\Scripts\python -B -m pytest -q
-.venv312\Scripts\python -B -m ncd_gemma.cli evaluate retrieval
-.venv312\Scripts\python -B -m ncd_gemma.cli evaluate plan
-.venv312\Scripts\python -B -m ncd_gemma.cli evaluate agent
-```
-
-`doctor --live` และ `evaluate agent` เรียก class proxy จริง `evaluate retrieval` คำนวณ metrics จาก saved ranked hits และตรวจ hash ไม่เรียกโมเดลหรือรัน test retrieval ใหม่ `evaluate plan` ล็อก dev sample 30 ข้อก่อนเรียกโมเดล แผนผูกกับ hashes ของ agent, verifier, adapter, schemas, config และ retrieval wrapper การเปลี่ยน implementation คำถามหรือ prompt หลังมีแผนต้องสร้าง version ใหม่ ไม่ปรับแผนตามผล
-
-ผล aggregate อยู่ใน `reports/` ผลคำตอบพร้อมหลักฐานอยู่ใน `private/runs/` และ raw model cache อยู่ใน `.cache/llm/` ทั้งสองโฟลเดอร์ถูก ignore การรัน agent evaluation ซ้ำ resume จาก qid ที่มีอยู่แล้ว ไม่เรียก API ซ้ำโดยไม่จำเป็น Cache เก็บ response เต็มรวม tool calls และผูกกับ endpoint identity, model, messages, tools และ parameters
-
-## โครงสร้าง
-
-```text
-src/ncd_gemma/     app, SDK adapter, validation, agent loop, evaluation
-src/ncdqa/        สำเนา retrieval modules จากโปรเจคเดิม
-configs/          frozen retrieval configuration
-static/           หน้าเว็บภาษาไทย ไม่มี external scripts/fonts
-schemas/          question/retrieval schemas จากต้นทาง
-scripts/          import และเครื่องมือทำเอกสาร
-tests/            protocol, citation, failure และ API tests
-data/             corpus/index/gold/frozen runs (private, ignored)
-reports/          aggregate metrics และเอกสารผลทดสอบ
-private/          คำตอบจริงและ evidence (ignored)
-provenance/       hashes และ attribution
-```
-
-## Architecture และขอบเขต tool
-
-```mermaid
-flowchart LR
-    U[Thai question / Web UI] --> API[FastAPI POST /api/ask]
-    API --> A[Bounded agent loop]
-    A <--> G[OpenAI SDK / class proxy / Gemma]
-    A --> V[Validate search_docs arguments]
-    V --> R[Frozen B hybrid retrieval]
-    R --> I[bge-m3 child index + BM25 parent chunks]
-    R --> E[Evidence IDs / text / document / page]
-    E --> A
-    A --> X[High-precision evidence readers when explicit relation exists]
-    X -->|relation bound to source| U
-    X -->|otherwise| C[Answer schema + citation quote validation]
-    A --> C
-    C --> V2[Same-model evidence review / fail closed]
-    V2 --> U
-    GOLD[Gold dev/test] --> EV[Evaluation only]
-    EV --> M[Metrics / baseline comparison]
-```
-
-Gold ไม่ถูกโหลดโดย serving layer และไม่มี reference answers ถูกส่งให้ Gemma ฝั่ง retrieval ใช้ child 128 tokens, parent 512 tokens, bge-m3, BM25 char3, k1=2.18, b=0.86 และ min-max convex fusion alpha=0.6, pool=100 ตาม frozen config เดิม
-
-Agent บังคับเริ่มด้วย `search_docs` จากนั้นเลือกค้นเพิ่มหรือตอบได้เอง เก็บ assistant tool calls และส่ง tool result กลับพร้อม `tool_call_id` ที่ตรงกัน configuration ที่ทดสอบจำกัด 6 model rounds รวม verification, 3 searches, top_k ไม่เกิน 8 และ context รวม 18,000 ตัวอักษร ปฏิเสธ query/filter ซ้ำ ชื่อ tool อื่น และ filter ที่ไม่มีใน metadata รอบสุดท้ายปิดการเรียก tools มี request timeout และ agent deadline
-
-คำถามทักทายล้วนตอบเป็น `out_of_scope` ทันทีโดยไม่โหลด retrieval หรือเรียก proxy คำถาม NCD ยังเริ่มด้วย native `search_docs` ผลค้นบางแบบมีความสัมพันธ์ตรงและตรวจรูปแบบได้ เช่น ชื่อหัวข้อฉลาก รอบ CQI + PDCA เป้าความดันตามเงื่อนไข และคำถามข้ามสองเอกสาร DASH/ไต จึงใช้ evidence-bound route ที่อ่านค่าจากข้อความจริงพร้อม citation ถ้า route ไม่ผ่านจึงใช้ Gemma สร้างคำตอบและ reviewer ตามเดิม ทุก citation ต้องอ้าง source ID จาก tool, quote ต้องอยู่ในข้อความที่ค้นได้ และ marker ต้องตรงกัน การตรวจ quote ไม่ได้พิสูจน์ความหมายทุกประโยค
-
-## ผล retrieval และ baseline
-
-ผลจาก saved frozen test มี 56 gold questions เป็น answerable 52 และ unanswerable 4 ข้อ ค่าเฉลี่ยต่อไปนี้ใช้ 52 ข้อที่ตอบได้
-
-| ระบบ | Strict Recall@5 | Strict MRR@10 |
-|---|---:|---:|
-| A dense parent-child (baseline) | 0.8077 | 0.6181 |
-| B hybrid parent-child (แอปเลือกใช้) | 0.8846 | 0.7374 |
-| C hybrid + reranker (ผลทดลองเดิม) | 0.9135 | 0.7706 |
-
-B เพิ่ม Recall@5 7.69 percentage points และ MRR@10 0.1193 เมื่อเทียบ A แอปไม่ใช้ variant C ของ frozen run; ใช้ reranker รุ่นเดียวกันกับ short passages ที่โฟกัสคำถาม ซึ่งเป็น pipeline คนละแบบและยังไม่อ้าง frozen C metrics เป็นผลของแอป ผลตารางนี้เป็น retrieval quality เดิม ไม่ใช่ answer accuracy หรือผลของ agent ที่เปลี่ยน query เอง
-
-ชุดข้อมูลมี 177 แถว ใช้ gold 162 ข้อ (dev 106/test 56) และตัด rejected 15 ข้อ ผล agent evaluation ใช้ dev sample ที่ล็อก 30 ข้อ เป็น development result แยกจาก frozen test มี abstention decision accuracy, citation primary-evidence coverage และ character F1 โดย character F1 เป็นเพียง text overlap ไม่ใช่ความถูกต้องทางคลินิก ดูผลรันจริงและข้อจำกัดใน `reports/gemma_dev_metrics.json` เมื่อ evaluation เสร็จ
-
-## สิ่งที่ตรงกับโจทย์ Project
-
-| Capability | Implementation |
+| นำมาจาก Thai NCD Guideline QA | พัฒนาในโครงงานนี้ |
 |---|---|
-| 1 Structured output | Pydantic answer/tool schemas + bounded repair |
-| 2 Retrieval/RAG | Frozen hybrid retrieval + evidence/citations |
-| 3 Retrieval evaluation | Gold labels + reproducible saved-hit metrics + A/B baseline |
-| 4 Agentic tool calling | Gemma native search_docs loop + stop conditions |
-| 6 Served interface | FastAPI REST API + Thai browser UI |
+| Corpus, gold และ split เดิม | OpenAI SDK adapter สำหรับ class proxy |
+| Child และ parent chunks, document vectors | Native tool calling และ bounded agent loop |
+| Dense search, BM25, fusion และ frozen A/B/C runs | Neighbour context, passage reranking และ table context |
+| Retrieval schemas และ evaluation protocol | Source bound readers, claim rendering, citation และ scope guards |
+| Metadata และ provenance ของทีม | FastAPI, UI ภาษาไทย, answer evaluation และ regression tests |
 
-มี incremental Git commits สำหรับงานนี้ อ่าน proposal และ demo script ใน `docs/` และรายงานผลจริงใน `reports/` repository ปลายทางคือ [Up2mEz/LLM-APP-END2END](https://github.com/Up2mEz/LLM-APP-END2END) ดูสถานะที่ตรวจล่าสุดใน `docs/SUBMISSION_AUDIT_2026-10-12_TH.md` และตรวจ Q2 PDF/demo URL แยกจากความสำเร็จของ local tests
+สำเนาโค้ดและข้อมูลอยู่ใน repository นี้ ไม่มี runtime import หรือ write ไปที่ repository ต้นทาง ไม่แก้ gold เพื่อให้ผลดีขึ้น รายการ 48 ไฟล์ที่นำเข้าและ hashes อยู่ใน [source snapshot](provenance/source_snapshot.json) ส่วนรายละเอียดเทคนิคทั้งหมดอยู่ใน [workflow และ reuse](docs/WORKFLOW_AND_REUSE_TH.md)
 
-## สถานะการตรวจล่าสุด 12 ตุลาคม 2026
+ผู้จัดทำยืนยันสิทธิ์เผยแพร่และโฮสต์ corpus ชุดนี้แล้ว เอกสารขอบเขตการอนุญาตไม่ได้แนบใน repo และ manifest สิทธิ์จากต้นทางยังเป็น snapshot เก่า การอ้างอิงต้นทางและเอกสารผู้เผยแพร่ยังคงจำเป็น
 
-v30 ตรวจสาระครบ **25/25** ใน 25 ข้อที่ gold ระบุว่าตอบได้จาก dev 30 ข้อเดิม เทียบ v24 **21/25** เพิ่ม 4 ข้อ และงดตรง label อีก 5 ข้อ v27 เคยถอยเป็น 24/25 เพราะ q108 อธิบายอาหารกระป๋องไม่ครบ แล้ว v28 แก้กลับ v29–v30 ไม่เปลี่ยนคำตอบชุดนี้ ผลทั้งหมดเป็น exposed dev ที่ใช้ปรับระบบ ไม่ใช่หลักฐานว่าจะตอบคำถามใหม่ถูกทั้งหมด ภายหลังเพิ่ม retry ของ class proxy เมื่อ connection หลุด 1 ครั้ง โดยยังไม่ได้รัน dev evaluation ซ้ำกับ adapter ที่เปลี่ยนนี้
+## ความครบถ้วนตามโจทย์ Project
 
-| Dev 30 ชุดเดิม | v13 | v24 | v26 | v27 | v28–v30 |
-|---|---:|---:|---:|---:|---:|
-| สาระครบจากการตรวจ | 14 | 21 | 25 | 24 | 25 |
-| ตอบแล้วผิด/ไม่ครบ/ต้องทบทวน | 9 | 2 | 0 | 1 | 0 |
-| False abstention | 2 | 2 | 0 | 0 | 0 |
-| ตอบ / งดตอบ | 23 / 7 | 23 / 7 | 25 / 5 | 25 / 5 | 25 / 5 |
-| Abstention decision accuracy | 0.9333 | 0.9333 | 1.0000 | 1.0000 | 1.0000 |
-| Citation primary-evidence hit rate | 0.5600 | 0.6000 | 0.6400 | 0.7200 | 0.7200 |
-| Character F1 | 0.2805 | 0.3464 | 0.4217 | 0.4265 | 0.4453 |
+| ข้อกำหนด | สิ่งที่มีให้ตรวจ |
+|---|---|
+| Corpus ของโดเมนตนเอง | เอกสาร NCD ภาษาไทย และ public data fetch script |
+| Evaluation set ประมาณ 30 ตัวอย่าง | Dev 30 ข้อ และ extra-dev 30 ข้อ พร้อมแผนและผลรายรุ่น |
+| Baseline และ measured improvement | A dense เทียบ B hybrid พร้อม Recall@5 และ MRR@10 |
+| Family 1: structured output | Pydantic schemas และ bounded repair |
+| Family 2: retrieval และ RAG | Hybrid retrieval พร้อมหลักฐานและ citations |
+| Family 3: retrieval evaluation | Frozen labelled test, metrics และ reproduction script |
+| Family 4: agent loop | Native `search_docs`, argument validation และ stop conditions |
+| Family 6: served interface | FastAPI และหน้าเว็บภาษาไทย |
+| รายงาน 4 ถึง 8 หน้า | [รายงานฉบับอ่านบน GitHub](docs/PROJECT_REPORT_TH.md) และ PDF 7 หน้าที่สร้างจากแหล่งเดียวกัน |
+| Demo | แอปในเครื่องและ temporary HTTPS demo; [แนวทางสาธิต](docs/DEMO_SCRIPT_TH.md) |
 
-- Tests **170 passed**, 0 failed/error/skipped; Starlette deprecation warning 1 รายการ (ตรวจซ้ำหลังเพิ่ม bounded connection retry)
-- ตรวจ SHA-256 ของ source allow-list 48 ไฟล์และ PDF ที่อ่าน 33 ไฟล์ไม่เปลี่ยน gold เดิมไม่แก้
-- v25 เพิ่ม high-precision evidence-bound routes โดยไม่ใช้ qid/เฉลยใน serving: q061 ชื่อ field ฉลาก, q115 รอบ+วงจร, q111 ความสัมพันธ์ DASH/CKD และ q106 ค่าเฉพาะเงื่อนไข
+แผนภาพใช้สกิล Diagram Design มี [ต้นฉบับ HTML และบันทึกการย่อรายละเอียด](docs/diagrams/README.md) ผู้ตรวจสามารถไล่จากภาพไปยัง [agent](src/ncd_gemma/agent.py), [retrieval wrapper](src/ncd_gemma/retrieval.py), [source bound readers](src/ncd_gemma/grounded_routes.py) และ [server](src/ncd_gemma/server.py) ได้
 
-- v26 ทดสอบคำถามสังเคราะห์ที่ทำให้ v25 ตอบผิด: โปรตีนจากอาหารไม่ใช่ proteinuria และผู้ล้างไตแล้วไม่ใช่ผู้ป่วยก่อนล้างไต จึงเพิ่ม guard ของบริบท ตรวจปีจาก document edition ตรวจ 4 ส่วนก่อนตอบ 1 ใน 4 และคงตัวเปรียบเทียบของค่าตามหลักฐาน ผล dev 30 ชุดเดิมเหมือน v25 ทุกข้อ ยกเว้น q111 ที่เติมเงื่อนไข “หากไม่อิ่ม” ให้ตรงต้นฉบับ
-- Extra-dev 30 ข้อที่ไม่ซ้ำชุดแรกใน v26 ตรวจคำตอบกับ gold และ citation ทีละข้อ: **ถูกหรืองดถูก 19/30**; 6 ข้องดเกินจำเป็น, 2 ข้อตอบผิด, 2 ข้อตอบทั้งที่หลักฐานไม่รองรับ และ 1 ข้อไม่ครบ หลังใช้ผลแก้ระบบ v28 ได้ 27/30 (ยังงดเกินจำเป็น q006/q107/q110) และ v29–v30 ได้ 30/30 (26 ตอบถูก, 4 งดตรง label) ชุดนี้เปิดผลแล้ว ผลรันซ้ำจึงเป็น regression ไม่ใช่ unseen evaluation หรือ clinical accuracy
-- v27–v28 เพิ่มการดึงแถวตาราง HTML/บริบทข้างเคียง, lexical admission ของข้อความน้ำหนัก–ส่วนสูง, ซ่อม citation จาก quote ที่ตรง source, prune claim ที่ไม่ตรง, ตรวจขอบเขตยา/กลุ่มผู้ป่วย และตรวจคำตอบเปรียบเทียบสองฝั่ง q108 แก้ด้วย evidence reader ที่ต้องมีทั้งสาเหตุจากอาหารกระป๋องและโซเดียมใน MSG
-- v29 เพิ่ม evidence readers ที่อ่านแถว Infection ของ secondary MCD, คู่เปรียบเทียบ conventional intermittent hemodialysis กับ SLED จาก edition เดียว และปริมาณข้าวขาว/โคล่าที่ผูกหน่วยกับค่าจริง จึงเปลี่ยน q006/q107/q110 จากงดเป็นตอบครบ v30 เพิ่ม negative-question guards ป้องกันการนำคำตอบนี้ไปใช้กับ primary MCD, ระบบไหลเวียนไม่คงที่ หรือคำถามปฏิเสธปริมาณคาร์บ; synthetic tests และการ replay ของหลักฐานจริงผ่าน
-- คำทักทายอย่าง `hello` แยกจากคำถาม NCD และตอบทันทีโดยไม่ค้น/เรียกโมเดล
-- ตาราง q113/q079/q080 ยังได้ค่าถูก; q078 กลับมามีทั้งขนาดยาและความถี่
-- v25 บันทึก 48 HTTP attempts ใหม่และใช้ cache เมื่อ payload ตรง; route ทั้งสี่ใช้ cached tool call ในรันนี้ จึงไม่ใช่ independent repeat generation
+## Demo และการโฮสต์
 
-- v26 บันทึก 0 HTTP attempts ใหม่เพราะ payload ของ 30 ข้อเดิมตรง cache; เป็น regression run ไม่ใช่การสุ่มคำตอบใหม่หรือ held-out test
-- v28 บน dev 30 ข้อเดิมบันทึก 0 HTTP attempts ใหม่เช่นกัน; คำตอบเปลี่ยนจาก v27 เฉพาะ q108 และตรวจสาระครบ 25/25 อีกครั้ง
-- v30 บน dev 30 และ extra-dev 30 บันทึก 0 HTTP attempts ใหม่เพราะ payload ตรง cache; คำตอบ/สถานะ/citation ทั้ง 60 ข้อตรงกับ v29 ทุกข้อ การตรวจ 30/30 ของ extra-dev อาศัย semantic audit ที่ทำหลัง v29 ไม่ใช่ผู้ตรวจอิสระหรือ generation ใหม่
+Temporary demo ใช้ Cloudflare Quick Tunnel ซึ่งต้องเปิดเครื่อง แอปและ tunnel ค้างไว้ URL เปลี่ยนได้เมื่อเริ่มใหม่ จึงส่งลิงก์ปัจจุบันและรหัสเข้าถึงให้ผู้ตรวจแยกจาก repository ไม่ใช่ deployment ถาวร
 
-ผลเป็นการพัฒนาบน exposed dev ที่ตรวจโดย coding agent ไม่ใช่ independent expert validation. คะแนนเลือกตอบ/งดและ Character F1 ไม่ใช่ clinical accuracy ยังต้องทดสอบคำถามใหม่และอ่านโดยผู้เชี่ยวชาญก่อนอ้าง generalization เก็บผลทุกรุ่นรวมรอบที่แย่ลงไว้ใน reports/history และ private/runs
+มี `Dockerfile` สำหรับ Python 3.12 และ CPU models แต่ **ยังไม่ยืนยัน full build และ runtime บน Linux host** หากนำไปโฮสต์ ให้ตั้ง `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `NCD_PUBLIC_HOST` เป็น hostname จริงแบบไม่มี `https://` และ `NCD_DEMO_PASSWORD` อย่างน้อย 12 ตัวอักษร โดย `NCD_DEMO_USER` มีค่าเริ่มต้นเป็น `demo` หน้าเว็บและ API ใช้ Basic Auth ยกเว้น health check และต้องเข้าผ่าน HTTPS เก็บ secrets ใน host และส่งรหัสให้ผู้ตรวจแยกจาก repository
 
-อ่าน [ผลรายข้อ dev](docs/DEV_COMPARISON_TH.md), [ผล extra-dev v26](docs/EXTRA_DEV_V26_REVIEW_TH.md), [เทคนิคทั้งหมดและ workflow](docs/WORKFLOW_AND_REUSE_TH.md), [สถานะตาม rubric](docs/PROJECT_READINESS_TH.md), [ตรวจความพร้อมส่ง 12 ต.ค.](docs/SUBMISSION_AUDIT_2026-10-12_TH.md) และ [ผล UI](docs/UI_REVIEW_TH.md)
+## โครงสร้าง repository
 
-## ข้อสังเกตจาก class proxy
+| ที่อยู่ | หน้าที่ |
+|---|---|
+| `src/ncd_gemma/` | Agent, adapter, validation, API และ evaluation |
+| `src/ncdqa/` | Retrieval modules ที่นำมาใช้จากต้นทาง |
+| `static/` | หน้าเว็บภาษาไทยและ stylesheet |
+| `configs/`, `schemas/` | Frozen retrieval config และ schemas |
+| `scripts/` | Fetch, integrity checks, model preparation และการสร้างรายงาน |
+| `tests/` | Unit, protocol, failure และ API tests |
+| `reports/` | ผล aggregate และ semantic audits |
+| `docs/` | รายงาน workflow ผลรายข้อ และแผนภาพ |
+| `provenance/` | Source hashes, attribution และ public release manifest |
+| `data/` | Local data ที่ fetch จาก release และถูก Git ignore |
+| `private/`, `.cache/` | Raw responses และ cache ที่ไม่เผยแพร่ |
 
-Proxy ส่ง Gemma native syntax อยู่ใน `function.arguments` บางครั้ง จึง parse รูปแบบที่อนุญาตด้วย parser ที่ไม่ใช้ eval แล้วส่งกลับเป็น JSON ที่ผ่าน schema ก่อนทำ tool call รอบถัดไป Raw response ยังอยู่ใน cache
+รายงาน PDF สร้างด้วย `python scripts/build_report.py` ใน environment ที่มี ReportLab, HarfBuzz และ Tahoma บน Windows ไฟล์อยู่ที่ `output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf` และถูก Git ignore ต้นฉบับเนื้อหาอยู่ใน [build_report.py](scripts/build_report.py) โดยตารางผลอ่านจาก JSON ที่บันทึกจริง
 
-รอบตรวจคำตอบแยกใช้ Gemma ตัวเดิมเปรียบเทียบ question/answer/evidence โดยไม่รับ gold label ผู้ตรวจแยกประเด็นและเลือกเลขบรรทัดอ้างอิง ระบบคัดข้อความให้เอง หากรูปแบบหรือ quote ไม่ผ่านซ่อมได้หนึ่งครั้งภายใน budget เดิม ต้องละ `tools` และ `tool_choice` เมื่อไม่ใช้ tools เพราะ proxy ปฏิเสธ empty tools + tool_choice คำตอบที่ตรวจไม่ได้จะงดตอบ รอบตรวจนี้นับรวมใน budget 6 model rounds และ 150 วินาที (HTTP 429 retry แยกนับ attempts) ไม่ใช่ independent verifier และยังปล่อยคำตอบผิดบางข้อ
+## เอกสารอ้างอิง
 
-แหล่ง protocol: [Google Gemma 4 function calling](https://ai.google.dev/gemma/docs/capabilities/text/function-calling-gemma4) พฤติกรรม HTTP 400 ข้างต้นตรวจพบจาก class proxy จริง ไม่ได้อนุมานว่าใช้ server implementation ใด
-
-## การเผยแพร่และข้อจำกัด
-
-ต้นทางเป็น private repository และ handoff ระบุว่าบาง corpus text ใช้ภายในทีมเท่านั้น จึงไม่ได้ commit gold, chunks, index, raw answers หรือ source PDFs การมี import script จาก local private artifacts ยังไม่ทำให้ผู้ตรวจที่ไม่มีสิทธิ์เข้าถึงข้อมูล reproduce ได้จาก public GitHub เพียงอย่างเดียว **Q1 เรื่อง public reproducibility ยังต้องจัดการสิทธิ์หรือเลือก corpus ที่เผยแพร่ได้ก่อนส่ง** ถ้าเปลี่ยน corpus ต้อง version และประเมินชุดใหม่ ไม่คัดตัวเลข v12 ไปอ้างกับ subset
-
-แอปนี้เป็นเครื่องมืออ่านเอกสาร ไม่ใช้วินิจฉัยรายบุคคล Gold เดิมตรวจความตรงกับเอกสาร ไม่ใช่การรับรองทางคลินิก Retrieval score ไม่ใช่ confidence ในคำตอบ ข้อจำกัดที่ต้องดูในการประเมินคือข้อมูลนอกขอบเขต เงื่อนไขเฉพาะกลุ่ม ตัวเลขจากตาราง และ citation ที่มี quote จริงแต่ไม่สนับสนุนคำตอบทั้งหมด
-
-## Attribution และเอกสารอ้างอิง
-
-- [Thai NCD Guideline QA](https://github.com/Chaiporn2005/thai-ncd-guideline-qa): retrieval modules, gold, artifacts และผล frozen ของทีม อ้าง snapshot ที่บันทึกไว้ใน provenance ไม่อ้างว่าเริ่มสร้างส่วนนี้ใหม่ในวิชา LLM
-- [โจทย์ Project](https://courses.nat-d.uk/courses/building-llm-powered-applications/courseworks/20): class proxy/model, capability families, baseline, report 4–8 หน้า และ demo 3–6 นาที
-- [OpenAI Docs: Function calling](https://developers.openai.com/api/docs/guides/function-calling): รูปแบบ assistant tool calls และ tool results ที่ใช้ tool_call_id
+1. [Thai NCD Guideline QA](https://github.com/Chaiporn2005/thai-ncd-guideline-qa): ข้อมูลและ retrieval snapshot ของทีม อ้างอิง commit ที่ตรวจและ hashes ใน provenance ไม่อ้างว่าสร้างส่วนนี้ใหม่ทั้งหมด
+2. [Project specification](https://courses.nat-d.uk/courses/building-llm-powered-applications/courseworks/20): class proxy, capability families, evaluation, รายงานและ demo ตามโจทย์ที่บันทึกเมื่อ 11 ตุลาคม 2026
+3. [OpenAI function calling](https://developers.openai.com/api/docs/guides/function-calling): assistant tool calls และ tool results
+4. [Gemma function calling](https://ai.google.dev/gemma/docs/capabilities/text/function-calling-gemma4): รูปแบบ function arguments ที่ adapter รองรับแบบจำกัด โดยไม่ใช้ `eval`

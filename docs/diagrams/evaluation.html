@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NCD Evidence evaluation</title>
+<style>
+body { margin:0; background:#f5faff; color:#18364e; font-family:Tahoma,Arial,sans-serif; }
+main { max-width:920px; margin:32px auto; padding:24px; min-width:0; }
+h1 { font-size:28px; margin:0 0 12px; } p { line-height:1.7; }
+.diagram-container { width:100%; overflow-x:auto; }
+svg { width:100%; height:auto; min-width:672px; display:block; }
+@media print { .diagram-container { overflow-x:visible; } svg { min-width:0; } }
+</style></head><body><main><h1>Two evaluation questions</h1>
+<p>Retrieval quality and answer quality are measured separately. Saved retrieval runs are replayed without generating new answers; the two answer samples are exposed development sets.</p>
+<div class="diagram-container">
+<svg xmlns="http://www.w3.org/2000/svg" width="672" height="432" viewBox="0 0 672 432" role="img" aria-labelledby="ncd-eval-title ncd-eval-desc">
+<title id="ncd-eval-title">Separate retrieval and answer evaluation</title>
+<desc id="ncd-eval-desc">The upper path compares frozen A, B and C ranked hits with unchanged gold evidence to calculate recall and MRR. The lower path compares versioned agent answers with unchanged gold and retrieved sources, calculating automatic metrics and a coding-agent semantic audit. Neither path represents an independent clinical assessment.</desc>
+<defs><marker id="ncd-eval-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#63788b"/></marker></defs>
+<rect width="672" height="432" fill="#fff"/>
+<g font-family="Arial,sans-serif" fill="#18364e">
+<text x="40" y="62" font-size="14" font-weight="600">Retrieval and answer evaluation</text>
+<text x="40" y="98" font-size="9" fill="#52697e">FROZEN RETRIEVAL TEST</text>
+<text x="40" y="234" font-size="9" fill="#52697e">EXPOSED DEVELOPMENT SAMPLES</text>
+</g>
+<path d="M216 150 H248" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#ncd-eval-arrow)"/>
+<path d="M424 150 H456" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#ncd-eval-arrow)"/>
+<path d="M216 286 H248" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#ncd-eval-arrow)"/>
+<path d="M424 286 H456" fill="none" stroke="#63788b" stroke-width="1.5" marker-end="url(#ncd-eval-arrow)"/>
+<g font-family="Arial,sans-serif" fill="#18364e">
+<rect x="40" y="116" width="176" height="68" rx="2" fill="#f8fafc" stroke="#b7c9d8"/>
+<text x="56" y="142" font-size="12" font-weight="600">Saved A, B, C hits</text><text x="56" y="163" font-size="9" fill="#52697e">52 answerable test questions</text>
+<rect x="248" y="116" width="176" height="68" rx="8" fill="#fff" stroke="#b7c9d8"/>
+<text x="264" y="142" font-size="12" font-weight="600">Strict evidence match</text><text x="264" y="163" font-size="9" fill="#52697e">Unchanged gold and hashes</text>
+<rect x="456" y="116" width="176" height="68" rx="8" fill="#edf6ff" stroke="#0964aa"/>
+<text x="472" y="142" font-size="12" font-weight="600">Recall and MRR</text><text x="472" y="163" font-size="9" fill="#52697e">B compared with baseline A</text>
+<rect x="40" y="252" width="176" height="68" rx="2" fill="#f8fafc" stroke="#b7c9d8"/>
+<text x="56" y="278" font-size="12" font-weight="600">Versioned answers</text><text x="56" y="299" font-size="9" fill="#52697e">Original 30 and extra 30</text>
+<rect x="248" y="252" width="176" height="68" rx="8" fill="#fff" stroke="#b7c9d8"/>
+<text x="264" y="278" font-size="12" font-weight="600">Gold and source review</text><text x="264" y="299" font-size="9" fill="#52697e">Code metrics and agent audit</text>
+<rect x="456" y="252" width="176" height="68" rx="8" fill="#edf6ff" stroke="#0964aa"/>
+<text x="472" y="278" font-size="12" font-weight="600">Quality and failures</text><text x="472" y="299" font-size="9" fill="#52697e">Exposed regression results</text>
+</g>
+<path d="M40 372 H632" stroke="#d8e4ed" stroke-width="1"/>
+<text x="40" y="395" font-family="Arial,sans-serif" font-size="9" fill="#52697e">The v30 replay used cached model responses. No independent clinical review was performed.</text>
+</svg></div></main></body></html>

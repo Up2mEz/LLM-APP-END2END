@@ -1,8 +1,10 @@
-"""Check the generated report's measured claims and rendered-page receipt."""
+"""Validate and render the report; record visual review only when explicitly attested."""
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pymupdf
@@ -12,34 +14,61 @@ PDF = ROOT / "output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf"
 RENDERS = ROOT / "tmp/pdfs"
 
 
-def main() -> None:
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--visual-reviewed", action="store_true",
+                        help="Use only after inspecting every rendered page of this exact PDF")
+    args = parser.parse_args()
     document = pymupdf.open(PDF)
-    pages = len(document)
-    if not 4 <= pages <= 8:
-        raise ValueError(f"Project PDF must have 4–8 pages, got {pages}")
+    if not 4 <= len(document) <= 8:
+        raise ValueError(f"Expected 4 to 8 pages, got {len(document)}")
     text = "\n".join(page.get_text() for page in document)
-    expected = ("gemma-dev-v30", "v26", "v28", "v29", "v30", "19/30", "27/30", "30/30",
-                "164", "0.4453", "0.72")
+    # Shaped Thai extraction may contain a decomposed sara am, so do not compare
+    # entire Thai paragraphs byte-for-byte. Latin figures remain unambiguous.
+    tests = json.loads((ROOT / "reports/documentation_tests_2026-10-14.json").read_text())
+    expected = ("6707060", "0.8077", "0.8846", "0.9135", "0.6181", "0.7374", "0.7706",
+                "0.4453", "0.7200", "19/30", "27/30", "30/30", str(tests["tests_passed"]),
+                "q076", "q108", "q006", "q107", "q110", "llm.py", "config.py")
     missing = [value for value in expected if value not in text]
     if missing:
-        raise ValueError(f"Measured results missing from PDF text: {missing}")
-    if "回答" in text:
-        raise ValueError("Unexpected Chinese phrase in PDF")
-    rendered = [i for i in range(1, pages + 1)
-                if (RENDERS / f"report-v30-final-{i}.png").is_file()]
-    if len(rendered) != pages:
-        raise ValueError("One or more final pages were not rendered")
+        raise ValueError(f"Report is missing measured claims: {missing}")
+    prohibited = [c for c in text if c == "\ufffd" or "\u4e00" <= c <= "\u9fff" or c in "→–—•"]
+    if prohibited:
+        raise ValueError(f"Unexpected glyphs: {sorted(set(prohibited))}")
+    overflow = []
+    for i,page in enumerate(document):
+        for block in page.get_text("blocks"):
+            rect = pymupdf.Rect(block[:4])
+            if not page.rect.contains(rect):
+                overflow.append(i+1)
+    if overflow:
+        raise ValueError(f"Text outside page bounds: {overflow}")
+    RENDERS.mkdir(parents=True,exist_ok=True)
+    rendered = []
+    for i,page in enumerate(document):
+        path = RENDERS / f"report-final-{i+1}.png"
+        pixmap = page.get_pixmap(matrix=pymupdf.Matrix(1.5,1.5),alpha=False)
+        rendered_bytes = pixmap.tobytes("png")
+        # Do not claim a visual check for an older render.
+        if args.visual_reviewed and (not path.exists() or path.read_bytes() != rendered_bytes):
+            raise ValueError(f"Page {i+1} changed since rendering; inspect again before attesting")
+        path.write_bytes(rendered_bytes)
+        rendered.append({"page":i+1,"path":path.relative_to(ROOT).as_posix(),"sha256":sha(path)})
     report = {
-        "path": str(PDF.relative_to(ROOT)).replace("\\", "/"),
-        "sha256": hashlib.sha256(PDF.read_bytes()).hexdigest(),
-        "pages": pages,
-        "rendered_pages_inspected": rendered,
-        "content_check": "v30 dev 25/25 answerable, extra-dev regression 19/30 to 27/30 to 30/30, 164 automated tests; all six final pages visually inspected",
-        "scope": "Rendered page layout and extracted-text checks; not an independent medical review.",
+        "recorded_at_utc":datetime.now(timezone.utc).isoformat(),
+        "path":PDF.relative_to(ROOT).as_posix(),"sha256":sha(PDF),"pages":len(document),
+        "rendered_pages":rendered,
+        "all_pages_visually_reviewed":args.visual_reviewed,
+        "checks":["4 to 8 pages","measured values present","no replacement glyph, CJK text or decorative dash/arrow/bullet","text within page bounds"],
+        "scope":"Document content and layout checks. No new LLM evaluation or independent clinical review.",
     }
-    path = ROOT / "reports/pdf_validation_v30.json"
-    path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps(report, ensure_ascii=False))
+    output = ROOT / "reports/pdf_validation_2026-10-14.json"
+    output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    print(json.dumps({"pages":report["pages"],"sha256":report["sha256"],"visual_reviewed":args.visual_reviewed}))
 
 
 if __name__ == "__main__":

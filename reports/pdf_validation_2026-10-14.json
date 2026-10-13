@@ -1,0 +1,51 @@
+{
+  "recorded_at_utc": "2026-10-13T18:47:46.673919+00:00",
+  "path": "output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf",
+  "sha256": "d77ffdcbb2d338ff6f05a6b4dffade81bada50686edb615e394256bcf4a3c3b9",
+  "pages": 7,
+  "rendered_pages": [
+    {
+      "page": 1,
+      "path": "tmp/pdfs/report-final-1.png",
+      "sha256": "508ea9ab2e9234b76a734fc2a5cf1062cc44de3aa6f081208de435d477e34fac"
+    },
+    {
+      "page": 2,
+      "path": "tmp/pdfs/report-final-2.png",
+      "sha256": "3bad7f67da29b6fc6b7acf40157de307386901244a3eaeb60af82f01a10a0e0b"
+    },
+    {
+      "page": 3,
+      "path": "tmp/pdfs/report-final-3.png",
+      "sha256": "961710b275fa1b8a50dd1531663ce277b60968254eb6ba4f5a15da0a9279ca34"
+    },
+    {
+      "page": 4,
+      "path": "tmp/pdfs/report-final-4.png",
+      "sha256": "4f405b7fde5d9a05415d7eb1c8c4f951c801b276b0b30c10a7d82496858ec0b4"
+    },
+    {
+      "page": 5,
+      "path": "tmp/pdfs/report-final-5.png",
+      "sha256": "ca6ae28b0affd06808d6131fd27064ed627153403d8778c9ebcbe0ba492c97f7"
+    },
+    {
+      "page": 6,
+      "path": "tmp/pdfs/report-final-6.png",
+      "sha256": "8a08d0bc86adba63b283820d5be6fa8f65fd8ac1314edf7b5c1ba4d63655e763"
+    },
+    {
+      "page": 7,
+      "path": "tmp/pdfs/report-final-7.png",
+      "sha256": "41f9c8fd100a5cb48200f3e440a34148c2944781506ffbdf5416fd3b575c538d"
+    }
+  ],
+  "all_pages_visually_reviewed": true,
+  "checks": [
+    "4 to 8 pages",
+    "measured values present",
+    "no replacement glyph, CJK text or decorative dash/arrow/bullet",
+    "text within page bounds"
+  ],
+  "scope": "Document content and layout checks. No new LLM evaluation or independent clinical review."
+}
