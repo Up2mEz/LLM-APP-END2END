@@ -89,6 +89,8 @@ def main():
         "",
         "Tests ผ่าน 176 ข้อ ไม่มี failure, error หรือ skipped มี Starlette deprecation warning หนึ่งรายการ Frozen retrieval replay ตรงเดิมครบ 6 runs การตรวจไฟล์ที่ใช้จากต้นทาง 48 ไฟล์และ PDF 33 ไฟล์ยังได้ hash เดิม",
         "",
+        "Clean clone จาก GitHub เมื่อ 20 ตุลาคม 2026 ดาวน์โหลด release ตรวจ hashes ของข้อมูล 34 ไฟล์ replay retrieval 6 runs และตรวจแผน v32 ทั้งสองชุดผ่าน หลังแก้ LF/CRLF ใน Git ของไฟล์ที่นำมาใช้สามไฟล์ให้ตรงกับ raw bytes ที่ประเมิน เนื้อหาและแผนไม่เปลี่ยน การตรวจใช้ Python environment เดิม ไม่มี LLM calls และยังไม่ใช่การทดสอบติดตั้ง dependencies ใหม่ ดู [หลักฐาน](../reports/remote_release_validation_2026-10-20.json)",
+        "",
         "หลังติดตั้งข้อมูลและโมเดลตาม README ใช้ `python -B -m ncd_gemma.cli evaluate plan --version v32 --suite both` เพื่อตรวจ hash guard และใช้ `evaluate agent` พร้อม arguments เดียวกันเพื่อรัน การเริ่มใน clean clone ใช้ class proxy จริง ส่วนเครื่องที่มีผลแล้วจะ resume หากต้องการรอบใหม่ให้เลือกเวอร์ชันใหม่ เช่น v33 ไม่ลบผลหรือแผนเดิม",
         "",
         "Raw responses และ cache อยู่ใน ignored folders คำสั่ง `python -B scripts/audit_evaluation.py --version v32` ตรวจเทียบ raw runs ในเครื่องนี้กับ verdict ที่ระบุไว้ ผู้ที่มีเพียง public repo สามารถรันคำตอบและ automatic metrics ใหม่ได้ แต่การตัดสิน semantic correctness ต้องอ่านคำตอบของรอบตนเอง ไม่คัดลอก verdict เดิม",

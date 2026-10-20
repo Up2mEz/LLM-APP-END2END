@@ -154,7 +154,7 @@ Public repository มีโค้ด คำสั่งติดตั้ง eva
 
 ผู้ตรวจติดตั้งตาม README แล้วใช้ evaluate plan หรือ evaluate agent พร้อม --version v32 --suite both แผนใหม่ตรวจโค้ด ข้อมูล config และค่ารันก่อนเริ่มและหลังจบ ผล v30 เก็บแยกใน history เพราะ llm.py และ config.py เปลี่ยนหลัง lock เดิม หากแก้โค้ดอีกต้องเลือกเลขรุ่นใหม่ ผลคำตอบดิบและ cache ไม่เผยแพร่ การเริ่มจาก clean clone ต้องมี class proxy key ส่วนการเรียกซ้ำในเครื่องเดิมจะ resume จึงต้องอ่านจำนวน API calls ประกอบ
 
-วันที่ 12 ตุลาคม 2569 ตรวจ clean clone พร้อมดาวน์โหลด release และ replay retrieval ครบ 6 runs แล้ว มี FastAPI และหน้าเว็บใช้งานในเครื่อง รวมทั้ง temporary HTTPS demo ผ่าน Cloudflare Quick Tunnel ซึ่งต้องเปิดเครื่องและ tunnel ค้างไว้ URL เปลี่ยนได้เมื่อเริ่มใหม่ ส่วน Dockerfile มีให้แต่ยังไม่ยืนยันการรันทั้งระบบบน Linux host
+วันที่ 20 ตุลาคม 2569 ตรวจ clean clone จาก GitHub ตรวจข้อมูล release 34 ไฟล์ replay retrieval 6 runs และแผน v32 ทั้งสองชุดผ่าน หลังแก้ LF/CRLF ใน Git สามไฟล์ให้ตรงกับ raw bytes ที่ประเมิน โดยไม่เปลี่ยนเนื้อหาหรือ gold การตรวจใช้ Python environment เดิม เดโม HTTPS ใช้ Cloudflare Quick Tunnel จึงต้องเปิดเครื่องและ tunnel ค้างไว้ URL เปลี่ยนได้ ส่วน Dockerfile ยังไม่ยืนยันการรันทั้งระบบบน Linux
 
 ### 7.2 ข้อสรุปและงานต่อไป
 

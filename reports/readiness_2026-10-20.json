@@ -34,5 +34,15 @@
   ],
   "submission_artifacts_available": true,
   "recommended_ready_for_submission": false,
-  "reason": "Three fresh-run answer regressions remain. Public demo is temporary and requires the PC, app and tunnel to stay on."
+  "reason": "Three fresh-run answer regressions remain. Public demo is temporary and requires the PC, app and tunnel to stay on.",
+  "clean_clone": {
+    "status": "pass",
+    "commit": "724acbe984aadd08fa0341afc4e99d997cc9d389",
+    "report": "reports/remote_release_validation_2026-10-20.json",
+    "evaluation_plans_verified": [
+      "gemma-dev-v32",
+      "extra-dev-v32"
+    ]
+  },
+  "pdf_validation_report": "reports/pdf_validation_2026-10-20.json"
 }

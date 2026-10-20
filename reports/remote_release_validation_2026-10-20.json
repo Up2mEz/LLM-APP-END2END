@@ -1,0 +1,40 @@
+{
+  "verified_at_utc": "2026-10-20T06:09:59.268842+00:00",
+  "repository": "https://github.com/Up2mEz/LLM-APP-END2END",
+  "command": "python -B scripts/smoke_remote_release.py --evaluation-version v32",
+  "remote_clean_clone": "pass",
+  "commit": "724acbe984aadd08fa0341afc4e99d997cc9d389",
+  "evaluation_plans_verified": [
+    "gemma-dev-v32",
+    "extra-dev-v32"
+  ],
+  "archive_sha256": "c78d40139f628fb6c9ef1bf93e62a55be331d64327db1a4c98cfa5f0e8faa731",
+  "data_files_verified": 34,
+  "retrieval_replay": {
+    "runs_verified": 6,
+    "test_B_minus_A": {
+      "recall@5": 0.0769,
+      "mrr@10": 0.1193
+    }
+  },
+  "new_llm_calls": 0,
+  "python_environment": "Existing project Python 3.12.13 environment; dependencies were not reinstalled.",
+  "initial_failure": {
+    "commit": "8640379ee5012c3c22356c582156cf0cb6f19157",
+    "reason": "Three imported files had LF in Git and CRLF in the evaluated working tree; the exact-byte guard correctly rejected the clone."
+  },
+  "fix": {
+    "commit": "724acbe984aadd08fa0341afc4e99d997cc9d389",
+    "method": "Store the already evaluated CRLF bytes under the existing -text Git attributes. Contents are identical after newline normalization. No plan, gold or source repository change.",
+    "paths": [
+      "src/ncdqa/retrieval/answer_match.py",
+      "src/ncdqa/retrieval/evaluate.py",
+      "schemas/question.schema.json"
+    ]
+  },
+  "log_sha256": "fbfb9186ef7764314ad3a851ba43e32f0940c52ce5473f3a569353f8c3ab4733",
+  "limitations": [
+    "Checks clean checkout, data release, frozen retrieval replay and evaluation plans only.",
+    "No fresh dependency installation, Linux deployment or model-answer generation in this smoke check."
+  ]
+}

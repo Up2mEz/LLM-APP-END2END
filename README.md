@@ -173,6 +173,8 @@ Model revisions ที่ตรึงไว้คือ `BAAI/bge-m3` ที่ 
 
 **ตรวจซ้ำ 20 ตุลาคม 2026: 176 tests passed ไม่มี failure, error หรือ skipped** มี Starlette deprecation warning หนึ่งรายการ ดู [บันทึกทดสอบ v31](reports/evaluation_tests_2026-10-20.json) รันนอก Windows sandbox เพื่อให้ TestClient สร้าง socketpair ได้ Unit tests ใช้ fake model และ retriever จึงไม่ทดแทนผลเรียก class proxy จริง
 
+**Clean clone จาก GitHub ผ่านเมื่อ 20 ตุลาคม 2026:** ดาวน์โหลด release และตรวจข้อมูลครบ 34 ไฟล์ ทำ frozen retrieval replay ครบ 6 runs และยืนยันแผน v32 ทั้งสองชุดได้ พบและแก้ LF/CRLF ใน Git ของไฟล์ที่นำมาใช้สามไฟล์ให้ตรงกับ raw bytes ที่ประเมิน โดยไม่เปลี่ยนเนื้อหา แผน หรือ gold ดู [หลักฐานการตรวจ](reports/remote_release_validation_2026-10-20.json) การตรวจนี้ใช้ Python environment เดิม ไม่ได้ทดสอบติดตั้ง dependencies ใหม่หรือเรียก LLM
+
 v30 เกิดก่อนการแก้ `llm.py` และ `config.py` จึงเก็บแผน metrics และ audit เดิมไว้ใน `reports/history/v30_*` แล้วสร้าง v31 โดยไม่เปลี่ยน prompt, gold หรือ retrieval แผนใหม่ล็อก Python code, โค้ด retrieval ที่นำมาใช้, release data 34 ไฟล์, configs และค่ารัน Guard เดิมยังปฏิเสธโค้ดที่ไม่ตรง v30 ส่วน guard ใหม่ยอมรับ v31 ที่ตรงกัน ตรวจซ้ำทั้งก่อนรันและหลังจบ
 
 หากต้องเริ่มการทดลองใหม่ให้เลือกเลขใหม่ เช่น `--version v33 --suite both` คำสั่งสร้าง cache และแผนแยกโดยรักษาผล v31 และ v32 ไว้ การรันใหม่มีการเรียก API และต้องประเมินสาระของคำตอบใหม่ ไม่คัดลอกคะแนนเดิมมาใช้ **Frozen retrieval replay ยังทำซ้ำได้โดยไม่ใช้ class proxy**

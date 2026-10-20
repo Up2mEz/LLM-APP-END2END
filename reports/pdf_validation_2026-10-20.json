@@ -1,7 +1,7 @@
 {
-  "recorded_at_utc": "2026-10-20T06:00:57.966308+00:00",
+  "recorded_at_utc": "2026-10-20T06:11:00.738008+00:00",
   "path": "output/pdf/NCD_GEMMA_PROJECT_REPORT_TH.pdf",
-  "sha256": "ba2e4fcd6767af8f13b7f43655305d97e3f82884ab9d5a0db5c2fd7508acb020",
+  "sha256": "f0adc7ed826864c9fb46230840ed6ff7c48f13a67b3b7692b4999222f4572315",
   "pages": 7,
   "rendered_pages": [
     {
@@ -37,7 +37,7 @@
     {
       "page": 7,
       "path": "tmp/pdfs/report-final-7.png",
-      "sha256": "67eee56262a3a90e2ab2435fd6aaddf28418003e1f9ecc9fffd250ab49be85db"
+      "sha256": "f5af860552ee10a4ada82d71e822159d1e93420644dfe8a06c65290e68bf0d8d"
     }
   ],
   "all_pages_visually_reviewed": true,
