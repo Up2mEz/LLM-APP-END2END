@@ -1,0 +1,122 @@
+{
+  "q079": {
+    "prediction_sha256": "2d4c8d86f682c247357d5ad476b1dfcef82bec149db04184f3d07ebbbba6a636",
+    "verdict": "correct",
+    "note": "แยกพลังงานรวม 632 นมแม่ 413 และอาหารตามวัย 219 กิโลแคลอรีตรงแถวอายุ 6 ถึง 8 เดือนในตาราง PDF ที่อ้าง"
+  },
+  "q068": {
+    "prediction_sha256": "dae1d6892631688bc5460f18390209993bb498a20a5366f98cbb43e873a8f5c3",
+    "verdict": "correct",
+    "note": "ระบุ PM2.5 ตรง gold และข้อความที่อ้างเรื่องผลต่อการควบคุมความดันโลหิต"
+  },
+  "q082": {
+    "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+    "verdict": "false_abstention",
+    "note": "พบตารางแล้ว แต่โมเดลส่ง citations ไม่ครบ ใช้ line แทน quote และไม่ส่ง table_cells ตาม schema จนถึงขีดจำกัดการซ่อม จึงงดตอบทั้งที่ gold ระบุ 55 กรัมต่อวัน"
+  },
+  "q098": {
+    "prediction_sha256": "6c7b3dfef4467deb605c04ab2bf195b61c56b5eb45c28b581e3cafd94326963a",
+    "verdict": "correct",
+    "note": "จำนวนพยาบาลวิชาชีพ 70 คน และร้อยละ 95.89 ตรง gold และหลักฐานทั้งสองข้อความ"
+  },
+  "q024": {
+    "prediction_sha256": "a3816b7bfbce98af93701606820fa53ddcb59776967cc8e2e29ae5daaf7edb27",
+    "verdict": "correct",
+    "note": "อธิบายเกลือและน้ำคั่ง คุมความดันยาก และหัวใจทำงานหนักครบตาม gold และข้อความอ้างอิง"
+  },
+  "q084": {
+    "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+    "verdict": "service_unavailable",
+    "note": "เกิด HTTP 502 ขณะเรียก reviewer หลังสร้างคำตอบ ระบบคืน insufficient_evidence ด้วย verification_unavailable จึงเป็นบริการขัดข้อง ไม่ใช่หลักฐานว่าโมเดลไม่รู้คำตอบ"
+  },
+  "q018": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q053": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q100": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q058": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q016": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q091": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q132": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q063": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q040": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q022": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q006": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q007": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q123": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q121": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q122": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q124": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q107": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  },
+  "q110": {
+    "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+    "verdict": "service_unavailable",
+    "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้"
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "baseline": "v30",
+  "current": "v31",
+  "scope": "Same 60 exposed dev questions; fresh-cache operational regression, not an isolated model-quality experiment.",
+  "gold_sha256": "680a752e738d7a60f463345c08e3e098934ab945df2183a8bb1e0d97b1f6ddea",
+  "same_ordered_qids": true,
+  "runtime_changes_vs_v30_lock": [
+    "llm.py",
+    "config.py"
+  ],
+  "added_locking": [
+    "runtime and evaluation code",
+    "all released data files",
+    "retrieval configs and schemas",
+    "reused retrieval Python code",
+    "runtime settings",
+    "cache mode",
+    "resume plan identity"
+  ],
+  "results": {
+    "dev": {
+      "v30_strict_correct": 30,
+      "v31_strict_correct": 29,
+      "core_correct_answerable": 24,
+      "correct_abstentions": 5,
+      "changed_qids": [
+        "q079",
+        "q068",
+        "q082",
+        "q098"
+      ],
+      "regressed_qids": [
+        "q082"
+      ],
+      "improved_qids": [],
+      "net_gain": -1,
+      "service_unavailable_qids": [],
+      "semantic_failure_qids": [
+        "q082"
+      ],
+      "metrics": {
+        "plan_id": "gemma-dev-v31",
+        "split": "dev",
+        "n": 30,
+        "answerable": 25,
+        "plan_sha256": "044ab19362ea1ee3c0fe40f8925d3fd0fb61eff19516213e9adfc550839b88ec",
+        "answers_sha256": "67361990f8b3301a29c3ae0a21be36bed493187d1f4c8a96c5cab2a6905b7896",
+        "status_counts": {
+          "answered": 24,
+          "insufficient_evidence": 6
+        },
+        "stop_reasons": {
+          "completed": 24,
+          "grounded_route": 5,
+          "answer_validation_failed": 1
+        },
+        "completed_rate": 0.8,
+        "abstention_decision_accuracy": 0.9667,
+        "decision_accuracy": 0.9667,
+        "citation_primary_evidence_hit_rate_answerable": 0.72,
+        "mean_character_f1_answerable": 0.4439,
+        "false_abstentions": [
+          "q082"
+        ],
+        "answered_unanswerable": [],
+        "error_qids": [],
+        "new_api_calls_recorded": 91,
+        "model_rounds_total": 90,
+        "reported_tokens_including_cache": 378141,
+        "elapsed_seconds_total": 191.375,
+        "cache_mode": "isolated",
+        "limitations": [
+          "Exposed development regression; not held-out or independent clinical validation.",
+          "Decision accuracy is not semantic correctness; manual evidence review is required.",
+          "Character F1 measures text overlap; citation hit checks primary gold evidence only.",
+          "Fresh calls are not a paired model-quality comparison against v30's cached responses."
+        ]
+      }
+    },
+    "extra": {
+      "v30_strict_correct": 30,
+      "v31_strict_correct": 11,
+      "core_correct_answerable": 11,
+      "correct_abstentions": 0,
+      "changed_qids": [
+        "q024",
+        "q084",
+        "q018",
+        "q053",
+        "q100",
+        "q058",
+        "q016",
+        "q091",
+        "q132",
+        "q063",
+        "q040",
+        "q022",
+        "q006",
+        "q007",
+        "q123",
+        "q121",
+        "q122",
+        "q124",
+        "q107",
+        "q110"
+      ],
+      "regressed_qids": [
+        "q084",
+        "q018",
+        "q053",
+        "q100",
+        "q058",
+        "q016",
+        "q091",
+        "q132",
+        "q063",
+        "q040",
+        "q022",
+        "q006",
+        "q007",
+        "q123",
+        "q121",
+        "q122",
+        "q124",
+        "q107",
+        "q110"
+      ],
+      "improved_qids": [],
+      "net_gain": -19,
+      "service_unavailable_qids": [
+        "q084",
+        "q018",
+        "q053",
+        "q100",
+        "q058",
+        "q016",
+        "q091",
+        "q132",
+        "q063",
+        "q040",
+        "q022",
+        "q006",
+        "q007",
+        "q123",
+        "q121",
+        "q122",
+        "q124",
+        "q107",
+        "q110"
+      ],
+      "semantic_failure_qids": [],
+      "metrics": {
+        "plan_id": "extra-dev-v31",
+        "split": "dev",
+        "n": 30,
+        "answerable": 26,
+        "plan_sha256": "780b49d1c638c4af10f5fa8d2eccce05a7a94242f0c64a30120ce696f4fb9281",
+        "answers_sha256": "b654b0e6838cb981aab52faa18d62e291079ccb378c905bfa8d15e38e00cf08c",
+        "status_counts": {
+          "answered": 11,
+          "insufficient_evidence": 1,
+          "error": 18
+        },
+        "stop_reasons": {
+          "completed": 10,
+          "grounded_route": 1,
+          "verification_unavailable": 1,
+          "proxy_http_502": 18
+        },
+        "completed_rate": 0.3333,
+        "abstention_decision_accuracy": 0.3667,
+        "decision_accuracy": 0.3667,
+        "citation_primary_evidence_hit_rate_answerable": 0.2692,
+        "mean_character_f1_answerable": 0.1486,
+        "false_abstentions": [
+          "q084"
+        ],
+        "answered_unanswerable": [],
+        "error_qids": [
+          "q018",
+          "q053",
+          "q100",
+          "q058",
+          "q016",
+          "q091",
+          "q132",
+          "q063",
+          "q040",
+          "q022",
+          "q006",
+          "q007",
+          "q123",
+          "q121",
+          "q122",
+          "q124",
+          "q107",
+          "q110"
+        ],
+        "new_api_calls_recorded": 53,
+        "model_rounds_total": 53,
+        "reported_tokens_including_cache": 99806,
+        "elapsed_seconds_total": 57.109,
+        "cache_mode": "isolated",
+        "limitations": [
+          "Exposed development regression; not held-out or independent clinical validation.",
+          "Decision accuracy is not semantic correctness; manual evidence review is required.",
+          "Character F1 measures text overlap; citation hit checks primary gold evidence only.",
+          "Fresh calls are not a paired model-quality comparison against v30's cached responses."
+        ]
+      }
+    }
+  },
+  "new_api_calls_recorded": 144,
+  "v30_new_api_calls_recorded": 0,
+  "limitations": [
+    "v30 used cached older model responses; provider variation and fresh timing are not controlled.",
+    "Both development sets were previously used for tuning; no claim about unseen clinical accuracy.",
+    "Semantic verdicts are coding-agent assessments, not independent expert labels."
+  ]
+}

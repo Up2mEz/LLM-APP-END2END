@@ -1,0 +1,457 @@
+{
+  "plan_id": "extra-dev-v32",
+  "current": "extra-dev-v32",
+  "baseline": "extra-dev-v30",
+  "comparison": "extra-dev-v30",
+  "n": 30,
+  "answerable_denominator": 26,
+  "answers_sha256": "d1178a21d8ae7d08cc02085ce8cf8c26c52d3409cc29518588dd035fae39aef1",
+  "raw_answers_sha256": "d1178a21d8ae7d08cc02085ce8cf8c26c52d3409cc29518588dd035fae39aef1",
+  "baseline_answers_sha256": "c9609cd008187fb95969a3751d15f30f3045e51ba54a2399bf2c39b338f26268",
+  "verdict_counts": {
+    "correct": 24,
+    "partial": 1,
+    "false_abstention": 1,
+    "correct_abstention": 4
+  },
+  "strict_correct": 28,
+  "strict_correct_rate": 0.9333,
+  "core_matches": [
+    "q044",
+    "q065",
+    "q033",
+    "q104",
+    "q039",
+    "q054",
+    "q127",
+    "q049",
+    "q064",
+    "q137",
+    "q024",
+    "q084",
+    "q018",
+    "q053",
+    "q100",
+    "q058",
+    "q016",
+    "q091",
+    "q132",
+    "q040",
+    "q022",
+    "q006",
+    "q107",
+    "q110"
+  ],
+  "label_correct_abstentions": [
+    "q123",
+    "q121",
+    "q122",
+    "q124"
+  ],
+  "incorrect_or_incomplete": [
+    "q063"
+  ],
+  "false_abstentions": [
+    "q007"
+  ],
+  "service_unavailable_qids": [],
+  "partial_or_needs_context_review": [],
+  "strict_improved_qids": [],
+  "strict_regressed_qids": [
+    "q063",
+    "q007"
+  ],
+  "strict_net_gain": -2,
+  "changed_qids": [
+    "q024",
+    "q016",
+    "q063",
+    "q006",
+    "q007",
+    "q124"
+  ],
+  "new_api_calls_recorded": 90,
+  "review_basis": "Coding-agent review of changed outputs against unchanged gold and cited source text. Identical outputs inherit the v30 verdict only after fingerprint checks. Exposed regression; not blinded expert or clinical review.",
+  "details": [
+    {
+      "qid": "q044",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบอย่างน้อยปีละครั้งตรงหลักฐาน; ไม่กล่าวถึงการติดตามถี่ขึ้นเมื่อผิดปกติ แต่คำถามถามขั้นต่ำ",
+      "prediction_sha256": "88796f35324969bae1e3fcd3b7d3e1ec69a9d0c432b249e5d5fe274f5dc74183",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-remission-principles-2568-september"
+      ]
+    },
+    {
+      "qid": "q065",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตรวจความดันทุกปีตั้งแต่อายุ 30 ปีตรงเอกสาร",
+      "prediction_sha256": "8f85827b99cee4875f831e995d9cb4959b80eb98d468c59c76a5baff0dfa18e6",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-siriraj-hypertension-public-1587-verified-20261005"
+      ]
+    },
+    {
+      "qid": "q033",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เลือกหลักสูตรระดับกลางปี 2568 ได้ระยะเวลารวม 5 ชั่วโมง ไม่สลับกับระดับกลาง II ปี 2566",
+      "prediction_sha256": "361367523fd04f9a4d7d81f22d1e42d8bc1371931a78240353620c3baa4d7e09",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-ddc-dmht-elearning-intermediate-2568"
+      ]
+    },
+    {
+      "qid": "q104",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ปัสสาวะกลางคืนตั้งแต่ 2 ครั้งตรงหลักฐาน",
+      "prediction_sha256": "06d2e7bc6f919f83c023f9106da3ca42e5f4eb4cd0daf3d7c4d08054d27ab36a",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ncd-ddc-health-literacy-fight-ncds-2566"
+      ]
+    },
+    {
+      "qid": "q039",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "คาร์บ 1 ส่วนประมาณ 15-18 กรัมตรงหลักฐาน",
+      "prediction_sha256": "f99d7d9c01b1912fd0263c0e42d400ef60fb37099d3aa054e058bbf9fdb303b5",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    },
+    {
+      "qid": "q054",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตัวอย่างอาหาร 121 ตัวอย่างตรงหลักฐาน; ไม่สับสนกับคน 124 คน",
+      "prediction_sha256": "050ea979d4ce1a673eab5667c09b55d163e4551504b1c613b0319cc53304c654",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-ddc-community-low-salt-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q127",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบร้อยละ 95 จากข้อความ T2D ใน source ที่อ้าง; claim ที่คัดไม่ตรงถูกตัดออกก่อนตรวจ",
+      "prediction_sha256": "42a3ac25ce079b67121532919b3ed7083ce911fe0acd9df9bbb78d5c7c9a49d5",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    },
+    {
+      "qid": "q049",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบความเสี่ยงถูกตัดเท้าหรือขาตรงคำถามและหลักฐาน",
+      "prediction_sha256": "69bf6c563e11621e06974ab62bcbdc96116bb0eda124829f83b6a372b2572eae",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-siriraj-nursing-foot-ulcer-prevention-2559"
+      ]
+    },
+    {
+      "qid": "q064",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เริ่มยาลดความดัน 2 ชนิดเมื่อ >=150/90 ตรงเงื่อนไข; คำถามถามจำนวนยา",
+      "prediction_sha256": "8a7af302868e7e731d4ae0062c936c0716c5dbf72334df23db19665b49b8ca40",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q137",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "การผ่าตัดวุ้นตาเมื่อเลือดไม่หายหรือจอตาถูกพังผืดดึงรั้งตรงหลักฐาน",
+      "prediction_sha256": "a915ba68a322a89211ef5e49c254ac725059fa7234f2e855a1de6bf6ba0b5a24",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-siriraj-retinopathy-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q024",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "อธิบายเกลือและน้ำคั่ง คุมความดันยาก และหัวใจทำงานหนักครบตาม gold และข้อความอ้างอิง",
+      "prediction_sha256": "a3816b7bfbce98af93701606820fa53ddcb59776967cc8e2e29ae5daaf7edb27",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "ckd-public-kidney-prevention-tips"
+      ]
+    },
+    {
+      "qid": "q084",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "นมไขมันต่ำสำหรับผู้สูงอายุที่ดื่มนมแล้วไม่ท้องเสียตรงหลักฐาน",
+      "prediction_sha256": "8ddedbf8b4ab6b477112416c6a7d77a5e04d6bead49fe2de0ee63bdc62ea214e",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q018",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ACEi หรือ ARB เป็นตัวเลือกแรกเมื่อมี albuminuria; ตอบซ้ำหลาย citation โดยไม่จำเป็น",
+      "prediction_sha256": "b830c59ea365633a743c1fa68412cd21117fe188df0dd50772dc0509b4b6f73d",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-guideline-2565-revised"
+      ]
+    },
+    {
+      "qid": "q053",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "น้ำเปล่าหรือน้ำสมุนไพรไม่หวานตรงหลักฐาน; มีขึ้นบรรทัดกลางประโยคจาก OCR",
+      "prediction_sha256": "c984d54dd46668df5fa348c8dad32f3feb2a8f76341586c9e75b18b015ddcbab",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-ddc-community-low-salt-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q100",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ระบุโรงพยาบาลเขาสุกิมตรงหลักฐาน",
+      "prediction_sha256": "250076929adef9488fce515e650efeadfacc01ac8c00d5b099ab3eb11cf16947",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ncd-ddc-dmht-service-model-lessons-2568"
+      ]
+    },
+    {
+      "qid": "q058",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "lexical admission ดึงข้อความที่ระบุให้แยกเก็บน้ำหนักและส่วนสูง",
+      "prediction_sha256": "f2c2c042b1f1103c830ca0210339e060dc9fdebbcd8f382485c193336f5ae3c5",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-ddc-dmht-elearning-intermediate-ii-2566"
+      ]
+    },
+    {
+      "qid": "q016",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ระบุเด็กและวัยทำงานครบ พร้อมช่วง ค.ศ. 1970s ตาม gold และข้อความอ้างอิง",
+      "prediction_sha256": "3a98d4fb3423fd75a711bfb0f470425a8a6cf28047ba320bec94bcd667b90136",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "ckd-ddc-epidemiology-prevention-review-2567"
+      ]
+    },
+    {
+      "qid": "q091",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เนื้อวัวและเนื้อควายตรงหลักฐาน",
+      "prediction_sha256": "3c732a2365125e9f3af369b943a14b66245b11c5aab3c9d28eb1ebd08d5552fc",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-siriraj-trans-fat-1380"
+      ]
+    },
+    {
+      "qid": "q132",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ภาชนะทนการแทงทะลุและการกัดกร่อนตรงหลักฐาน; มีรายละเอียดฝากับฉลากเกินที่ถาม",
+      "prediction_sha256": "70d3fdc7623596269c1a6ec4c63003f30117846d4796c22840ae778a485a8f4b",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-siriraj-needle-disposal-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q063",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "partial",
+      "note": "ตอบว่าไม่ควรใช้ ACEIs ร่วมกับ ARBs แต่ขาดระดับคำแนะนำ III และหลักฐาน B ที่ถาม ทั้งที่อยู่ใน quote โมเดล reviewer ยังระบุว่าครบ จึงเป็นช่องว่างการตรวจความครบถ้วน",
+      "prediction_sha256": "04fad0f5960005ce636776f2205619a66f86419bc081314e312d89aa208c3876",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "ht-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q040",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "อ่านแถว HTML ปี 2567 ที่มีผู้ร่วม 468 คนและ remission 98 คน",
+      "prediction_sha256": "fa66214d52df8d50924523da16639d688bc9056d664367aec70469f9a5389080",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-remission-implementation-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q022",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "BUN >100 หรือมีแนวโน้มถึง 100 มก./ดล.ตรงหลักฐาน; ข้อความซ้ำ",
+      "prediction_sha256": "a7e974965ffc197af6ba17a60901f0bba0a85cdae4e73dd8d870e824a66cbf29",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-hemodialysis-plasma-manual-2561"
+      ]
+    },
+    {
+      "qid": "q006",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "อ้างหัวตารางสาเหตุ secondary MCD และแถว Infection ที่ระบุ Virus กับ parasites ครบ แม้ source ID เปลี่ยน",
+      "prediction_sha256": "36a240d28233a67bf52e25712a396931a88f70d64a4f77f4fd8bf4bc187ebce2",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "ckd-adult-glomerular-guideline-2561"
+      ]
+    },
+    {
+      "qid": "q007",
+      "answerable": true,
+      "type": "table",
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "ค้นพบตาราง BMI ของ nephrotic syndrome แล้ว แต่ข้อความที่เลือกอ้างขาดบริบทประชากร จึงถูก scope guard ปฏิเสธซ้ำและงดตอบ Gold คือ 25 ถึง 29.9 กก./ม²",
+      "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q123",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "ไม่ถ่ายคำแนะนำการลืมยาเบาหวานไปใช้กับ ezetimibe; หยุดเมื่อ citation ไม่มียานี้",
+      "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    },
+    {
+      "qid": "q121",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "เอกสารให้ปริมาณโซเดียมของน้ำปลา แต่ไม่ระบุยี่ห้อ",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    },
+    {
+      "qid": "q122",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "เอกสารชุดนี้ไม่ให้ AQI cutoff เฉพาะผู้มีความดันสูง",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    },
+    {
+      "qid": "q124",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "งดตอบตรง gold ที่ไม่มีคำตอบสำหรับเด็ก 6 ถึง 8 ปีซึ่งมีทั้งเบาหวานและโรคไต แต่ stop reason เป็น answer_validation_failed จึงไม่ยืนยันว่าค้นครบทุกเอกสาร",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q107",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบ conventional intermittent สำหรับไหลเวียนคงที่และ SLED สำหรับความดันค่อนข้างต่ำ พร้อมอ้างสองข้อความในเอกสาร edition เดียวกัน",
+      "prediction_sha256": "0b2817ded415a61b04c10fae35cad5e3886e7a51aea3cdb41b2e2cbeb95c0a54",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-hemodialysis-plasma-manual-2561"
+      ]
+    },
+    {
+      "qid": "q110",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "อ่านข้าวขาว 1 ทัพพีต่อ 1 คาร์บ และโคล่า 1 กระป๋อง 1.7 คาร์บจากข้อความที่อ้างจริง",
+      "prediction_sha256": "0439fdc49926466b6b99e37e4649b434b4ed1ad50a7cda76f4e09743021c0c88",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    }
+  ]
+}

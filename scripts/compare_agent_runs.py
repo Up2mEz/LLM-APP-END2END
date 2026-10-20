@@ -39,7 +39,7 @@ for version in sorted(versions, key=lambda v:int(v[1:])):
         "false_abstentions": [r["qid"] for r in records if r["answerable"] and r["prediction"]["status"] == "insufficient_evidence"],
         "answered_unanswerable": [r["qid"] for r in records if not r["answerable"] and r["prediction"]["status"] == "answered"],
         "correct_abstentions": [r["qid"] for r in records if not r["answerable"] and r["prediction"]["status"] == "insufficient_evidence"]})
-report = {"scope": "Same exposed development sample; cached completions reused when payloads match. Not independent validation.",
+report = {"scope": "Same exposed development sample. v30 and earlier may reuse shared cached completions; v31 starts with isolated caches. Not independent validation.",
           "selection": "Report all iterations, including failures. Read the semantic audit alongside these automatic metrics.",
           "runs": runs, 'partial_runs':partial}
 (ROOT / "reports/agent_comparison.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

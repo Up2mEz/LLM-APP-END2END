@@ -29,10 +29,15 @@ def main():
     text = "\n".join(page.get_text() for page in document)
     # Shaped Thai extraction may contain a decomposed sara am, so do not compare
     # entire Thai paragraphs byte-for-byte. Latin figures remain unambiguous.
-    tests = json.loads((ROOT / "reports/documentation_tests_2026-10-14.json").read_text())
+    tests = json.loads((ROOT / "reports/evaluation_tests_2026-10-20.json").read_text(encoding="utf-8"))
+    latest = json.loads((ROOT / "reports/evaluations/v32/dev_metrics.json").read_text(encoding="utf-8"))
+    audit = json.loads((ROOT / "reports/evaluations/v32/dev_semantic_audit.json").read_text(encoding="utf-8"))
+    extra = json.loads((ROOT / "reports/evaluations/v32/extra_semantic_audit.json").read_text(encoding="utf-8"))
     expected = ("6707060", "0.8077", "0.8846", "0.9135", "0.6181", "0.7374", "0.7706",
-                "0.4453", "0.7200", "19/30", "27/30", "30/30", str(tests["tests_passed"]),
-                "q076", "q108", "q006", "q107", "q110", "llm.py", "config.py")
+                f"{latest['mean_character_f1_answerable']:.4f}",
+                f"{latest['citation_primary_evidence_hit_rate_answerable']:.4f}",
+                f"{len(audit['core_matches'])}/25", f"{extra['strict_correct']}/30",
+                "19/30", "27/30", "30/30", str(tests["tests_passed"]), "v31", "v32", "llm.py", "config.py")
     missing = [value for value in expected if value not in text]
     if missing:
         raise ValueError(f"Report is missing measured claims: {missing}")
@@ -66,7 +71,7 @@ def main():
         "checks":["4 to 8 pages","measured values present","no replacement glyph, CJK text or decorative dash/arrow/bullet","text within page bounds"],
         "scope":"Document content and layout checks. No new LLM evaluation or independent clinical review.",
     }
-    output = ROOT / "reports/pdf_validation_2026-10-14.json"
+    output = ROOT / "reports/pdf_validation_2026-10-20.json"
     output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"pages":report["pages"],"sha256":report["sha256"],"visual_reviewed":args.visual_reviewed}))
 

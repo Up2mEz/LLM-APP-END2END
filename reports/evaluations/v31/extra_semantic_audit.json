@@ -1,0 +1,456 @@
+{
+  "plan_id": "extra-dev-v31",
+  "current": "extra-dev-v31",
+  "baseline": "extra-dev-v30",
+  "comparison": "extra-dev-v30",
+  "n": 30,
+  "answerable_denominator": 26,
+  "answers_sha256": "b654b0e6838cb981aab52faa18d62e291079ccb378c905bfa8d15e38e00cf08c",
+  "raw_answers_sha256": "b654b0e6838cb981aab52faa18d62e291079ccb378c905bfa8d15e38e00cf08c",
+  "baseline_answers_sha256": "c9609cd008187fb95969a3751d15f30f3045e51ba54a2399bf2c39b338f26268",
+  "verdict_counts": {
+    "correct": 11,
+    "service_unavailable": 19
+  },
+  "strict_correct": 11,
+  "strict_correct_rate": 0.3667,
+  "core_matches": [
+    "q044",
+    "q065",
+    "q033",
+    "q104",
+    "q039",
+    "q054",
+    "q127",
+    "q049",
+    "q064",
+    "q137",
+    "q024"
+  ],
+  "label_correct_abstentions": [],
+  "incorrect_or_incomplete": [],
+  "false_abstentions": [],
+  "service_unavailable_qids": [
+    "q084",
+    "q018",
+    "q053",
+    "q100",
+    "q058",
+    "q016",
+    "q091",
+    "q132",
+    "q063",
+    "q040",
+    "q022",
+    "q006",
+    "q007",
+    "q123",
+    "q121",
+    "q122",
+    "q124",
+    "q107",
+    "q110"
+  ],
+  "partial_or_needs_context_review": [],
+  "strict_improved_qids": [],
+  "strict_regressed_qids": [
+    "q084",
+    "q018",
+    "q053",
+    "q100",
+    "q058",
+    "q016",
+    "q091",
+    "q132",
+    "q063",
+    "q040",
+    "q022",
+    "q006",
+    "q007",
+    "q123",
+    "q121",
+    "q122",
+    "q124",
+    "q107",
+    "q110"
+  ],
+  "strict_net_gain": -19,
+  "changed_qids": [
+    "q024",
+    "q084",
+    "q018",
+    "q053",
+    "q100",
+    "q058",
+    "q016",
+    "q091",
+    "q132",
+    "q063",
+    "q040",
+    "q022",
+    "q006",
+    "q007",
+    "q123",
+    "q121",
+    "q122",
+    "q124",
+    "q107",
+    "q110"
+  ],
+  "new_api_calls_recorded": 53,
+  "review_basis": "Coding-agent review of changed outputs against unchanged gold and cited source text. Identical outputs inherit the v30 verdict only after fingerprint checks. Exposed regression; not blinded expert or clinical review.",
+  "details": [
+    {
+      "qid": "q044",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบอย่างน้อยปีละครั้งตรงหลักฐาน; ไม่กล่าวถึงการติดตามถี่ขึ้นเมื่อผิดปกติ แต่คำถามถามขั้นต่ำ",
+      "prediction_sha256": "88796f35324969bae1e3fcd3b7d3e1ec69a9d0c432b249e5d5fe274f5dc74183",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-remission-principles-2568-september"
+      ]
+    },
+    {
+      "qid": "q065",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตรวจความดันทุกปีตั้งแต่อายุ 30 ปีตรงเอกสาร",
+      "prediction_sha256": "8f85827b99cee4875f831e995d9cb4959b80eb98d468c59c76a5baff0dfa18e6",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-siriraj-hypertension-public-1587-verified-20261005"
+      ]
+    },
+    {
+      "qid": "q033",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เลือกหลักสูตรระดับกลางปี 2568 ได้ระยะเวลารวม 5 ชั่วโมง ไม่สลับกับระดับกลาง II ปี 2566",
+      "prediction_sha256": "361367523fd04f9a4d7d81f22d1e42d8bc1371931a78240353620c3baa4d7e09",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-ddc-dmht-elearning-intermediate-2568"
+      ]
+    },
+    {
+      "qid": "q104",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ปัสสาวะกลางคืนตั้งแต่ 2 ครั้งตรงหลักฐาน",
+      "prediction_sha256": "06d2e7bc6f919f83c023f9106da3ca42e5f4eb4cd0daf3d7c4d08054d27ab36a",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ncd-ddc-health-literacy-fight-ncds-2566"
+      ]
+    },
+    {
+      "qid": "q039",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "คาร์บ 1 ส่วนประมาณ 15-18 กรัมตรงหลักฐาน",
+      "prediction_sha256": "f99d7d9c01b1912fd0263c0e42d400ef60fb37099d3aa054e058bbf9fdb303b5",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    },
+    {
+      "qid": "q054",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตัวอย่างอาหาร 121 ตัวอย่างตรงหลักฐาน; ไม่สับสนกับคน 124 คน",
+      "prediction_sha256": "050ea979d4ce1a673eab5667c09b55d163e4551504b1c613b0319cc53304c654",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-ddc-community-low-salt-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q127",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบร้อยละ 95 จากข้อความ T2D ใน source ที่อ้าง; claim ที่คัดไม่ตรงถูกตัดออกก่อนตรวจ",
+      "prediction_sha256": "42a3ac25ce079b67121532919b3ed7083ce911fe0acd9df9bbb78d5c7c9a49d5",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-rama-nursing-t2dm-risk-case-management-2567"
+      ]
+    },
+    {
+      "qid": "q049",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ตอบความเสี่ยงถูกตัดเท้าหรือขาตรงคำถามและหลักฐาน",
+      "prediction_sha256": "69bf6c563e11621e06974ab62bcbdc96116bb0eda124829f83b6a372b2572eae",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-siriraj-nursing-foot-ulcer-prevention-2559"
+      ]
+    },
+    {
+      "qid": "q064",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เริ่มยาลดความดัน 2 ชนิดเมื่อ >=150/90 ตรงเงื่อนไข; คำถามถามจำนวนยา",
+      "prediction_sha256": "8a7af302868e7e731d4ae0062c936c0716c5dbf72334df23db19665b49b8ca40",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q137",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "การผ่าตัดวุ้นตาเมื่อเลือดไม่หายหรือจอตาถูกพังผืดดึงรั้งตรงหลักฐาน",
+      "prediction_sha256": "a915ba68a322a89211ef5e49c254ac725059fa7234f2e855a1de6bf6ba0b5a24",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-siriraj-retinopathy-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q024",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "อธิบายเกลือและน้ำคั่ง คุมความดันยาก และหัวใจทำงานหนักครบตาม gold และข้อความอ้างอิง",
+      "prediction_sha256": "a3816b7bfbce98af93701606820fa53ddcb59776967cc8e2e29ae5daaf7edb27",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "ckd-public-kidney-prevention-tips"
+      ]
+    },
+    {
+      "qid": "q084",
+      "answerable": true,
+      "type": "condition",
+      "status": "insufficient_evidence",
+      "verdict": "service_unavailable",
+      "note": "เกิด HTTP 502 ขณะเรียก reviewer หลังสร้างคำตอบ ระบบคืน insufficient_evidence ด้วย verification_unavailable จึงเป็นบริการขัดข้อง ไม่ใช่หลักฐานว่าโมเดลไม่รู้คำตอบ",
+      "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q018",
+      "answerable": true,
+      "type": "condition",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q053",
+      "answerable": true,
+      "type": "fact",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q100",
+      "answerable": true,
+      "type": "fact",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q058",
+      "answerable": true,
+      "type": "fact",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q016",
+      "answerable": true,
+      "type": "fact",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q091",
+      "answerable": true,
+      "type": "fact",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q132",
+      "answerable": true,
+      "type": "fact",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q063",
+      "answerable": true,
+      "type": "table",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q040",
+      "answerable": true,
+      "type": "table",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q022",
+      "answerable": true,
+      "type": "table",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q006",
+      "answerable": true,
+      "type": "table",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q007",
+      "answerable": true,
+      "type": "table",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q123",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q121",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q122",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q124",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q107",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q110",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "error",
+      "verdict": "service_unavailable",
+      "note": "Class proxy ตอบ HTTP 502 ก่อนระบบทำคำตอบเสร็จ เก็บเป็น service failure และยังสรุปคุณภาพคำตอบข้อนี้ไม่ได้",
+      "prediction_sha256": "0d46107a4770c25dba9307fc7e0719dd70140b94d209950f10bdf062ea4f0b9d",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    }
+  ]
+}

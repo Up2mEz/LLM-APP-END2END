@@ -1,0 +1,38 @@
+{
+  "checked_at_utc": "2026-10-20T05:55:23.980235+00:00",
+  "public_demo_url": "https://mails-nuts-navigator-drill.trycloudflare.com",
+  "scope": "One authorized original-dev question through the public demo; serving cache is allowed. v32 batch supplies the separate fresh-request evidence.",
+  "health_http": 200,
+  "unauthenticated_http": 401,
+  "authenticated_page_http": 200,
+  "greeting": {
+    "http_status": 200,
+    "status": "out_of_scope",
+    "api_calls": 0
+  },
+  "q075": {
+    "http_status": 200,
+    "status": "answered",
+    "citations": 1,
+    "stats": {
+      "model_rounds": 3,
+      "api_calls": 0,
+      "searches": 1,
+      "reported_tokens_including_cache": 9084,
+      "elapsed_ms": 422.0
+    },
+    "stop_reason": "completed"
+  },
+  "software_tests_passed": 176,
+  "v32_semantic_success": 57,
+  "v32_questions": 60,
+  "regression_matches_v30": false,
+  "remaining_qids": [
+    "q082",
+    "q007",
+    "q063"
+  ],
+  "submission_artifacts_available": true,
+  "recommended_ready_for_submission": false,
+  "reason": "Three fresh-run answer regressions remain. Public demo is temporary and requires the PC, app and tunnel to stay on."
+}

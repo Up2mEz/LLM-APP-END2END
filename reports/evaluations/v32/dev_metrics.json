@@ -1,0 +1,38 @@
+{
+  "plan_id": "gemma-dev-v32",
+  "split": "dev",
+  "n": 30,
+  "answerable": 25,
+  "plan_sha256": "2f924237c573a7cd0199336bb3d42fb7dc54ef416d96f0bdf487821cbe5c0910",
+  "answers_sha256": "2980637a651c136613547f8cb2f2ad6f7742e02a2671aa35fb2a620dd64865e8",
+  "status_counts": {
+    "answered": 24,
+    "insufficient_evidence": 6
+  },
+  "stop_reasons": {
+    "completed": 24,
+    "grounded_route": 5,
+    "answer_validation_failed": 1
+  },
+  "completed_rate": 0.8,
+  "abstention_decision_accuracy": 0.9667,
+  "decision_accuracy": 0.9667,
+  "citation_primary_evidence_hit_rate_answerable": 0.72,
+  "mean_character_f1_answerable": 0.4439,
+  "false_abstentions": [
+    "q082"
+  ],
+  "answered_unanswerable": [],
+  "error_qids": [],
+  "new_api_calls_recorded": 90,
+  "model_rounds_total": 90,
+  "reported_tokens_including_cache": 378154,
+  "elapsed_seconds_total": 107.218,
+  "cache_mode": "isolated",
+  "limitations": [
+    "Exposed development regression; not held-out or independent clinical validation.",
+    "Decision accuracy is not semantic correctness; manual evidence review is required.",
+    "Character F1 measures text overlap; citation hit checks primary gold evidence only.",
+    "Fresh calls are not a paired model-quality comparison against v30's cached responses."
+  ]
+}

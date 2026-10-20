@@ -22,6 +22,9 @@ def main():
     evaluate = commands.add_parser("evaluate")
     evaluate.add_argument("kind", choices=["retrieval", "agent", "plan"])
     evaluate.add_argument("--limit", type=int, default=30)
+    evaluate.add_argument("--version", default="v31")
+    evaluate.add_argument("--suite", choices=["dev", "extra", "both"], default="dev")
+    evaluate.add_argument("--cache-mode", choices=["isolated", "shared"], default="isolated")
     args = parser.parse_args()
     load_environment()
     if args.command == "serve":
@@ -60,15 +63,30 @@ def main():
             raise SystemExit(1)
         return
     if args.command == "evaluate":
-        from .evaluation import evaluate_frozen, make_dev_plan
+        from .evaluation import evaluate_frozen
         if args.kind == "retrieval":
             result = evaluate_frozen()
             print(json.dumps({"runs_verified": len(result["runs"]), "test_B_minus_A": result["test_B_minus_A"]}))
             return
+        from .versioned_evaluation import evaluation_settings, make_plan, run_locked
+        suites = ("dev", "extra") if args.suite == "both" else (args.suite,)
+        plans = [make_plan(args.limit, args.version, suite, args.cache_mode) for suite in suites]
         if args.kind == "plan":
-            _, plan = make_dev_plan(args.limit)
-            print(json.dumps(plan))
+            print(json.dumps([p for _, p in plans]))
             return
+        from .agent import Agent
+        from .llm import ProxyClient
+        from .retrieval import EvidenceRetriever
+        retriever = EvidenceRetriever()
+        results = []
+        for selected, plan in plans:
+            settings = evaluation_settings(plan)
+            agent = Agent(ProxyClient(settings), retriever, settings)
+            results.append(run_locked(agent, selected, plan))
+        print(json.dumps(results))
+        if any(r["error_qids"] for r in results):
+            raise SystemExit(1)
+        return
     from .server import get_agent
     agent = get_agent()
     if args.command == "ask":
@@ -78,9 +96,6 @@ def main():
             raise ValueError("Output must stay within this project")
         write_json(output, result)
         print(json.dumps({"output": str(output), "status": result["status"], "stop_reason": result["stop_reason"], "stats": result["stats"]}))
-    else:
-        from .evaluation import evaluate_agent
-        print(json.dumps(evaluate_agent(agent, args.limit)))
 
 
 if __name__ == "__main__":

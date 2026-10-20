@@ -1,0 +1,42 @@
+{
+  "recorded_at_utc": "2026-10-20T05:37:10.076529+00:00",
+  "python": "3.12.13",
+  "tests": {
+    "tests": 176,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "tests_passed": 176,
+  "seconds": 4.15,
+  "warnings": [
+    "StarletteDeprecationWarning: TestClient httpx integration deprecated"
+  ],
+  "command": "python -B -m pytest -q --basetemp private/pytest-v31-full --junitxml private/tests-v31.xml",
+  "scope": "Unit/API tests use fake model/retriever. Executed outside the Windows sandbox for TestClient socketpair support. Real v31 model evaluation is recorded separately.",
+  "frozen_retrieval_replay": {
+    "runs_verified": 6,
+    "test_B_minus_A": {
+      "recall@5": 0.0769,
+      "mrr@10": 0.1193
+    },
+    "scope": "Recomputed from saved hits on 2026-10-20; no fresh retrieval generation."
+  },
+  "hash_guard": {
+    "historical_v30_rejected": true,
+    "message": "Existing plan differs; create a new version explicitly before evaluating",
+    "v31_plans_accepted": [
+      "gemma-dev-v31",
+      "extra-dev-v31"
+    ],
+    "released_data_files_checked": 34
+  },
+  "final_guard_check": {
+    "accepted": [
+      "gemma-dev-v32",
+      "extra-dev-v32"
+    ],
+    "runtime_code_unchanged_since_tests": true,
+    "same_gold_sha256": "680a752e738d7a60f463345c08e3e098934ab945df2183a8bb1e0d97b1f6ddea"
+  }
+}

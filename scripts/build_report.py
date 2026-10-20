@@ -30,11 +30,14 @@ def read(name):
 
 def main():
     retrieval = read("retrieval_metrics.json")
-    current, audit = read("gemma_dev_metrics.json"), read("semantic_audit.json")
-    validation = read("documentation_tests_2026-10-14.json")
-    histories = {v: read(f"history/v{v}_gemma_dev_metrics.json") for v in (13, 24, 26, 27)}
-    audits = {v: read(f"history/v{v}_semantic_audit.json") for v in (13, 24, 26, 27)}
-    extras = {v: read(f"extra_dev_v{v}_semantic_audit.json") for v in (26, 28, 29, 30)}
+    current, audit = read("evaluations/v32/dev_metrics.json"), read("evaluations/v32/dev_semantic_audit.json")
+    comparison = read("evaluations/v32/comparison.json")
+    validation = read("evaluation_tests_2026-10-20.json")
+    histories = {v: read(f"history/v{v}_gemma_dev_metrics.json") for v in (13, 27, 30, 31)}
+    audits = {v: read(f"history/v{v}_semantic_audit.json") for v in (13, 27, 30, 31)}
+    extras = {v: read(f"extra_dev_v{v}_semantic_audit.json") for v in (26, 28, 30)}
+    extras[31] = read("evaluations/v31/extra_semantic_audit.json")
+    extras[32] = read("evaluations/v32/extra_semantic_audit.json")
     if current["plan_id"] != audit["current"] or current["n"] != sum(current["status_counts"].values()):
         raise ValueError("Current answer metrics and audit are inconsistent")
     for value in extras.values():
@@ -108,11 +111,11 @@ def main():
     add("รายงานโครงงานรายวิชา Building LLM-Powered Applications", "meta")
     add("ผู้จัดทำ นายธนกฤต เสมอหน้า   รหัสนักศึกษา 6707060", "meta")
     add("ผู้สอน ดร. ณัฏฐ์ ดิลกธนากุล", "meta")
-    add("14 ตุลาคม 2569", "meta")
+    add("20 ตุลาคม 2569", "meta")
     story.append(Spacer(1,12))
     add("บทคัดย่อ", "h2")
     add("โครงงานนี้พัฒนาระบบถามตอบจากเอกสารโรคไม่ติดต่อเรื้อรัง หรือ NCD ภาษาไทย เพื่อช่วยผู้ใช้ค้นคำแนะนำและกลับไปตรวจข้อความอ้างอิงได้สะดวก ระบบนำ corpus และ hybrid retrieval จากโครงงาน Thai NCD Guideline QA มาใช้ต่อ แล้วเพิ่ม Gemma ผ่าน class proxy, native tool calling, agent loop และการตรวจคำตอบกับหลักฐาน หน้าจอแสดงคำตอบพร้อมเอกสาร ฉบับพิมพ์ เลขหน้า และข้อความที่ใช้อ้างอิง")
-    add("ผลจาก frozen retrieval test พบว่า hybrid retrieval ให้ Strict Recall@5 เท่ากับ 0.8846 สูงกว่า dense baseline ที่ 0.8077 ส่วน dev ชุดเดิม 30 ข้อมีคำตอบที่ตรวจว่าได้สาระครบเพิ่มจาก 14 เป็น 25 ข้อในกลุ่มที่ตอบได้ 25 ข้อ และงดตอบตรง label อีก 5 ข้อ ชุด extra-dev อีก 30 ข้อเพิ่มจาก 19 เป็น 30 ข้อเมื่อรวมการงดตอบที่ถูกต้อง ผลด้านคำตอบเป็นการตรวจโดย coding agent บนชุดที่เปิดผลแล้วและใช้ปรับระบบ จึงแสดงความก้าวหน้าในการพัฒนา แต่ยังไม่ยืนยันคุณภาพบนคำถามใหม่หรือความถูกต้องทางคลินิก")
+    add(f"ผล frozen retrieval test พบว่า hybrid retrieval ให้ Strict Recall@5 เท่ากับ 0.8846 สูงกว่า dense baseline ที่ 0.8077 การประเมิน v32 ใช้โค้ดปัจจุบันและ cache ใหม่ ได้สาระครบ {len(audit['core_matches'])}/25 ข้อใน dev ชุดเดิม และได้ผลสำเร็จ {extras[32]['strict_correct']}/30 ข้อใน extra-dev เมื่อรวมการงดตอบที่ถูกต้อง ยังพบปัญหา structured output ที่ทำให้งดตอบเกินจำเป็น และมีบันทึกบริการขัดข้องในรอบ v31 การตรวจสาระทำโดย coding agent บนชุดที่เคยใช้ปรับระบบ ไม่ใช่การยืนยันทางคลินิก")
     add("1. ปัญหาและวัตถุประสงค์", "h2")
     add("เอกสารแนวทางมีหลายฉบับและมักอธิบายข้อแนะนำผ่านตารางหรือเงื่อนไขเฉพาะกลุ่ม การค้นพบข้อความที่มีคำตรงกันจึงยังไม่เพียงพอ ผู้ใช้ต้องรู้ด้วยว่าคำแนะนำนั้นใช้กับกลุ่มใดและอยู่ในบริบทใด ระบบนี้มุ่งช่วยผู้ใช้ทั่วไปและนักศึกษาที่ต้องการอ่านแนวทาง โดยลดเวลาค้นหาและทำให้ที่มาของคำตอบตรวจสอบได้")
     add("วัตถุประสงค์คือพัฒนาแอปที่ค้นหลักฐานก่อนตอบ เรียก tool ได้ภายในขอบเขตที่กำหนด และประเมินผลเทียบ baseline อย่างทำซ้ำได้ ขอบเขตของระบบคือการอ่านเอกสาร ไม่รวมการวินิจฉัย การสั่งยา หรือการจัดแผนรักษาเฉพาะบุคคล เมื่อข้อมูลไม่พอ ระบบควรงดตอบหรือขอรายละเอียดเพิ่มตามลักษณะคำถาม")
@@ -162,42 +165,48 @@ def main():
         if "core_correct_answerable" in a:
             return a["core_correct_answerable"], len(a["partial_answerable"])+len(a["wrong_answerable"]), len(a["false_abstentions"])
         return len(a["core_matches"]), len(a["incorrect_or_incomplete"])+len(a.get("partial_or_needs_context_review",[])), len(a["false_abstentions"])
-    versions = [(str(v),audits[v],histories[v]) for v in (13,24,26,27)]+[("30",audit,current)]
+    versions = [(str(v),audits[v],histories[v]) for v in (13,27,30,31)]+[("32",audit,current)]
     rows = [("v"+v,*counts(a),f"{m['citation_primary_evidence_hit_rate_answerable']:.4f}",f"{m['mean_character_f1_answerable']:.4f}") for v,a,m in versions]
     table("ตารางที่ 4 ผลคำตอบในกลุ่ม answerable 25 ข้อ",["รุ่น","สาระครบ","ผิดหรือไม่ครบ","งดเกิน","Citation hit","Char. F1"],rows,[19,25,32,22,34,34])
     gain = len(audit["core_matches"])-len(audits[13]["core_matches"])
-    add(f"v30 มีคำตอบที่ตรวจว่าได้สาระครบ {len(audit['core_matches'])}/25 ข้อ เพิ่มจาก v13 จำนวน {gain} ข้อ และงดตอบตรง label อีก 5 ข้อ Abstention decision accuracy เท่ากับ {current['abstention_decision_accuracy']:.4f} อย่างไรก็ตาม metric นี้วัดเพียงการเลือกตอบหรืองด ส่วน Citation hit {current['citation_primary_evidence_hit_rate_answerable']:.4f} ตรวจ primary evidence ของ gold และ Character F1 {current['mean_character_f1_answerable']:.4f} วัดข้อความที่ทับซ้อน ไม่ใช่ความถูกต้องทางคลินิก")
+    change = f"ลดลง {abs(audit['strict_net_gain'])}" if audit["strict_net_gain"] < 0 else f"เพิ่มขึ้น {audit['strict_net_gain']}"
+    add(f"v32 ได้สาระครบ {len(audit['core_matches'])}/25 ข้อ เพิ่มจาก v13 จำนวน {gain} ข้อ แต่{change} ข้อเมื่อเทียบ v30 และงดตอบตรง label {len(audit['label_correct_abstentions'])}/5 ข้อ Decision accuracy {current['abstention_decision_accuracy']:.4f} วัดการเลือกตอบหรืองด ส่วน Citation hit ตรวจ primary evidence และ Character F1 วัด text overlap")
     add("5.2 Extra-dev อีก 30 ข้อ", "h2")
     extra_rows = []
     for v,a in extras.items():
         c = a["verdict_counts"]
-        extra_rows.append((f"v{v}",f"{a['strict_correct']}/30",c.get("correct",0),c.get("correct_abstention",0),c.get("false_abstention",0),a["n"]-a["strict_correct"]-c.get("false_abstention",0)))
-    table("ตารางที่ 5 ผล extra-dev รวมการงดตอบที่ถูกต้อง",["รุ่น","ถูกทั้งหมด","ตอบถูก","งดถูก","งดเกิน","ผิดอื่น"],extra_rows,[20,34,28,28,28,28])
-    add("v26 เป็นรอบแรกของชุดเพิ่มเติมและได้ 19/30 ข้อ หลังเปิดผลแล้วจึงแก้การอ่านตาราง เงื่อนไขและความครบถ้วนจน v29 ได้ 30/30 ข้อ ส่วน v30 เพิ่ม guard คำถามปฏิเสธและ replay แล้วได้คำตอบ สถานะและ citation ตรงกับ v29 ทั้งสองชุด โดยไม่มี API calls ใหม่ คะแนนหลังปรับจึงเป็น exposed regression ไม่ใช่ unseen test และไม่มี ablation ที่แยกผลของแต่ละเทคนิคออกจากกัน", "small")
+        service = c.get("service_unavailable", 0)
+        extra_rows.append((f"v{v}",f"{a['strict_correct']}/30",c.get("correct",0),c.get("correct_abstention",0),c.get("false_abstention",0),a["n"]-a["strict_correct"]-c.get("false_abstention",0)-service,service))
+    table("ตารางที่ 5 ผล extra-dev โดยแยกบริการขัดข้องจากคำตอบผิด",["รุ่น","สำเร็จ","ตอบถูก","งดถูก","งดเกิน","ผิดอื่น","บริการ"],extra_rows,[18,29,22,22,25,25,25])
+    add(f"v30 ใช้ cache และไม่มี API calls ใหม่ รอบ v31 มี 19 ข้อได้รับผลกระทบจาก proxy จึงเก็บผลไว้แล้วรัน v32 หลังบริการกลับมา v32 ใช้โค้ดเดียวกับ v31 เริ่ม cache ว่างอีกครั้ง และมี API attempts {comparison['new_api_calls_recorded']} ครั้ง ทั้งสองชุดเป็น exposed regression ซึ่งยังแยกความแปรผันของบริการออกจากผลการแก้โค้ดไม่ได้", "small")
 
     section("6. กรณีผิดพลาดและการตรวจระบบ")
     add("6.1 สิ่งที่พบจากคำตอบจริง", "h2")
-    table("ตารางที่ 6 ตัวอย่างข้อผิดพลาดระหว่างพัฒนา",["กรณี","สาเหตุและการแก้ไข","ผลที่ตรวจได้"],[
-        ("q076 ใน v13","คำตอบใช้ค่า 150 นาทีจากบริบทใกล้เคียง แทนช่วง 150 ถึง 300 นาทีที่ถาม จึงเพิ่มการรักษาหน่วย ช่วงค่า และบริบทใน claim","v30 ผ่านการตรวจสาระใน dev เดิม"),
-        ("q108 ใน v27","คำตอบอธิบายโซเดียมไม่ครบด้านอาหารกระป๋อง จึงผูก reader กับข้อความที่มีทั้งบริบทการเติมเกลือและ MSG","แก้กลับใน v28 และคงผลถึง v30"),
-        ("q006, q107, q110 ใน extra-dev v28","พบหลักฐานแล้วแต่ยังงดตอบ จึงเพิ่ม reader สำหรับความสัมพันธ์และแถวตารางที่ตรวจได้ตรง พร้อม guard ประชากรและคำปฏิเสธ","v29 ตอบได้ครบทั้งสามข้อ และ v30 ให้ผลเดิม")],[37,86,43])
+    failures = [d for a in (audit, extras[32]) for d in a["details"]
+                if d["verdict"] not in {"correct", "correct_abstention", "service_unavailable"}]
+    labels = {"false_abstention":"งดเกินจำเป็น", "partial":"คำตอบไม่ครบ", "wrong":"ตอบผิด"}
+    failure_rows = [(d["qid"] + " ใน v32", d["note"], labels.get(d["verdict"], d["verdict"])) for d in failures]
+    failure_rows.append(("Extra-dev ใน v31", "q084 เรียก reviewer แล้วได้ HTTP 502 อีก 18 ข้อได้ proxy_http_502 ต่อมาพบ HTTP 530 และหน้า Cloudflare Tunnel error จึงเก็บผลล้มเหลวและเริ่ม v32 หลังบริการกลับมา", "แยก outage จากคำตอบผิด"))
+    if not failure_rows:
+        failure_rows = [("q108 ใน v27", "คำตอบขาดเรื่องอาหารกระป๋อง จึงผูก reader กับหลักฐานที่มีบริบทครบ", "แก้ใน v28")]
+    table("ตารางที่ 6 ข้อผิดพลาดที่ตรวจพบในรอบล่าสุด",["กรณี","สาเหตุจาก trace และหลักฐาน","ผลตรวจ"],failure_rows,[33,104,29])
     add("กรณีเหล่านี้แสดงว่า quote ที่มีอยู่จริงอาจไม่สนับสนุนทุกประเด็นในคำตอบ และ reviewer ที่ใช้โมเดลเดียวกับผู้ตอบอาจยอมรับข้อผิดพลาดร่วมกัน การตรวจ primary citation ต่ำกว่า 1.0 ยังต้องทบทวนว่ามาจากหลักฐานทางเลือกที่ถูกต้องหรือจากช่องว่างการอ้างอิง ไม่ควรตีความว่าคำตอบทั้งหมดได้รับการพิสูจน์แล้ว")
     add("6.2 ผลทดสอบซอฟต์แวร์", "h2")
-    add(f"ตรวจซ้ำวันที่ 14 ตุลาคม 2569 ผ่าน {validation['tests_passed']} tests ไม่มี failure, error หรือ skipped และมี Starlette deprecation warning หนึ่งรายการ ครอบคลุม tool protocol, argument validation, schema, citation, timeout, proxy retry, scope guard, การอ่านตาราง, API และ public data round trip รอบใน sandbox ค้างที่ Windows socketpair ของ TestClient จึงยืนยันผลด้วยการรันนอก sandbox โดยไม่แก้โค้ดระบบ")
-    add("Unit และ API tests ใช้ fake model และ retriever การผ่าน tests จึงยืนยันพฤติกรรมของโค้ดตามกรณีที่กำหนด ไม่ยืนยันว่า Gemma ตอบถูกทุกครั้ง การตรวจ retrieval จริงและ class proxy จริงบันทึกแยกจากผลเหล่านี้ หลังผล v30 มีการเพิ่ม connection retry และการตั้งค่าสำหรับ deployment ซึ่งผ่าน tests แล้ว แต่ยังไม่ได้ประเมินคำตอบทั้งชุดใหม่ด้วย implementation ที่เปลี่ยน")
+    add(f"ตรวจซ้ำวันที่ 20 ตุลาคม 2569 ผ่าน {validation['tests_passed']} tests ไม่มี failure, error หรือ skipped มี Starlette deprecation warning หนึ่งรายการ Tests ครอบคลุม tool protocol, schema, citations, timeout, retry, scope, ตารางและ API รวมถึง guard ใหม่ที่ปฏิเสธโค้ด ข้อมูล config หรือคำตอบ resume ซึ่งไม่ตรงแผน รันนอก Windows sandbox เพื่อให้ TestClient สร้าง socketpair ได้")
+    add("Unit และ API tests ใช้ fake model กับ retriever จึงอ่านแยกจากผลคำตอบจริง การตรวจไฟล์ต้นทางที่ใช้ 48 ไฟล์และ PDF ต้นทาง 33 ไฟล์พบ hash เดิม Gold และข้อมูล release 34 ไฟล์ไม่เปลี่ยน รอบนี้แก้ evaluation harness โดยคง prompt และวิธีตอบเดิมไว้")
     add("6.3 ข้อจำกัดของหลักฐานการประเมิน", "h2")
     add("ทั้งสองชุดคำตอบถูกใช้ปรับระบบแล้ว การคัด quote และ source bound reader ช่วยลดการแต่งเนื้อหาแต่ยังจำกัดตามรูปแบบภาษาที่รองรับ Corpus อาจไม่ครอบคลุมแนวทางทุกฉบับหรือข้อมูลปัจจุบัน ระบบยังต้องทดสอบคำถามใหม่และให้ผู้เชี่ยวชาญอ่านคำตอบก่อนนำผลไปกล่าวอ้างด้านคลินิก นอกจากนี้ test ของ retrieval เป็น snapshot จากงานเดิมซึ่งทีมเคยเห็นผลแล้ว")
 
     section("7. การทำซ้ำ ข้อสรุป และแนวทางพัฒนา")
     add("7.1 สิ่งที่ผู้ตรวจสามารถทำซ้ำได้", "h2")
     add("Public repository มีโค้ด คำสั่งติดตั้ง evaluation scripts และผล aggregate ชุด data-v12 release มีข้อมูลที่ extract แล้ว index, gold, frozen ranked hits และ table context รวม 34 ไฟล์ สคริปต์ public_data.py fetch ตรวจ SHA-256 ก่อนใช้งาน จึงไม่ต้องเข้าถึง source repository ในเครื่องของผู้จัดทำ ผู้จัดทำยืนยันสิทธิ์เผยแพร่ข้อมูล ส่วนเอกสารขอบเขตการอนุญาตไม่ได้แนบใน repository")
-    add("ผู้ตรวจสร้าง Python environment ตาม README ดาวน์โหลด release และ model revisions ที่ตรึงไว้ แล้วตั้ง class proxy key ใน .env การเรียก evaluate retrieval คำนวณจาก frozen hits ได้ ส่วน evaluate agent ต้องผ่าน hash guard ของแผนก่อน ขณะนี้ llm.py และ config.py เปลี่ยนหลังแผน v30 จึงต้องสร้าง evaluation version ใหม่ก่อนรันคำตอบ ไม่ลบแผนเพื่ออ้างเป็นผลเดิม ผลคำตอบดิบและ cache ไม่อยู่ใน public repo การรันใหม่ต้องมี key และอ่านจำนวน API calls ประกอบ")
+    add("ผู้ตรวจติดตั้งตาม README แล้วใช้ evaluate plan หรือ evaluate agent พร้อม --version v32 --suite both แผนใหม่ตรวจโค้ด ข้อมูล config และค่ารันก่อนเริ่มและหลังจบ ผล v30 เก็บแยกใน history เพราะ llm.py และ config.py เปลี่ยนหลัง lock เดิม หากแก้โค้ดอีกต้องเลือกเลขรุ่นใหม่ ผลคำตอบดิบและ cache ไม่เผยแพร่ การเริ่มจาก clean clone ต้องมี class proxy key ส่วนการเรียกซ้ำในเครื่องเดิมจะ resume จึงต้องอ่านจำนวน API calls ประกอบ")
     add("วันที่ 12 ตุลาคม 2569 ตรวจ clean clone พร้อมดาวน์โหลด release และ replay retrieval ครบ 6 runs แล้ว มี FastAPI และหน้าเว็บใช้งานในเครื่อง รวมทั้ง temporary HTTPS demo ผ่าน Cloudflare Quick Tunnel ซึ่งต้องเปิดเครื่องและ tunnel ค้างไว้ URL เปลี่ยนได้เมื่อเริ่มใหม่ ส่วน Dockerfile มีให้แต่ยังไม่ยืนยันการรันทั้งระบบบน Linux host")
     add("7.2 ข้อสรุปและงานต่อไป", "h2")
-    add("โครงงานต่อยอด retrieval เดิมให้เป็นแอปที่รับคำถาม ค้นหลักฐาน ตรวจและแสดงคำตอบได้ครบเส้นทาง ผลพัฒนาดีขึ้นทั้งการใช้หลักฐานและการลดการงดตอบในกรณีที่ทดสอบ งานต่อไปควรล็อก implementation แล้วประเมินชุดใหม่ที่ไม่ใช้ปรับระบบ จัด blind review โดยผู้เชี่ยวชาญ แยก ablation ของ reader กับ reranker และวัด latency กับค่าใช้จ่ายจาก fresh requests เพื่อประเมินประโยชน์ของแต่ละส่วนอย่างเป็นธรรม")
+    add("โครงงานมีเส้นทางตั้งแต่รับคำถามจนแสดงหลักฐาน พร้อม baseline และผลที่ตรวจย้อนกลับได้ แผนใหม่แก้ความไม่ตรงกันระหว่างโค้ดกับ evaluation และการเรียกใหม่เปิดเผยข้อจำกัดที่ cache เดิมไม่แสดง งานต่อไปควรปรับ structured output และการซ่อมตาม schema โดยคงการตรวจตาราง แล้วทดสอบชุดใหม่ ทำ blind review และ ablation เพื่อวัดผลของแต่ละส่วน")
     add("เอกสารอ้างอิงและที่มาของงาน", "h2")
     reference(1,"Thai NCD Guideline QA","Corpus, gold และ frozen retrieval snapshot. GitHub: Chaiporn2005/thai-ncd-guideline-qa. Source commit ที่ตรวจ: 3fb287c; รายละเอียด hashes อยู่ใน provenance/source_snapshot.json","https://github.com/Chaiporn2005/thai-ncd-guideline-qa")
-    reference(2,"NCD Evidence","โค้ดและผลการทดลองของโครงงานนี้. GitHub: Up2mEz/LLM-APP-END2END. ผลตัวเลขอยู่ใน reports และรายละเอียดรายข้ออยู่ใน docs/DEV_COMPARISON_TH.md","https://github.com/Up2mEz/LLM-APP-END2END")
+    reference(2,"NCD Evidence","โค้ดและผลการทดลองของโครงงานนี้. GitHub: Up2mEz/LLM-APP-END2END. ผล v31 และ v32 อยู่ใน reports/evaluations และรายละเอียดใน docs/EVALUATION_V32_TH.md","https://github.com/Up2mEz/LLM-APP-END2END")
     reference(3,"Building LLM-Powered Applications","Project specification, coursework 20. courses.nat-d.uk. ใช้ข้อกำหนดที่บันทึกเมื่อ 11 ตุลาคม 2569","https://courses.nat-d.uk/courses/building-llm-powered-applications/courseworks/20")
 
     def page_frame(canvas, doc):

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import argparse
 import os
 import shutil
 import stat
@@ -17,6 +18,9 @@ REPOSITORY = "https://github.com/Up2mEz/LLM-APP-END2END.git"
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--evaluation-version", help="Also verify an existing plan; never generate model answers")
+    args = parser.parse_args()
     SCRATCH_ROOT.mkdir(parents=True, exist_ok=True)
     scratch = Path(tempfile.mkdtemp(prefix="remote-clone-", dir=SCRATCH_ROOT)).resolve()
     if not scratch.is_relative_to(SCRATCH_ROOT):
@@ -28,9 +32,19 @@ def main() -> None:
         subprocess.run([sys.executable, "-B", "scripts/public_data.py", "fetch"], cwd=checkout, env=environment, check=True)
         subprocess.run([sys.executable, "-B", "-m", "ncd_gemma.cli", "evaluate", "retrieval"],
                        cwd=checkout, env=environment, check=True)
+        plan_ids = []
+        if args.evaluation_version:
+            # Match the documented .env.example without copying any secret.
+            plan_environment = {**environment, "NCD_MODEL": "gemma-4-E4B-it", "NCD_MAX_STEPS": "6",
+                                "NCD_REQUEST_TIMEOUT": "45", "NCD_AGENT_TIMEOUT": "150"}
+            result = subprocess.run(
+                [sys.executable, "-B", "-m", "ncd_gemma.cli", "evaluate", "plan",
+                 "--version", args.evaluation_version, "--suite", "both"],
+                cwd=checkout, env=plan_environment, capture_output=True, text=True, encoding="utf-8", check=True)
+            plan_ids = [plan["id"] for plan in json.loads(result.stdout)]
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip()
         manifest = json.loads((checkout / "provenance/public_data_release.json").read_text(encoding="utf-8"))
-        print(json.dumps({"remote_clean_clone": "pass", "commit": commit,
+        print(json.dumps({"remote_clean_clone": "pass", "commit": commit, "evaluation_plans_verified": plan_ids,
                           "archive_sha256": manifest["archive_sha256"]}))
     finally:
         if scratch.is_relative_to(SCRATCH_ROOT):

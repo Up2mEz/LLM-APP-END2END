@@ -1,0 +1,451 @@
+{
+  "plan_id": "gemma-dev-v32",
+  "current": "gemma-dev-v32",
+  "baseline": "gemma-dev-v30",
+  "comparison": "gemma-dev-v30",
+  "n": 30,
+  "answerable_denominator": 25,
+  "answers_sha256": "2980637a651c136613547f8cb2f2ad6f7742e02a2671aa35fb2a620dd64865e8",
+  "raw_answers_sha256": "2980637a651c136613547f8cb2f2ad6f7742e02a2671aa35fb2a620dd64865e8",
+  "baseline_answers_sha256": "1cad42e6bf10e839fad847e16cdf27addcdc5ed4a40b0d887cbf6a69014227f5",
+  "verdict_counts": {
+    "correct": 24,
+    "correct_abstention": 5,
+    "false_abstention": 1
+  },
+  "strict_correct": 29,
+  "strict_correct_rate": 0.9667,
+  "core_matches": [
+    "q014",
+    "q017",
+    "q113",
+    "q126",
+    "q079",
+    "q041",
+    "q068",
+    "q108",
+    "q045",
+    "q080",
+    "q081",
+    "q093",
+    "q111",
+    "q099",
+    "q075",
+    "q083",
+    "q115",
+    "q011",
+    "q098",
+    "q101",
+    "q061",
+    "q106",
+    "q076",
+    "q078"
+  ],
+  "label_correct_abstentions": [
+    "q125",
+    "q116",
+    "q120",
+    "q119",
+    "q118"
+  ],
+  "incorrect_or_incomplete": [],
+  "false_abstentions": [
+    "q082"
+  ],
+  "service_unavailable_qids": [],
+  "partial_or_needs_context_review": [],
+  "strict_improved_qids": [],
+  "strict_regressed_qids": [
+    "q082"
+  ],
+  "strict_net_gain": -1,
+  "changed_qids": [
+    "q079",
+    "q068",
+    "q082",
+    "q098"
+  ],
+  "new_api_calls_recorded": 90,
+  "review_basis": "Coding-agent review of changed outputs against unchanged gold and cited source text. Identical outputs inherit the v30 verdict only after fingerprint checks. Exposed regression; not blinded expert or clinical review.",
+  "details": [
+    {
+      "qid": "q014",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "อัตราส่วนโปรตีนต่อครีเอตินินตรง reference; ยังมีคำสะกดจาก OCR ในข้อความคัดมา",
+      "prediction_sha256": "de3c7d299e2a4903eda31c5ee5c80848266d348316e8899ebd79cc9d31d80cfe",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-ddc-epidemiology-prevention-review-2567"
+      ]
+    },
+    {
+      "qid": "q017",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ครบทั้งน้ำหนักแรกเกิดน้อยและเติบโตช้าในครรภ์; คำซ้ำและช่องว่างจาก source ยังอยู่",
+      "prediction_sha256": "b17e66e1164f90a35dd60693fbcea43863dbc568512eedcc5fa86c2c75d0bfb7",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-ddc-epidemiology-prevention-review-2567"
+      ]
+    },
+    {
+      "qid": "q113",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ค่าจากอาหารตามวัย 219 kcal และ 5.4 g ถูก แยกจากค่ารวมและนมแม่; แสดงแถวอื่นมากกว่าที่ถาม",
+      "prediction_sha256": "1097c2a898aa412787c339b9e01b9e11f0d40ccb3122210e0408baae015faf43",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q126",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ต่ำกว่า 70 mg/dL ตรง; ไม่เพิ่มการตรวจยืนยันด้วย FPG แบบ v13 แล้ว",
+      "prediction_sha256": "f40eef7429911a983c2e3e7e6c9c4a404af5d324fc164e9206879848218b7d22",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-siriraj-hypoglycemia-leaflet-undated"
+      ]
+    },
+    {
+      "qid": "q079",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "แยกพลังงานรวม 632 นมแม่ 413 และอาหารตามวัย 219 กิโลแคลอรีตรงแถวอายุ 6 ถึง 8 เดือนในตาราง PDF ที่อ้าง",
+      "prediction_sha256": "2d4c8d86f682c247357d5ad476b1dfcef82bec149db04184f3d07ebbbba6a636",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q125",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "งดตอบตรง label ไม่พบเกณฑ์ tie-break ที่ถาม; stop reason completed",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    },
+    {
+      "qid": "q041",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เลือก SKT ในกิจกรรมที่ถาม ไม่ใช้ yoga/taichi จากคำแนะนำทั่วไปแทน",
+      "prediction_sha256": "da6ba2b44fa8e2a5cccb6208bf8779755735ed9278229f0c9e63f7bfcd3283f1",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-remission-implementation-lessons-undated"
+      ]
+    },
+    {
+      "qid": "q068",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ระบุ PM2.5 ตรง gold และข้อความที่อ้างเรื่องผลต่อการควบคุมความดันโลหิต",
+      "prediction_sha256": "dae1d6892631688bc5460f18390209993bb498a20a5366f98cbb43e873a8f5c3",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "ht-ths-air-pollution-article-2568"
+      ]
+    },
+    {
+      "qid": "q108",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ครบอาหารกระป๋องเติมเกลือ/สารกันบูด และ MSG มีโซเดียมราว 15%; มีตัวอย่างน้ำผลไม้เพิ่มจาก source",
+      "prediction_sha256": "367d54284ce5e12e178bbf56a230b5f1370232ab517ebcd97c39ba6177d840a9",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-public-kidney-prevention-tips"
+      ]
+    },
+    {
+      "qid": "q045",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ครึ่งจานหรือ 2 ใน 4 ส่วนตรง",
+      "prediction_sha256": "e90f09a71dcefaa25beaa8e5c3204be06c8c4690f183f6fb6b9eb872c65472c9",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "dm-remission-principles-2568-september"
+      ]
+    },
+    {
+      "qid": "q080",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "โปรตีนรวม 14.4 g/day แยก milk 6.5 และ food 7.9 ถูก",
+      "prediction_sha256": "123e48f5c3915bd8d2724d1a07a0de9636ff71f8d7ee8dd516707d7733aa4cb3",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q116",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "งดตอบตรง label; completed แทน validation failure ของ baseline แต่ยังไม่ใช่ independent proof",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    },
+    {
+      "qid": "q081",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "นมพร่องมันเนยหรือนมขาดมันเนยตรง",
+      "prediction_sha256": "b7fbf5edfca32bbd2ba28d14ccf39ad1310a24e24a5d9463e622558267417e80",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q093",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "chylomicron จากอาหาร และ VLDL จากการสร้างที่ตับครบ",
+      "prediction_sha256": "44ccebf6d9f195bf61a16ed82f87f467d9e101e86ee0493503e2f6742ecbccbd",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-thaijpen-severe-hypertriglyceridemia-2565"
+      ]
+    },
+    {
+      "qid": "q111",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ครบสองประเด็น: ข้าวแป้ง 1 ใน 4 ของจาน และสำหรับผู้มีไตเรื้อรังก่อนล้างไต เอกสารให้เพิ่มแป้งปลอดโปรตีน เช่น วุ้นเส้น เมื่อไม่อิ่ม; คงบริบทจากสองแหล่งและไม่ใช้กับคำถามที่ระบุว่าล้างไตแล้ว",
+      "prediction_sha256": "6d3608c268a934bb50883c8527d15165b5a74559c04c4a2068460e4705444ccd",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ht-guideline-2567",
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q099",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "90% ของผู้ขึ้นทะเบียนและมารักษาตรง ไม่ใช้ตัวชี้วัดค้นหาผู้ป่วยใหม่ 80% แทน",
+      "prediction_sha256": "0cd7d58404b8784de92fd6733a5992014787b5b9df2f60a555a91d86865dff87",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "DDC-NCD-SERVICE-INDICATOR-REVIEW-2563-2566"
+      ]
+    },
+    {
+      "qid": "q082",
+      "answerable": true,
+      "type": "table",
+      "status": "insufficient_evidence",
+      "verdict": "false_abstention",
+      "note": "พบตารางแล้ว แต่โมเดลส่ง citations ไม่ครบ ใช้ line แทน quote และไม่ส่ง table_cells ตาม schema จนถึงขีดจำกัดการซ่อม จึงงดตอบทั้งที่ gold ระบุ 55 กรัมต่อวัน",
+      "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+      "inherited_identical_v30": false,
+      "cited_documents": []
+    },
+    {
+      "qid": "q120",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "งดตอบตรง label; candidate สองรอบไม่ผ่านการตรวจข้อความอ้างอิง แล้วโมเดลเลือกงดตอบเองด้วย stop reason completed หลักฐานที่ค้นได้ไม่ยืนยันจำนวนคะแนน CNEU ที่ถาม",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    },
+    {
+      "qid": "q075",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "สาระเดิมไม่เปลี่ยน เพิ่มคำว่า เป็นต้น ท้ายข้อความที่คัดจากแหล่ง",
+      "prediction_sha256": "31408548975dd83ec5b4c8a6dcc98d41a118112ca006d948879690e04d7e8ab3",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q083",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ไม่มีพลังงานแต่ยังหวานมากและทำให้ติดรสหวานตรง",
+      "prediction_sha256": "04f0f98f56feec6c72e31ef021a002cc93ffa8cc55ab81cace356e4a2a97adc4",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q115",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ระบุ CQI คิดคะแนนเฉพาะรอบที่ 2 และพัฒนาต่อด้วย PDCA จากหน้าเดียวกันในคู่มือ NCD Clinic Plus 2568; แก้ regression ที่ verifier สร้าง JSON ผิด",
+      "prediction_sha256": "7de414faf384569899d4d96ed1f942431f7f8ec4f0bded24a0d98c72b395f1fe",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ncd-clinic-plus-2568-update"
+      ]
+    },
+    {
+      "qid": "q011",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "7 คนครบ ไม่หยุดที่จำนวนครั้งเยี่ยมบ้าน 36 หรือผู้ป่วยรวม 32",
+      "prediction_sha256": "d1335065896c8eed3714d56fc438328f702c90dffcdbe812235462eb2266a7fe",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-ddc-community-kidney-prevention-model-2568"
+      ]
+    },
+    {
+      "qid": "q098",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "จำนวนพยาบาลวิชาชีพ 70 คน และร้อยละ 95.89 ตรง gold และหลักฐานทั้งสองข้อความ",
+      "prediction_sha256": "6c7b3dfef4467deb605c04ab2bf195b61c56b5eb45c28b581e3cafd94326963a",
+      "inherited_identical_v30": false,
+      "cited_documents": [
+        "ncd-ddc-dmht-care-management-report-2568"
+      ]
+    },
+    {
+      "qid": "q119",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "งดตอบตรง label ไม่พบค่าสมาชิกที่ถาม; completed",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    },
+    {
+      "qid": "q101",
+      "answerable": true,
+      "type": "condition",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "จับคู่ผู้ป่วยที่นัดตรงกันและบ้านใกล้กันเพื่อเดินทางมาตามนัด ครบ",
+      "prediction_sha256": "27b1ace069b3e25b7441636f7abe13686d4124d769a978de3eb568cb1a77b4a7",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ncd-ddc-dmht-service-model-lessons-2568"
+      ]
+    },
+    {
+      "qid": "q061",
+      "answerable": true,
+      "type": "fact",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ระบุ field ปริมาณโซเดียมบนฉลากโดยผูกกับประโยคอ่านฉลากและหัวตารางโซเดียมในหลักฐานเดียวกัน; ไม่ตอบเพียงให้อ่านฉลาก",
+      "prediction_sha256": "479d114d8f62182ed99257136182718f9fe3ad9a6e03b29a895be41884a8aa5f",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-inmu-food-knowledge-all-ages"
+      ]
+    },
+    {
+      "qid": "q106",
+      "answerable": true,
+      "type": "multi_page",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "เลือก sodium <=2 g/day กับ BP <125/75 เฉพาะกรณี proteinuria >1 g/day; ไม่ใส่เป้าความดันทั่วไป 130/80",
+      "prediction_sha256": "a7712180e7a95f7be552a9e0c79851256392053a6b4c4068f29c7b3c32b2a890",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "ckd-adult-glomerular-guideline-2561"
+      ]
+    },
+    {
+      "qid": "q076",
+      "answerable": true,
+      "type": "number_unit",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "150–300 min/week ในบริบท lipid ตรง ไม่เหลือเพียง 150 นาทีจากบริบทป้องกันเบาหวาน",
+      "prediction_sha256": "3013fc878f66d6fd4b73d02e49e030b1a6779bfec0d096d32dd0985bee254205",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q078",
+      "answerable": true,
+      "type": "table",
+      "status": "answered",
+      "verdict": "correct",
+      "note": "ezetimibe 10 mg/day วันละ 1 ครั้งครบ หลังแยกเส้นทางอ่านตารางข้อความ",
+      "prediction_sha256": "7671b092e562f660c27f21ef830220c0cf2fa3ed9e80528655edee0cebd12940",
+      "inherited_identical_v30": true,
+      "cited_documents": [
+        "lipid-guideline-2567"
+      ]
+    },
+    {
+      "qid": "q118",
+      "answerable": false,
+      "type": "unanswerable",
+      "status": "insufficient_evidence",
+      "verdict": "correct_abstention",
+      "note": "งดตอบตรง label แต่ unsupported_answer จากการปฏิเสธ candidate ไม่ใช่ proof ว่าไม่มีคำตอบในทุกเอกสาร",
+      "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+      "inherited_identical_v30": true,
+      "cited_documents": []
+    }
+  ]
+}

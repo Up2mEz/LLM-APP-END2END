@@ -1,5 +1,5 @@
 {
-  "scope": "Same exposed development sample; cached completions reused when payloads match. Not independent validation.",
+  "scope": "Same exposed development sample. v30 and earlier may reuse shared cached completions; v31 starts with isolated caches. Not independent validation.",
   "selection": "Report all iterations, including failures. Read the semantic audit alongside these automatic metrics.",
   "runs": [
     {
@@ -1100,6 +1100,100 @@
       "searches_total": 35,
       "false_abstentions": [],
       "answered_unanswerable": [],
+      "correct_abstentions": [
+        "q125",
+        "q116",
+        "q120",
+        "q119",
+        "q118"
+      ]
+    },
+    {
+      "plan_id": "gemma-dev-v31",
+      "split": "dev",
+      "n": 30,
+      "answerable": 25,
+      "plan_sha256": "044ab19362ea1ee3c0fe40f8925d3fd0fb61eff19516213e9adfc550839b88ec",
+      "answers_sha256": "67361990f8b3301a29c3ae0a21be36bed493187d1f4c8a96c5cab2a6905b7896",
+      "status_counts": {
+        "answered": 24,
+        "insufficient_evidence": 6
+      },
+      "stop_reasons": {
+        "completed": 24,
+        "grounded_route": 5,
+        "answer_validation_failed": 1
+      },
+      "completed_rate": 0.8,
+      "abstention_decision_accuracy": 0.9667,
+      "decision_accuracy": 0.9667,
+      "citation_primary_evidence_hit_rate_answerable": 0.72,
+      "mean_character_f1_answerable": 0.4439,
+      "false_abstentions": [
+        "q082"
+      ],
+      "answered_unanswerable": [],
+      "error_qids": [],
+      "new_api_calls_recorded": 91,
+      "model_rounds_total": 90,
+      "reported_tokens_including_cache": 378141,
+      "elapsed_seconds_total": 191.375,
+      "cache_mode": "isolated",
+      "limitations": [
+        "Exposed development regression; not held-out or independent clinical validation.",
+        "Decision accuracy is not semantic correctness; manual evidence review is required.",
+        "Character F1 measures text overlap; citation hit checks primary gold evidence only.",
+        "Fresh calls are not a paired model-quality comparison against v30's cached responses."
+      ],
+      "max_model_calls_per_question": 6,
+      "searches_total": 34,
+      "correct_abstentions": [
+        "q125",
+        "q116",
+        "q120",
+        "q119",
+        "q118"
+      ]
+    },
+    {
+      "plan_id": "gemma-dev-v32",
+      "split": "dev",
+      "n": 30,
+      "answerable": 25,
+      "plan_sha256": "2f924237c573a7cd0199336bb3d42fb7dc54ef416d96f0bdf487821cbe5c0910",
+      "answers_sha256": "2980637a651c136613547f8cb2f2ad6f7742e02a2671aa35fb2a620dd64865e8",
+      "status_counts": {
+        "answered": 24,
+        "insufficient_evidence": 6
+      },
+      "stop_reasons": {
+        "completed": 24,
+        "grounded_route": 5,
+        "answer_validation_failed": 1
+      },
+      "completed_rate": 0.8,
+      "abstention_decision_accuracy": 0.9667,
+      "decision_accuracy": 0.9667,
+      "citation_primary_evidence_hit_rate_answerable": 0.72,
+      "mean_character_f1_answerable": 0.4439,
+      "false_abstentions": [
+        "q082"
+      ],
+      "answered_unanswerable": [],
+      "error_qids": [],
+      "new_api_calls_recorded": 90,
+      "model_rounds_total": 90,
+      "reported_tokens_including_cache": 378154,
+      "elapsed_seconds_total": 107.218,
+      "cache_mode": "isolated",
+      "limitations": [
+        "Exposed development regression; not held-out or independent clinical validation.",
+        "Decision accuracy is not semantic correctness; manual evidence review is required.",
+        "Character F1 measures text overlap; citation hit checks primary gold evidence only.",
+        "Fresh calls are not a paired model-quality comparison against v30's cached responses."
+      ],
+      "max_model_calls_per_question": 6,
+      "searches_total": 34,
       "correct_abstentions": [
         "q125",
         "q116",

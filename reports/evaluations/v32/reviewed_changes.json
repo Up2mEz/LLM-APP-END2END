@@ -1,0 +1,52 @@
+{
+  "q079": {
+    "prediction_sha256": "2d4c8d86f682c247357d5ad476b1dfcef82bec149db04184f3d07ebbbba6a636",
+    "verdict": "correct",
+    "note": "แยกพลังงานรวม 632 นมแม่ 413 และอาหารตามวัย 219 กิโลแคลอรีตรงแถวอายุ 6 ถึง 8 เดือนในตาราง PDF ที่อ้าง"
+  },
+  "q068": {
+    "prediction_sha256": "dae1d6892631688bc5460f18390209993bb498a20a5366f98cbb43e873a8f5c3",
+    "verdict": "correct",
+    "note": "ระบุ PM2.5 ตรง gold และข้อความที่อ้างเรื่องผลต่อการควบคุมความดันโลหิต"
+  },
+  "q082": {
+    "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+    "verdict": "false_abstention",
+    "note": "พบตารางแล้ว แต่โมเดลส่ง citations ไม่ครบ ใช้ line แทน quote และไม่ส่ง table_cells ตาม schema จนถึงขีดจำกัดการซ่อม จึงงดตอบทั้งที่ gold ระบุ 55 กรัมต่อวัน"
+  },
+  "q098": {
+    "prediction_sha256": "6c7b3dfef4467deb605c04ab2bf195b61c56b5eb45c28b581e3cafd94326963a",
+    "verdict": "correct",
+    "note": "จำนวนพยาบาลวิชาชีพ 70 คน และร้อยละ 95.89 ตรง gold และหลักฐานทั้งสองข้อความ"
+  },
+  "q024": {
+    "prediction_sha256": "a3816b7bfbce98af93701606820fa53ddcb59776967cc8e2e29ae5daaf7edb27",
+    "verdict": "correct",
+    "note": "อธิบายเกลือและน้ำคั่ง คุมความดันยาก และหัวใจทำงานหนักครบตาม gold และข้อความอ้างอิง"
+  },
+  "q016": {
+    "prediction_sha256": "3a98d4fb3423fd75a711bfb0f470425a8a6cf28047ba320bec94bcd667b90136",
+    "verdict": "correct",
+    "note": "ระบุเด็กและวัยทำงานครบ พร้อมช่วง ค.ศ. 1970s ตาม gold และข้อความอ้างอิง"
+  },
+  "q063": {
+    "prediction_sha256": "04fad0f5960005ce636776f2205619a66f86419bc081314e312d89aa208c3876",
+    "verdict": "partial",
+    "note": "ตอบว่าไม่ควรใช้ ACEIs ร่วมกับ ARBs แต่ขาดระดับคำแนะนำ III และหลักฐาน B ที่ถาม ทั้งที่อยู่ใน quote โมเดล reviewer ยังระบุว่าครบ จึงเป็นช่องว่างการตรวจความครบถ้วน"
+  },
+  "q006": {
+    "prediction_sha256": "36a240d28233a67bf52e25712a396931a88f70d64a4f77f4fd8bf4bc187ebce2",
+    "verdict": "correct",
+    "note": "อ้างหัวตารางสาเหตุ secondary MCD และแถว Infection ที่ระบุ Virus กับ parasites ครบ แม้ source ID เปลี่ยน"
+  },
+  "q007": {
+    "prediction_sha256": "1f573171e2f4d25f2360b36d623fb74eec3b4aee09c04ff357f01f8c4a03a9ea",
+    "verdict": "false_abstention",
+    "note": "ค้นพบตาราง BMI ของ nephrotic syndrome แล้ว แต่ข้อความที่เลือกอ้างขาดบริบทประชากร จึงถูก scope guard ปฏิเสธซ้ำและงดตอบ Gold คือ 25 ถึง 29.9 กก./ม²"
+  },
+  "q124": {
+    "prediction_sha256": "bcf5c94afdb4e6cebb114379bb807e6f9b3027e47783166306e0d0731dda11dc",
+    "verdict": "correct_abstention",
+    "note": "งดตอบตรง gold ที่ไม่มีคำตอบสำหรับเด็ก 6 ถึง 8 ปีซึ่งมีทั้งเบาหวานและโรคไต แต่ stop reason เป็น answer_validation_failed จึงไม่ยืนยันว่าค้นครบทุกเอกสาร"
+  }
+}

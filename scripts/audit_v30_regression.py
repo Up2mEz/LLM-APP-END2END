@@ -40,7 +40,7 @@ def same_predictions(previous: Path, current: Path, qids: list[str]) -> list[dic
 
 
 def main() -> None:
-    plan = read_json(ROOT / "reports/gemma_dev_plan.json")
+    plan = read_json(ROOT / "reports/history/v30_gemma_dev_plan.json")
     old_plan = read_json(ROOT / "reports/history/v29_gemma_dev_plan.json")
     if plan["id"] != "gemma-dev-v30" or old_plan["id"] != "gemma-dev-v29":
         raise ValueError("Unexpected plan versions")
@@ -59,7 +59,9 @@ def main() -> None:
                  answer_changed_vs_v29=[],
                  new_api_calls_recorded=sum(r["prediction"]["stats"]["api_calls"] for r in original),
                  route_limitations="v30 adds negative-question guards around v29 evidence readers. Original 30 answer/status/citation tuples are identical to the reviewed v29 run; verdicts are inherited, not re-reviewed independently.")
-    write_json(ROOT / "reports/semantic_audit.json", audit)
+    # This historical verifier must never replace the current version's audit.
+    if audit != read_json(ROOT / "reports/history/v30_semantic_audit.json"):
+        raise ValueError("Recomputed v30 audit differs from the archived audit")
 
     extra_plan = read_json(ROOT / "reports/extra_dev_v30_plan.json")
     old_extra_plan = read_json(ROOT / "reports/extra_dev_v29_plan.json")
@@ -77,7 +79,8 @@ def main() -> None:
                        changed_qids=[],
                        new_api_calls_recorded=sum(r["prediction"]["stats"]["api_calls"] for r in extra),
                        review_basis="Inherited coding-agent semantic verdicts only after all 30 answers, statuses and citations matched the reviewed v29 regression exactly. Exposed development sample, not blinded or clinical review.")
-    write_json(ROOT / "reports/extra_dev_v30_semantic_audit.json", extra_audit)
+    if extra_audit != read_json(ROOT / "reports/extra_dev_v30_semantic_audit.json"):
+        raise ValueError("Recomputed extra-dev v30 audit differs from the archived audit")
     print(json.dumps({"original_qids_identical": len(original), "extra_qids_identical": len(extra),
                       "original_core_matches": len(audit["core_matches"]),
                       "extra_strict_correct": extra_audit["strict_correct"],

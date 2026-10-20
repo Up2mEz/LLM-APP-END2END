@@ -8,6 +8,8 @@
 
 อ่าน [วิธีรัน](#เริ่มใช้งาน), [ผลการประเมิน](#ผลการประเมิน), [รายงานโครงงาน](docs/PROJECT_REPORT_TH.md) และ [เทคนิคกับการนำงานเดิมมาใช้](docs/WORKFLOW_AND_REUSE_TH.md)
 
+**สถานะตรวจล่าสุด 20 ตุลาคม 2026:** แก้ hash guard และรัน evaluation ใหม่แล้ว v31 พบ proxy outage จึงเก็บผลไว้และรัน v32 หลังบริการกลับมา ผล v32 ยืนยันได้ **57/60 ข้อ** ไม่มี API error แต่ยังเหลือ q082, q007 และ q063 จึงยังไม่ควรถือว่าปิดงานแก้ไขครบ ดู [ผล v32 เทียบ v30 และรายการที่ยังค้าง](docs/EVALUATION_V32_TH.md)
+
 ## ระบบทำงานอย่างไร
 
 ![สถาปัตยกรรม NCD Evidence แสดงการเชื่อม browser, agent, class proxy, retrieval และการตรวจหลักฐาน](docs/diagrams/architecture.svg)
@@ -58,32 +60,38 @@ B เพิ่ม Recall@5 **7.69 percentage points** และ MRR@10 **0.1193*
 
 ล็อกคำถามหกประเภทอย่างละ 5 ข้อ ได้แก่ condition, fact, multi_page, number_unit, table และ unanswerable ชุดนี้มีข้อที่ตอบได้ 25 ข้อและควรงดตอบ 5 ข้อ ใช้คำถามเดิมเปรียบเทียบระหว่างรุ่น และตรวจสาระกับ gold และหลักฐานโดย coding agent
 
-| ผลในกลุ่ม answerable 25 ข้อ | v13 | v24 | v26 | v27 | v30 |
-|---|---:|---:|---:|---:|---:|
-| คำตอบที่ตรวจว่าได้สาระครบ | 14 | 21 | 25 | 24 | 25 |
-| ตอบผิด ไม่ครบ หรือต้องทบทวน | 9 | 2 | 0 | 1 | 0 |
-| งดตอบเกินจำเป็น | 2 | 2 | 0 | 0 | 0 |
-| Citation primary evidence hit rate | 0.5600 | 0.6000 | 0.6400 | 0.7200 | 0.7200 |
-| Mean character F1 | 0.2805 | 0.3464 | 0.4217 | 0.4265 | 0.4453 |
+| ผลในกลุ่ม answerable 25 ข้อ | v13 | v24 | v26 | v27 | v30 | v31 | v32 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| คำตอบที่ตรวจว่าได้สาระครบ | 14 | 21 | 25 | 24 | 25 | 24 | 24 |
+| ตอบผิด ไม่ครบ หรือต้องทบทวน | 9 | 2 | 0 | 1 | 0 | 0 | 0 |
+| งดตอบเกินจำเป็น | 2 | 2 | 0 | 0 | 0 | 1 | 1 |
+| Citation primary evidence hit rate | 0.5600 | 0.6000 | 0.6400 | 0.7200 | 0.7200 | 0.7200 | 0.7200 |
+| Mean character F1 | 0.2805 | 0.3464 | 0.4217 | 0.4265 | 0.4453 | 0.4439 | 0.4439 |
 
-v30 ได้สาระครบเพิ่มจาก v13 **11 ข้อ** และงดตอบตรง label อีก **5 ข้อ** จาก 5 ข้อที่ตอบไม่ได้ Abstention decision accuracy จึงเท่ากับ **1.0000** แต่ metric นี้วัดการเลือกตอบหรืองด ไม่ได้วัดความถูกต้องทุกประโยค Citation hit วัดการอ้าง primary evidence ของ gold และอาจไม่ครอบคลุมหลักฐานทางเลือก ส่วน Character F1 วัด text overlap
+v30 จาก cache ได้สาระครบ 25/25 และงดตอบตรง label 5/5 ส่วน v31 และ v32 ที่เริ่ม cache ใหม่ได้ **24/25 และ 5/5** รวม 29/30 ข้อ ถอยลงหนึ่งข้อคือ **q082** ซึ่งค้นพบตารางแล้วแต่โมเดลส่ง citations และ table cells ไม่ผ่าน schema จนหมดจำนวนครั้งที่อนุญาตให้ซ่อม Abstention decision accuracy เท่ากับ **0.9667** เป็นคะแนนการเลือกตอบหรืองด ไม่ใช่ความถูกต้องทุกประโยค Citation hit ตรวจ primary evidence ของ gold และอาจพลาดหลักฐานทางเลือก ส่วน Character F1 วัด text overlap
 
-หลักฐาน: [metrics รุ่นปัจจุบัน](reports/gemma_dev_metrics.json), [semantic audit](reports/semantic_audit.json), [ผลรายข้อ](docs/DEV_COMPARISON_TH.md), [ประวัติทุกรุ่นรวมรุ่นที่แย่ลง](reports/history)
+หลักฐาน: [metrics v32](reports/evaluations/v32/dev_metrics.json), [semantic audit v32](reports/evaluations/v32/dev_semantic_audit.json), [ผลเปรียบเทียบรายข้อ](docs/EVALUATION_V32_TH.md), [ประวัติทุกรุ่นรวมรุ่นที่แย่ลง](reports/history)
 
 ### 3. Extra-dev อีก 30 ข้อ
 
 ชุดเพิ่มเติมไม่ซ้ำ 30 ข้อเดิม มีคำถามที่ตอบได้ 26 ข้อและควรงดตอบ 4 ข้อ v26 เป็นรอบแรกของชุดนี้ หลังเปิดผลแล้วจึงใช้ข้อผิดพลาดปรับระบบ
 
-| รุ่น | ถูกทั้งหมด รวมงดถูก | ตอบถูก | งดถูก | งดเกินจำเป็น | ผิดหรือไม่ครบประเภทอื่น |
-|---|---:|---:|---:|---:|---:|
-| v26 | 19/30 | 17 | 2 | 6 | 5 |
-| v28 | 27/30 | 23 | 4 | 3 | 0 |
-| v29 | 30/30 | 26 | 4 | 0 | 0 |
-| v30 | 30/30 | 26 | 4 | 0 | 0 |
+| รุ่น | ยืนยันผลสำเร็จ | ตอบถูก | งดถูก | งดเกินจำเป็น | ผิดหรือไม่ครบ | บริการขัดข้อง |
+|---|---:|---:|---:|---:|---:|---:|
+| v26 | 19/30 | 17 | 2 | 6 | 5 | 0 |
+| v28 | 27/30 | 23 | 4 | 3 | 0 | 0 |
+| v29 | 30/30 | 26 | 4 | 0 | 0 | 0 |
+| v30 | 30/30 | 26 | 4 | 0 | 0 | 0 |
+| v31 | 11/30 | 11 | 0 | 0 | 0 | 19 |
+| v32 | 28/30 | 24 | 4 | 1 | 1 | 0 |
 
-**ผลหลังปรับเป็น exposed regression ไม่ใช่ unseen test** การ replay v30 ใช้ model responses จาก cache และบันทึก API calls ใหม่เป็น 0 คำตอบ สถานะและ citations ตรงกับ v29 ทั้งสองชุด จึงไม่ใช่การทดลองสร้างคำตอบใหม่ และ semantic audit เป็นการตรวจโดย coding agent ไม่ใช่ผู้เชี่ยวชาญอิสระ ยังไม่มี ablation ที่แยกผลของแต่ละเทคนิค
+v31 ประเมินคุณภาพ extra-dev ไม่ครบเพราะบริการขัดข้อง q084 สร้างคำตอบแล้วแต่ reviewer ได้ HTTP 502 จึงคืน `verification_unavailable` อีก 18 ข้อจบด้วย `proxy_http_502` ต่อมาตรวจ `/v1/models` พบ HTTP 530 และหน้า Cloudflare Tunnel error ค่า 11/30 จึงเป็นผลสำเร็จของรอบที่มี outage ไม่ใช่ข้อสรุปว่าโมเดลตอบผิด 19 ข้อ Automatic metrics นับ q084 เป็น insufficient evidence แต่ semantic audit แยกเป็น service failure ตาม trace
 
-หลักฐาน: [v26](reports/extra_dev_v26_semantic_audit.json), [v28](reports/extra_dev_v28_semantic_audit.json), [v29](reports/extra_dev_v29_semantic_audit.json), [v30](reports/extra_dev_v30_semantic_audit.json)
+หลังบริการกลับมาตอบ HTTP 200 จึงรัน **v32 ด้วยโค้ดและค่ารันเดียวกับ v31** โดยเริ่ม cache แยกว่างอีกครั้ง ใช้ API attempts **180 ครั้ง** ไม่พบ service error และได้ **28/30** ข้อ q007 งดตอบเพราะ quote ไม่ครอบคลุมประชากรที่ถาม ส่วน q063 ตอบไม่ครบระดับคำแนะนำและหลักฐาน รวมสองชุดจึงได้ **57/60** ต่ำกว่า v30 สามข้อ
+
+เก็บ v31 ที่ใช้ API attempts 144 ครั้งไว้ครบ ส่วน v30 ใช้ cache และมี 0 ครั้ง ทั้งสองชุดเคยใช้ปรับระบบแล้ว จึงเป็น **exposed regression** ไม่ใช่ unseen test การตรวจสาระทำโดย coding agent และไม่มี ablation ที่แยกผลการแก้โค้ดจากความแปรผันของบริการ
+
+หลักฐาน: [v26](reports/extra_dev_v26_semantic_audit.json), [v28](reports/extra_dev_v28_semantic_audit.json), [v29](reports/extra_dev_v29_semantic_audit.json), [v30](reports/extra_dev_v30_semantic_audit.json), [v31](reports/evaluations/v31/extra_semantic_audit.json), [v32](reports/evaluations/v32/extra_semantic_audit.json), [ผลเทียบทั้งสองชุด](reports/evaluations/v32/comparison.json)
 
 ## ข้อผิดพลาดที่พบและสิ่งที่ยังต้องพัฒนา
 
@@ -92,6 +100,10 @@ v30 ได้สาระครบเพิ่มจาก v13 **11 ข้อ** 
 | q076 ใน v13 | ใช้ค่า 150 นาทีจากบริบทใกล้เคียง แทนช่วง 150 ถึง 300 นาทีที่โจทย์ถาม | รักษาช่วงค่า หน่วยและเงื่อนไขใน claim; v30 ผ่านการตรวจ dev เดิม |
 | q108 ใน v27 | อธิบายโซเดียมไม่ครบด้านอาหารกระป๋อง | ผูก reader กับหลักฐานที่มีทั้งบริบทการเติมเกลือและ MSG; แก้กลับใน v28 |
 | q006, q107, q110 ใน extra-dev v28 | พบหลักฐานแล้วแต่ยังงดตอบ | เพิ่ม reader สำหรับตารางและความสัมพันธ์ที่ตรวจได้ตรง; v29 ตอบได้ครบและ v30 ให้ผลเดิม |
+| q082 ใน v31 และ v32 | ค้นพบตาราง แต่ citations และ table cells ไม่ตรง schema | ยังงดตอบเกินจำเป็น ต้องปรับ structured output และ repair โดยคงการตรวจคอลัมน์ |
+| q007 ใน v32 | เลือก quote ที่ขาดบริบท nephrotic syndrome แม้ค้นพบตารางแล้ว | ผูกแถวตารางกับหัวข้อประชากรจาก source จริง และแก้การซ่อมที่วนกลับ payload เดิม |
+| q063 ใน v32 | ตอบเหตุผล แต่ขาดคำแนะนำ III และหลักฐาน B; reviewer ยังยอมรับว่าครบ | ตรวจ requested fields ทีละส่วน แยกความครบถ้วนออกจาก quote validity |
+| Extra-dev 19 ข้อใน v31 | Class proxy ขัดข้อง รวม q084 ที่ล้มเหลวระหว่าง review | เก็บผลเดิมแล้วรัน v32 หลังบริการกลับมา ไม่พบ API error ในรอบ v32 |
 | คำถาม “เป็นโรคไต ควรงดกินอะไร” | ข้อมูลกว้างเกินกว่าจะกำหนดข้อจำกัดเฉพาะบุคคล | รองรับคำแนะนำทั่วไปที่มีหลักฐานและขอรายละเอียดเพิ่ม แยกเงื่อนไขก่อนล้างไตกับผู้ที่ล้างไตแล้ว |
 
 สิ่งที่ยังไม่ยืนยันคือคุณภาพบนคำถามใหม่ โดยเฉพาะการเปลี่ยนสำนวน ประชากร เงื่อนไขและคำปฏิเสธ การมี quote จริงไม่ได้พิสูจน์ว่าทุก claim ถูกต้อง และ reviewer ที่ใช้ Gemma ตัวเดียวกับผู้ตอบอาจผิดพร้อมกันได้ Source bound readers ช่วยในรูปแบบที่รองรับ แต่ยังไม่ใช่ตัวตรวจความหมายทั่วไป
@@ -153,15 +165,17 @@ Model revisions ที่ตรึงไว้คือ `BAAI/bge-m3` ที่ 
 | Frozen retrieval replay | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate retrieval` | คำนวณ metrics จาก saved hits และตรวจ hashes ไม่มี LLM calls |
 | ตรวจ retrieval จริง | `.venv312\Scripts\python -B -m ncd_gemma.cli doctor --retrieval` | โหลด model และค้น local index จริง |
 | ตรวจ class proxy | `.venv312\Scripts\python -B -m ncd_gemma.cli doctor --live` | เรียก class proxy จริง ต้องมี key |
-| ตรวจแผน dev | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate plan` | ตรวจ 30 ข้อและ implementation hashes; ปฏิเสธเมื่อไม่ตรงแผนที่บันทึก |
-| ประเมินคำตอบตามแผน | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate agent` | ต้องผ่านการตรวจแผนก่อน จึงเรียก class proxy หรือใช้ cache และ resume |
-| ตรวจ clean clone และ release | `.venv312\Scripts\python -B scripts/smoke_remote_release.py` | Clone main, fetch และ replay frozen retrieval 6 runs |
+| ตรวจแผน dev ทั้งสองชุด | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate plan --version v32 --suite both` | ตรวจคำถาม ข้อมูล โค้ด config ค่ารันและ cache policy ให้ตรงแผน |
+| ประเมินคำตอบตามแผน | `.venv312\Scripts\python -B -m ncd_gemma.cli evaluate agent --version v32 --suite both` | เริ่มด้วย cache แยกว่างใน clean clone; ในเครื่องที่รันแล้วจะ resume และคงผลผิดพลาดเดิม |
+| ตรวจ clean clone และ release | `.venv312\Scripts\python -B scripts/smoke_remote_release.py --evaluation-version v32` | Clone main, fetch, replay retrieval 6 runs และตรวจแผน v32 โดยไม่เรียก LLM |
 
-ผล aggregate อยู่ใน `reports/` ส่วนคำตอบดิบพร้อมหลักฐานอยู่ใน `private/runs/` และ response cache อยู่ใน `.cache/llm/` สองส่วนหลังถูก Git ignore การประเมินซ้ำอาจ resume หรือใช้ cache จึงต้องอ่าน plan ID และ `new_api_calls_recorded` ประกอบ ไม่ตีความทุก invocation ว่าเป็นการสร้างคำตอบใหม่
+แผนและผลล่าสุดอยู่ใน `reports/evaluations/v32/` พร้อมเก็บ v31 ไว้ในโฟลเดอร์ข้างกัน คำตอบดิบอยู่ใน `private/runs/` และ cache สำหรับการประเมินอยู่ใน `.cache/evaluations/<plan-id>/` แอปปกติใช้ `.cache/llm/` Raw responses และ cache ถูก Git ignore การเรียกซ้ำจะ resume โดยตรวจ plan fingerprint, qid, คำถาม, gold และ prompt version ก่อนใช้คำตอบเดิม ไม่ลบข้อที่ล้มเหลวเพื่อทำให้คะแนนดีขึ้น
 
-**ตรวจซ้ำ 14 ตุลาคม 2026: 170 tests passed ไม่มี failure, error หรือ skipped** มี Starlette deprecation warning หนึ่งรายการ ดู [บันทึกทดสอบรอบจัดทำรายงาน](reports/documentation_tests_2026-10-14.json) การรันใน Windows sandbox ค้างขณะสร้าง socketpair ของ TestClient จึงยืนยันผลนอก sandbox โดยไม่แก้โค้ดระบบ
+**ตรวจซ้ำ 20 ตุลาคม 2026: 176 tests passed ไม่มี failure, error หรือ skipped** มี Starlette deprecation warning หนึ่งรายการ ดู [บันทึกทดสอบ v31](reports/evaluation_tests_2026-10-20.json) รันนอก Windows sandbox เพื่อให้ TestClient สร้าง socketpair ได้ Unit tests ใช้ fake model และ retriever จึงไม่ทดแทนผลเรียก class proxy จริง
 
-ผล fresh clone และ public release เคยตรวจครบเมื่อ 12 ตุลาคม 2026 ส่วนผลคำตอบ v30 เกิดก่อนการเพิ่ม connection retry และการตั้งค่าสำหรับ deployment ขณะนี้ hashes ของ `llm.py` และ `config.py` ไม่ตรงแผน v30 ดังนั้นคำสั่งตรวจแผนและประเมินคำตอบจะหยุดด้วย `Existing plan differs` ตาม guard ที่ตั้งใจไว้ ต้องสร้าง evaluation version ใหม่โดยเก็บแผนและผลเดิมไว้ก่อนรันใหม่ ไม่ลบแผนเพื่ออ้างว่าเป็น v30 เดิม **การทำซ้ำ frozen retrieval ยังทำได้ตามคำสั่งข้างต้น** ผล unit tests ต้องอ่านแยกจากผลคำตอบ
+v30 เกิดก่อนการแก้ `llm.py` และ `config.py` จึงเก็บแผน metrics และ audit เดิมไว้ใน `reports/history/v30_*` แล้วสร้าง v31 โดยไม่เปลี่ยน prompt, gold หรือ retrieval แผนใหม่ล็อก Python code, โค้ด retrieval ที่นำมาใช้, release data 34 ไฟล์, configs และค่ารัน Guard เดิมยังปฏิเสธโค้ดที่ไม่ตรง v30 ส่วน guard ใหม่ยอมรับ v31 ที่ตรงกัน ตรวจซ้ำทั้งก่อนรันและหลังจบ
+
+หากต้องเริ่มการทดลองใหม่ให้เลือกเลขใหม่ เช่น `--version v33 --suite both` คำสั่งสร้าง cache และแผนแยกโดยรักษาผล v31 และ v32 ไว้ การรันใหม่มีการเรียก API และต้องประเมินสาระของคำตอบใหม่ ไม่คัดลอกคะแนนเดิมมาใช้ **Frozen retrieval replay ยังทำซ้ำได้โดยไม่ใช้ class proxy**
 
 ## ส่วนที่นำมาใช้และส่วนที่ทำเพิ่ม
 
