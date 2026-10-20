@@ -40,7 +40,10 @@ def main() -> None:
             result = subprocess.run(
                 [sys.executable, "-B", "-m", "ncd_gemma.cli", "evaluate", "plan",
                  "--version", args.evaluation_version, "--suite", "both"],
-                cwd=checkout, env=plan_environment, capture_output=True, text=True, encoding="utf-8", check=True)
+                cwd=checkout, env=plan_environment, capture_output=True, text=True, encoding="utf-8")
+            if result.returncode:
+                sys.stderr.write(result.stderr)
+                raise RuntimeError("Clean-clone evaluation plan verification failed")
             plan_ids = [plan["id"] for plan in json.loads(result.stdout)]
         commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip()
         manifest = json.loads((checkout / "provenance/public_data_release.json").read_text(encoding="utf-8"))
