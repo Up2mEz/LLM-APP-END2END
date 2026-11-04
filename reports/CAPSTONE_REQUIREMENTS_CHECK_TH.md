@@ -12,7 +12,7 @@
 | Real answer evaluation | Luna 6 xhigh แบบซ่อนชื่อแขน: dense 23/30, hybrid 28/30 | ครบ 60 verdicts พร้อมเหตุผล; LLM review ไม่ใช่ human review |
 | Honest failures | Dense มี wrong/partial/false abstention; proxy HTTP 429 dense 1 และ hybrid 2 | เก็บ service errors ในตัวหาร ไม่มี replacement calls |
 | Reranker tradeoff | ON/OFF retrieval Recall@5 0.90/0.74, median 14.49/0.24 วินาที | Retrieval-only, ไม่อนุมานคะแนนคำตอบ OFF |
-| Q1 repo/README/eval/history | README และ harness พร้อมข้อมูลคำถาม/aggregate/receipts ในเครื่อง | มี local commits; ยังไม่ได้ทดสอบ clean clone รอบนี้หรือ push รุ่นใหม่ |
+| Q1 repo/README/eval/history | README และ harness พร้อมคำถาม ผลประเมิน และประวัติ commits | ตรวจ clone แยกและ environment ใหม่ผ่าน 209 tests, build และค้นเอกสารจริง; ดู Q1_RELEASE_CHECK_2026-11-05.md |
 | Q2 PDF 4–8 หน้า | output/pdf/NCD_EVIDENCE_SUBMISSION_67070060.pdf | 8 หน้า, architecture, protocol, baseline/results, failures, limitations; สีดำ Angsana New ไม่มีวันที่ปรับปรุง |
 | Q3 narrated demo 3–6 นาที | ประกอบเสียง Arlo ใหม่และภาพ AboutSystem ผลปัจจุบันใน ncd-capstone-current-v2-demo | 4 นาที 49 วินาที; decode ผ่าน ไม่พบจอดำ/เงียบเกิน 1.5 วินาที; ยังไม่ได้ฟังตรวจตลอดคลิปหรือเผยแพร่ URL |
 | Live defence | ต้องรับ input ใหม่และอธิบาย design choice/metric ต่อผู้สอน | วิดีโอและ dev score ไม่แทนการสาธิตต่อหน้า |
