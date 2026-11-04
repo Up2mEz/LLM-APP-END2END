@@ -1,0 +1,59 @@
+{
+  "run_id": "paired-agent-v30-current-20261105",
+  "review_type": "LLM-as-judge",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "xhigh",
+  "temperature": "not exposed by T3 transport",
+  "human_review": false,
+  "complete": true,
+  "arms": {
+    "old_v30": {
+      "n": 60,
+      "successes": 56,
+      "semantic_success": 0.9333333333333333,
+      "verdict_counts": {
+        "correct": 48,
+        "correct_abstention": 8,
+        "unsupported": 1,
+        "false_abstention": 1,
+        "wrong": 1,
+        "service_error": 1
+      }
+    },
+    "current": {
+      "n": 60,
+      "successes": 56,
+      "semantic_success": 0.9333333333333333,
+      "verdict_counts": {
+        "correct": 49,
+        "false_abstention": 1,
+        "correct_abstention": 7,
+        "service_error": 2,
+        "unsupported": 1
+      }
+    }
+  },
+  "packet_sha256": "cb692353eb9d30ac7eb959e63da30e0e80f27a07d6ea154f0f6dced8e94717d8",
+  "judgments_sha256": {
+    "batch-01.jsonl": "25c0666eba524b7f8f99ebf65024e575b8609e5f00c9b77e8e80f6b85e3ea94e",
+    "batch-02.jsonl": "6e0470fbb26c2592e7d92ab1801d2761a497b073d6fe3dd14b6f247700422eb5",
+    "batch-03.jsonl": "ee0dce5cc2fe9e5d758cae29aaeae837e7d00e71c9aed5b8137b144ece9ce425",
+    "batch-04.jsonl": "48d85e1af9ce21117961e6008c615c593521cc399757d6f0f000faeb7b55c743",
+    "batch-05.jsonl": "da1136b1349e083fc64e7425f96d1eb420adec3a19696b799ac91f8626519cf7",
+    "batch-06.jsonl": "8144d15516ff901c815bc0135855ba9ddc20e9ad65e5c047701c5480e6095f2c",
+    "batch-07.jsonl": "7dd0a40fc81fcc1a4d1e969d174699de2c47d56787b10ef3a6cb9793d9c2f43d",
+    "batch-08.jsonl": "291239c30d7f1adc6a3449a91a1040a5e47822136c5de64c5d8d15db393ed1c5",
+    "batch-09.jsonl": "95f77b551c70a6edc8b9995af51efb630732ca636856f0f71acb5c8d6bdc5443",
+    "batch-10.jsonl": "018205258c03d58523d45540052fb46370d5a777d9da826377e2d6d7c4a41844",
+    "batch-11.jsonl": "ab61a01cac18f1c64c011ef571304d3c4fdd6c9995e74f3e5d8ac3f6c919af4b",
+    "batch-12.jsonl": "3eac6ffe3afdf6740e2b51482fd2cb85fccfd4e75743592229ba64e529bfea98",
+    "batch-13.jsonl": "b6d21ffc99353ed5cf71da89ebdfdbe9a0558619097460dcc2764d9b81a0aaf6",
+    "batch-14.jsonl": "e94ecdbfa3fda486cd0484e1699fbab741c74c9497ce3fbdf0db8ddde6548b6f",
+    "batch-15.jsonl": "b6479a35316576ce0a3b2ac56daab2abbdaade6b4d0346943539b9ce497e8e84",
+    "batch-16.jsonl": "0b16c701a5d8edfef6e3e9b25490eca63f68e879723f186f2028f2d5704ba6a4",
+    "batch-17.jsonl": "194bee212745ee8fe5eafeabfc0915755454c0fe5dfcbe8bede9f2ea2feeef96",
+    "batch-18.jsonl": "2a009859a819d4d7ef2629b7394ae090c736449b742065d30e58a147b0613bcf",
+    "batch-19.jsonl": "6912a5ca12e3900683ce389f243e6e64854a32810269ca589ba92c4076fe57e5",
+    "batch-20.jsonl": "aa973797924c93f8cb486e892ed64eaa737533f458921d4cc769e6454087fd28"
+  }
+}

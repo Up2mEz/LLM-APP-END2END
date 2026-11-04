@@ -15,7 +15,7 @@ Review focus: unavailable old bytes; unpaired data; cache contamination; outage 
 - [x] Recover and verify 18 old runtime files; record normalized control replacements separately.
 - [x] Implement separate harness outside frozen current runtime and tests for paired IDs, failure accounting, cache controls and durable resume.
 - [x] Run 60 paired questions with alternating order, no replacement results.
-- [ ] Judge all 120 answers with blinded Luna xhigh and identical rubric; publish paired scores and disagreements.
-- [ ] Correct ReAct terminology and link current comparison without claiming newer is better; run tests and independent harness review.
+- [x] Judge all 120 answers with blinded Luna xhigh and identical rubric; publish paired scores and disagreements.
+- [x] Correct ReAct terminology and link current comparison without claiming newer is better; run tests and independent harness review.
 
 Recovery: config.py reconstructed from the recorded Git version by setting max_sources=20, verified byte-for-byte against the v30 SHA-256. No guessed file is accepted without a hash match.

@@ -25,9 +25,25 @@ def main():
     key={r['item_id']:r for r in rows(private/'review_key.jsonl')}
     failed={(r['qid'],r['arm']):service_failure(r['prediction']) for r in rows(private/'answers.jsonl')}
     groups={'old_v30':{},'current':{}}
+    paired={}
     for r in rows(out/'judge_verdicts.jsonl'):
         k=key[r['item_id']];groups[k['arm']][k['qid']]=not failed[k['qid'],k['arm']] and r['verdict'] in ('correct','correct_abstention')
+        paired.setdefault(k['qid'],{'qid':k['qid']})[k['arm']]={**r,'verdict':'service_error' if failed[k['qid'],k['arm']] else r['verdict']}
     if any(len(g)!=60 for g in groups.values()):raise ValueError('Expected two complete 60-question arms')
     result=paired_counts(groups['old_v30'],groups['current']);result.update(run_id=RUN,scope='Paired exposed development set; one draw per arm; LLM judge uncertainty not included in statistical interval')
+    for arm in groups:
+        if sum(groups[arm].values())!=metric['arms'][arm]['successes']:raise ValueError('Paired scorer differs from judge collector')
+    (out/'paired_verdicts.jsonl').write_text(''.join(json.dumps(paired[q],ensure_ascii=False)+'\n' for q in sorted(paired)),encoding='utf-8')
     (out/'paired_summary.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');print(json.dumps(result))
-if __name__=='__main__':main()
+def public_summary():
+    records=rows(ROOT/'reports'/RUN/'paired_verdicts.jsonl')
+    if len(records)!=60 or len({r['qid'] for r in records})!=60:raise ValueError('Expected 60 unique public pairs')
+    groups={arm:{r['qid']:r[arm]['verdict'] in ('correct','correct_abstention') for r in records} for arm in ('old_v30','current')}
+    result=paired_counts(groups['old_v30'],groups['current'])
+    saved=json.loads((ROOT/'reports'/RUN/'paired_summary.json').read_text())
+    if any(saved[k]!=v for k,v in result.items()):raise ValueError('Public verdicts do not reproduce saved aggregate')
+    print(json.dumps({'verified_from_public_verdicts':True,**result}))
+
+if __name__=='__main__':
+    if '--public' in sys.argv:public_summary()
+    else:main()

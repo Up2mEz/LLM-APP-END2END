@@ -1,0 +1,17 @@
+{
+  "n": 60,
+  "old_successes": 56,
+  "current_successes": 56,
+  "both_success": 54,
+  "both_fail": 2,
+  "current_only_success": 2,
+  "old_only_success": 2,
+  "success_rate_difference": 0.0,
+  "paired_bootstrap_95_interval": [
+    -0.06666666666666667,
+    0.06666666666666667
+  ],
+  "mcnemar_exact_two_sided_p": 1,
+  "run_id": "paired-agent-v30-current-20261105",
+  "scope": "Paired exposed development set; one draw per arm; LLM judge uncertainty not included in statistical interval"
+}

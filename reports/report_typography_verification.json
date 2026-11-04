@@ -1,12 +1,15 @@
 {
   "run_id": "capstone-current-v2",
+  "additional_comparison": "paired-agent-v30-current-20261105",
   "pages": 8,
-  "sha256": "adba51b00e8b20ea0b73d5000145601152c6e989226294542f77f916a83cdfd5",
+  "sha256": "32df6213449ebe8ced1c8390c8766b93581987817b925381fdb5ef56d59325f3",
   "pua": 0,
   "corrupt_question_marks": false,
   "text_colors": [
     0
   ],
   "font": "Angsana New",
-  "renderer": "Chromium"
+  "renderer": "Chromium",
+  "paired_results_page": 7,
+  "paired_results_page_visually_reviewed": true
 }

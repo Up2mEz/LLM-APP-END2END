@@ -39,6 +39,23 @@ def main():
         if len(cases)==3:break
     if not cases:cases=['ไม่พบ failure ตาม rubric ใน 60 คำตอบรอบนี้ ผลบน dev ชุดเล็กยังไม่รับประกันว่าระบบจะตอบคำถามใหม่ได้ครบถ้วน']
     times={arm:statistics.median(r['elapsed_seconds'] for r in raw if r['arm']==arm) for arm in ('dense_default','hybrid_current')}
+    paired_text=''
+    paired_dir=ROOT/'reports/paired-agent-v30-current-20261105'
+    if (paired_dir/'judge_metrics.json').exists():
+        pj=read(paired_dir/'judge_metrics.json');ps=read(paired_dir/'paired_summary.json')
+        if not pj.get('complete'):raise ValueError('Paired judgments incomplete')
+        paired_text=f'''### การเทียบ agent รุ่นเก่ากับปัจจุบันภายใต้เงื่อนไขเดียวกัน
+
+ทดลองเพิ่มด้วยคำถามเดิม 60 ข้อ รุ่นละหนึ่งคำตอบ ใช้โค้ด v30 ที่กู้และตรวจ hashes แล้ว เทียบรุ่นปัจจุบัน โดยใช้ตัวเชื่อมต่อโมเดล ค่าตั้ง และการปิดแคชชุดเดียวกัน ทั้งคู่ค้นแบบผสมและเปิด reranker สลับลำดับรุ่นที่ตอบก่อน แล้วให้ Luna 6 xhigh ตรวจแบบซ่อนชื่อรุ่น
+
+| รายการ | รุ่นเก่า | รุ่นปัจจุบัน |
+| --- | --- | --- |
+| ผ่านเกณฑ์ รวมการงดตอบถูก | {ps['old_successes']}/60 | {ps['current_successes']}/60 |
+| บริการล้มเหลวที่รวมในตัวหาร | {pj['arms']['old_v30']['verdict_counts'].get('service_error',0)} | {pj['arms']['current']['verdict_counts'].get('service_error',0)} |
+
+ทั้งคู่ผ่านตรงกัน {ps['both_success']} ข้อ ไม่ผ่านตรงกัน {ps['both_fail']} ข้อ และแต่ละรุ่นผ่านฝ่ายเดียว 2 ข้อ ผลเสมอรอบนี้ยังไม่สนับสนุนว่ารุ่นใหม่ตอบถูกกว่า และไม่ได้พิสูจน์ว่าเทียบเท่ากันทุกคำถาม สามในสี่คู่ที่ผลต่างกันเกี่ยวข้องกับ HTTP 429 คงใช้รุ่นปัจจุบันเพื่อการควบคุมแคชและแสดงหลักฐาน ไม่อ้างว่าฉลาดขึ้นจากเลขรุ่น รายละเอียดอยู่ใน docs/PAIRED_AGENT_EVALUATION_TH.md
+
+'''
     text=f'''# NCD Evidence
 
 ระบบถามตอบจากหลักฐานในเอกสาร NCD ภาษาไทย
@@ -134,6 +151,8 @@ Semantic success ต้องตอบสาระที่ถามครบแ
 รอบนี้พบ class proxy ตอบ HTTP 429 จำนวน 3 รายการ (dense 1 และ hybrid 2) เก็บเป็น service errors และไม่เรียกซ้ำแทนผลเดิม การให้คะแนนยังป้องกัน verification_unavailable ถูกนับเป็น correct_abstention แม้ API ส่ง status ว่า insufficient_evidence คำตอบที่ตรวจไม่ได้ใช้ uncertain และอยู่ในตัวหาร การให้ judge เป็นโมเดลยังอาจอ่านเงื่อนไขหรือหลักฐานผิด ต้องอ่านเหตุผลรายข้อประกอบคะแนน
 
 ## 7. การทำซ้ำและการตรวจสอบหลักฐาน
+
+{paired_text}
 
 README ระบุการสร้าง Python environment ตั้งค่า class proxy ดาวน์โหลดข้อมูลด้วย scripts/public_data.py fetch เตรียมโมเดล และ build frontend ก่อนใช้ run.ps1 ไม่มี API key ใน manifest หรือรายงาน หลักฐานรอบนี้อยู่ที่ reports/{RUN}/ ส่วน raw และ trace อยู่ใน private/{RUN}/ สำหรับการตรวจในเครื่อง
 

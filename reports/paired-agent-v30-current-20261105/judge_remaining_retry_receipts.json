@@ -1,0 +1,68 @@
+[
+  {
+    "status": "fulfilled",
+    "value": {
+      "taskId": "node:delegated-task:command%3Amcp%3A4a3088a9-6c0d-4cad-b561-e066b32b8684%3Adelegate-task%3Apaired-luna-20261105-retry1-8-14",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A4a3088a9-6c0d-4cad-b561-e066b32b8684%3Adelegate-task%3Apaired-luna-20261105-retry1-8-14",
+      "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A4a3088a9-6c0d-4cad-b561-e066b32b8684%253Adelegate-task%253Apaired-luna-20261105-retry1-8-14:ordinal:1",
+      "childNodeId": "node:delegated-task:command%3Amcp%3A4a3088a9-6c0d-4cad-b561-e066b32b8684%3Adelegate-task%3Apaired-luna-20261105-retry1-8-14",
+      "status": "running",
+      "workState": "working",
+      "hasPendingChildRuns": false,
+      "latestTerminalRunId": null,
+      "latestTerminalStatus": null,
+      "latestTerminalSummary": null,
+      "latestTerminalResultContextTransferId": null,
+      "providerInstanceId": "codex",
+      "model": "gpt-6-luna",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "xhigh"
+        },
+        {
+          "id": "serviceTier",
+          "value": "default"
+        }
+      ],
+      "summary": null,
+      "resultContextTransferId": null,
+      "hasPendingQuestion": false,
+      "pendingApproval": null,
+      "waitTimedOut": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "taskId": "node:delegated-task:command%3Amcp%3A4a3088a9-6c0d-4cad-b561-e066b32b8684%3Adelegate-task%3Apaired-luna-20261105-retry1-15-20",
+      "childThreadId": "thread:delegated-task:command%3Amcp%3A4a3088a9-6c0d-4cad-b561-e066b32b8684%3Adelegate-task%3Apaired-luna-20261105-retry1-15-20",
+      "childRunId": "run:thread:thread%3Adelegated-task%3Acommand%253Amcp%253A4a3088a9-6c0d-4cad-b561-e066b32b8684%253Adelegate-task%253Apaired-luna-20261105-retry1-15-20:ordinal:1",
+      "childNodeId": "node:delegated-task:command%3Amcp%3A4a3088a9-6c0d-4cad-b561-e066b32b8684%3Adelegate-task%3Apaired-luna-20261105-retry1-15-20",
+      "status": "running",
+      "workState": "working",
+      "hasPendingChildRuns": false,
+      "latestTerminalRunId": null,
+      "latestTerminalStatus": null,
+      "latestTerminalSummary": null,
+      "latestTerminalResultContextTransferId": null,
+      "providerInstanceId": "codex",
+      "model": "gpt-6-luna",
+      "options": [
+        {
+          "id": "reasoningEffort",
+          "value": "xhigh"
+        },
+        {
+          "id": "serviceTier",
+          "value": "default"
+        }
+      ],
+      "summary": null,
+      "resultContextTransferId": null,
+      "hasPendingQuestion": false,
+      "pendingApproval": null,
+      "waitTimedOut": false
+    }
+  }
+]
