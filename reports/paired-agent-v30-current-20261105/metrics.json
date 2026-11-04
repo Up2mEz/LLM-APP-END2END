@@ -1,0 +1,23 @@
+{
+  "run_id": "paired-agent-v30-current-20261105",
+  "complete": true,
+  "answers": {
+    "old_v30": {
+      "n": 60,
+      "error_rate": 0.016666666666666666,
+      "errors": 1,
+      "abstention_decision_accuracy": 0.95,
+      "primary_citation_hit": 0.7450980392156863
+    },
+    "current": {
+      "n": 60,
+      "error_rate": 0.03333333333333333,
+      "errors": 2,
+      "abstention_decision_accuracy": 0.95,
+      "primary_citation_hit": 0.7450980392156863
+    }
+  },
+  "raw_sha256": "28af02e0914b1f0c22b63035fb6d64c075a04bfb28c35f953622c99fe9e06632",
+  "judge_status": "pending",
+  "scope": "60 exposed dev, paired alternating order, 120 fresh requests; historical saved outputs never loaded"
+}

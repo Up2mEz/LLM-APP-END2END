@@ -1,0 +1,52 @@
+{
+  "run_id": "paired-agent-v30-current-20261105",
+  "records": 120,
+  "pairs": 60,
+  "proxy_attempts": 361,
+  "same_status": 56,
+  "identical_answer_text": 53,
+  "status_differences": [
+    {
+      "qid": "q118",
+      "old_status": "answered",
+      "current_status": "insufficient_evidence"
+    },
+    {
+      "qid": "q127",
+      "old_status": "insufficient_evidence",
+      "current_status": "answered"
+    },
+    {
+      "qid": "q122",
+      "old_status": "insufficient_evidence",
+      "current_status": "error"
+    },
+    {
+      "qid": "q124",
+      "old_status": "insufficient_evidence",
+      "current_status": "error"
+    }
+  ],
+  "service_failures": [
+    {
+      "qid": "q127",
+      "arm": "old_v30",
+      "status": "insufficient_evidence",
+      "stop_reason": "verification_unavailable"
+    },
+    {
+      "qid": "q122",
+      "arm": "current",
+      "status": "error",
+      "stop_reason": "proxy_http_429"
+    },
+    {
+      "qid": "q124",
+      "arm": "current",
+      "status": "error",
+      "stop_reason": "proxy_http_429"
+    }
+  ],
+  "raw_sha256": "28af02e0914b1f0c22b63035fb6d64c075a04bfb28c35f953622c99fe9e06632",
+  "scope": "Mechanical execution audit; equality and answer/abstain decisions are not semantic correctness"
+}

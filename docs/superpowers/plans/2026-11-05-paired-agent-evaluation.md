@@ -12,9 +12,9 @@ Global constraints: gemma-4-E4B-it, temperature 0, max_steps 6, searches 3, requ
 
 Review focus: unavailable old bytes; unpaired data; cache contamination; outage credit; interruption duplicate requests.
 
-- [ ] Recover and verify 18 old runtime files; record normalized control replacements separately.
-- [ ] Implement separate harness outside frozen current runtime and tests for paired IDs, failure accounting, cache controls and durable resume.
-- [ ] Run 60 paired questions with alternating order, no replacement results.
+- [x] Recover and verify 18 old runtime files; record normalized control replacements separately.
+- [x] Implement separate harness outside frozen current runtime and tests for paired IDs, failure accounting, cache controls and durable resume.
+- [x] Run 60 paired questions with alternating order, no replacement results.
 - [ ] Judge all 120 answers with blinded Luna xhigh and identical rubric; publish paired scores and disagreements.
 - [ ] Correct ReAct terminology and link current comparison without claiming newer is better; run tests and independent harness review.
 

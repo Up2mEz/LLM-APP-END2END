@@ -6,6 +6,7 @@
 
 - [รายงานฉบับส่ง](docs/PROJECT_REPORT_SUBMISSION_TH.md): ปัญหา สถาปัตยกรรม ผลประเมิน และข้อจำกัด
 - [ผลประเมินปัจจุบัน](docs/CAPSTONE_CURRENT_EVALUATION_TH.md): เปรียบเทียบการค้นสองแบบบนระบบที่ใช้ส่งงาน
+- [การเทียบ agent รุ่นเก่ากับปัจจุบัน](docs/PAIRED_AGENT_EVALUATION_TH.md): คำถามเดียวกัน 60 คู่ ปิดแคชทั้งคู่ รันครบแล้วและรอการตรวจเนื้อหาคำตอบ
 - [คำศัพท์และวิธีอ่านเลขรุ่น](docs/READING_GUIDE_TH.md): React, pipeline, รหัสคำถามและแหล่งอ้างอิง
 - [รายละเอียดทางเทคนิคและประวัติผล](docs/TECHNICAL_RESULTS_TH.md)
 - [บทเดโม](docs/DEMO_SCRIPT_TH.md)
