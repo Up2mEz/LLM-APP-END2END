@@ -1,0 +1,50 @@
+{
+  "retrieval": {
+    "dense_default": {
+      "n": 30,
+      "answerable": 25,
+      "recall@5": 0.82,
+      "hit@5": 0.84,
+      "mrr@5": 0.7046666666666667
+    },
+    "hybrid_current": {
+      "n": 30,
+      "answerable": 25,
+      "recall@5": 0.9,
+      "hit@5": 0.92,
+      "mrr@5": 0.7833333333333333
+    }
+  },
+  "answers": {
+    "dense_default": {
+      "n": 30,
+      "error_rate": 0.03333333333333333,
+      "errors": 1,
+      "abstention_decision_accuracy": 0.8333333333333334,
+      "primary_citation_hit": 0.64
+    },
+    "hybrid_current": {
+      "n": 30,
+      "error_rate": 0.06666666666666667,
+      "errors": 2,
+      "abstention_decision_accuracy": 0.9333333333333333,
+      "primary_citation_hit": 0.64
+    }
+  },
+  "run_id": "capstone-current-v2",
+  "manifest_hash": "3ac2670d90f51f6280ae0217b6728d64b17b58757a75d7091101e9152ddb02d5",
+  "complete": true,
+  "retrieval_delta": {
+    "recall@5": 0.08000000000000007,
+    "hit@5": 0.08000000000000007,
+    "mrr@5": 0.07866666666666666
+  },
+  "measured_retrieval_improvement": true,
+  "raw_hashes": {
+    "retrieval": "e6723d454c175e812243590441ce27e3ba31a0c960a8c3b900e76f0e1843d77f",
+    "answers": "4083b6da30251b13ad6ff6fc93a6328613e8e224d1b84d22cd795339ca070ba8"
+  },
+  "judge_status": "complete",
+  "scope": "Exposed dev; fresh current pipeline; no frozen predictions imported",
+  "judge_metrics_file": "judge_metrics.json"
+}

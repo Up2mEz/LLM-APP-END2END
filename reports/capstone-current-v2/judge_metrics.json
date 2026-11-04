@@ -1,0 +1,47 @@
+{
+  "run_id": "capstone-current-v2",
+  "review_type": "LLM-as-judge",
+  "model": "gpt-6-luna",
+  "reasoning_effort": "xhigh",
+  "temperature": "not exposed by T3 transport",
+  "human_review": false,
+  "complete": true,
+  "arms": {
+    "hybrid_current": {
+      "n": 30,
+      "successes": 28,
+      "semantic_success": 0.9333333333333333,
+      "verdict_counts": {
+        "correct": 23,
+        "correct_abstention": 5,
+        "service_error": 2
+      }
+    },
+    "dense_default": {
+      "n": 30,
+      "successes": 23,
+      "semantic_success": 0.7666666666666667,
+      "verdict_counts": {
+        "correct": 19,
+        "correct_abstention": 4,
+        "false_abstention": 4,
+        "partial": 1,
+        "service_error": 1,
+        "wrong": 1
+      }
+    }
+  },
+  "packet_sha256": "d7f657f2719ffe9188c9c5b9d317ca9a68874157c0b5497765a2d8e22163c6ce",
+  "judgments_sha256": {
+    "batch-01.jsonl": "18cccf2cf07f339d0bfb0e3a9eb1f3d579fff4e260fe2f4de83351a4bcf67f6b",
+    "batch-02.jsonl": "19f88fab92309b036b390ba6af96e0faa7031c5f37d5bbb20631f479b1da1244",
+    "batch-03.jsonl": "b119e98584974e046bfafd0c53a2248066c609fac3eab6df32fe96abbf06347e",
+    "batch-04.jsonl": "86c83f7e32c2a50dde0f6fc3174984fe62a5ae3e2a893d87f21d6954ef9e7dd5",
+    "batch-05.jsonl": "975065b9a41fde59fc4bdff18efda0e41b228f3d148178f98bbc92ebfe6c5379",
+    "batch-06.jsonl": "86fc8b22eb4cac3ba841d62afc65176706e481977ff8e17cbbec914273c46851",
+    "batch-07.jsonl": "ca4c1711d35508a1228086686f9d10689717d77f3c85b03202da645fd5d32ed2",
+    "batch-08.jsonl": "125ae673a962cb4ea0a917638f424bd89b40390835074aa9b6bc738695e00342",
+    "batch-09.jsonl": "4d994f9e213a0e91346e70e942ef7ac8a009823cdbf26886ea501904527589cb",
+    "batch-10.jsonl": "af8ecbed15ae37e36ed94ddfc63b7e708533c93ea3cb199c85f7935f0693f021"
+  }
+}

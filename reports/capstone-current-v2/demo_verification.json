@@ -1,0 +1,24 @@
+{
+  "duration": 288.821333,
+  "width": 1920,
+  "height": 1080,
+  "fps": "86635/1444",
+  "audio": "aac",
+  "decodePassed": true,
+  "blackSegments": [],
+  "silenceOver1_5sec": [],
+  "frames": [
+    30,
+    94,
+    125,
+    175,
+    190,
+    207,
+    235,
+    266
+  ],
+  "captionAlignment": "Phrase pages; not word-aligned",
+  "listeningReview": false,
+  "artifact": "D:\\skill ai\\reports\\demo-runs\\ncd-capstone-current-v2-demo\\NCD_Evidence_Demo_67070060.mp4",
+  "provenance": "Recorded live application sessions; new current evaluation sheet and Arlo narration. Waiting time edited; not a latency demonstration."
+}

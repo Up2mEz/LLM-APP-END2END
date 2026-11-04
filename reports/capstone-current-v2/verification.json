@@ -1,0 +1,25 @@
+﻿{
+    "run_id":  "capstone-current-v2",
+    "manifest_verification":  "PASS",
+    "retrieval_records":  60,
+    "answer_records":  60,
+    "pilot_records_excluded":  2,
+    "app_requests_including_pilot":  62,
+    "proxy_attempts_including_pilot":  201,
+    "full_test_suite_passed":  209,
+    "test_warnings":  [
+                          "Starlette TestClient httpx deprecation"
+                      ],
+    "service_errors":  {
+                           "dense_default":  1,
+                           "hybrid_current":  2,
+                           "category":  "proxy_http_429"
+                       },
+    "judge":  "complete; 60 valid items; rationale encoding repaired, all verdicts preserved",
+    "reranker_ablation":  "complete; reports/capstone-reranker-ablation-v1/metrics.json",
+    "scope":  "Fresh current pipeline, exposed dev; no old predictions reused",
+    "judge_successes":  {
+                            "dense_default":  23,
+                            "hybrid_current":  28
+                        }
+}

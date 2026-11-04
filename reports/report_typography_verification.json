@@ -1,0 +1,12 @@
+{
+  "run_id": "capstone-current-v2",
+  "pages": 8,
+  "sha256": "adba51b00e8b20ea0b73d5000145601152c6e989226294542f77f916a83cdfd5",
+  "pua": 0,
+  "corrupt_question_marks": false,
+  "text_colors": [
+    0
+  ],
+  "font": "Angsana New",
+  "renderer": "Chromium"
+}

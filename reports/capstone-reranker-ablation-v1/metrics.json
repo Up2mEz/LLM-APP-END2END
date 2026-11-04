@@ -1,0 +1,22 @@
+{
+  "run_id": "capstone-reranker-ablation-v1",
+  "complete": true,
+  "n": 30,
+  "reranker_on": {
+    "n": 30,
+    "answerable": 25,
+    "recall@5": 0.9,
+    "hit@5": 0.92,
+    "mrr@5": 0.7833333333333333
+  },
+  "reranker_off": {
+    "n": 30,
+    "answerable": 25,
+    "recall@5": 0.74,
+    "hit@5": 0.76,
+    "mrr@5": 0.532
+  },
+  "median_seconds_on": 14.492500000051223,
+  "median_seconds_off": 0.23499999998603016,
+  "scope": "Fresh retrieval only; same current code/data/query and hybrid arm; sequential timing; no LLM calls or end-to-end answer claims"
+}
