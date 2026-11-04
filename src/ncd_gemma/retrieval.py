@@ -11,6 +11,7 @@ from threading import Lock
 from .config import ROOT
 from .schemas import SearchArgs
 from .evidence import TableContext
+from .runtime_options import use_reranker
 
 
 def file_hash(path: Path):
@@ -99,5 +100,5 @@ class EvidenceRetriever:
                     if fingerprint not in seen:
                         seen.add(fingerprint)
                         evidence.append(window)
-            ranked = self.passage_reranker.rank(args.query,evidence)
+            ranked = self.passage_reranker.rank(args.query,evidence) if use_reranker.get() else evidence
             return sorted(ranked, key=lambda hit: not hit.get('lexical_exact', False))

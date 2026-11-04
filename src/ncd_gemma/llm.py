@@ -10,6 +10,7 @@ from uuid import uuid4
 from openai import APIConnectionError, OpenAI
 
 from .config import Settings, proxy_ready
+from .runtime_options import use_cache
 
 
 class ProxyError(RuntimeError):
@@ -38,7 +39,7 @@ class ProxyClient:
         key = hashlib.sha256(json.dumps({"endpoint": self.endpoint_identity, "payload": payload},
                                        ensure_ascii=False, sort_keys=True).encode()).hexdigest()
         path = self.settings.cache_dir / f"{key}.json"
-        if path.exists():
+        if use_cache.get() and path.exists():
             try:
                 result = json.loads(path.read_text(encoding="utf-8"))
                 if result.get("cache_key") == key and isinstance(result["message"], dict):
@@ -81,7 +82,8 @@ class ProxyClient:
                   "cached": False, "api_attempts": attempts, "latency_ms": round((time.monotonic() - start) * 1000, 1)}
         if calls:
             result["message"]["tool_calls"] = calls
-        temp = path.with_name(f"{key}.{uuid4().hex}.tmp")
-        temp.write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
-        temp.replace(path)
+        if use_cache.get():
+            temp = path.with_name(f"{key}.{uuid4().hex}.tmp")
+            temp.write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
+            temp.replace(path)
         return result

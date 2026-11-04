@@ -12,3 +12,4 @@ private
 output
 tmp
 *.log
+frontend/node_modules

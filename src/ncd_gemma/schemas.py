@@ -48,6 +48,8 @@ class AnswerDraft(StrictModel):
 
 class AskRequest(StrictModel):
     question: Annotated[Nonblank, Field(max_length=1500)]
+    use_cache: bool = True
+    use_reranker: bool = True
 
 
 SEARCH_TOOL = {

@@ -17,6 +17,7 @@ from .config import ROOT, Settings, allowed_hosts, load_environment, proxy_ready
 from .llm import ProxyClient
 from .retrieval import EvidenceRetriever
 from .schemas import AskRequest
+from . import runtime_options
 
 load_environment()
 app = FastAPI(title="NCD Evidence · Gemma", version="0.1.0")
@@ -64,7 +65,9 @@ async def local_origin(request: Request, call_next):
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "no-referrer"
-    response.headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'"
+    # Radix overlays inject scroll-lock styles and calculate popover positions.
+    # Permit their inline CSS; scripts and connections remain same-origin only.
+    response.headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'"
     return response
 
 
@@ -87,7 +90,14 @@ def ask(request: AskRequest):
             agent = get_agent()
         except Exception:
             raise HTTPException(503, "ยังโหลดระบบไม่ได้ โปรดตรวจ class proxy, data snapshot และ embedding cache ตาม README") from None
-        result = agent.run(request.question)
+        cache_token = runtime_options.use_cache.set(request.use_cache)
+        rerank_token = runtime_options.use_reranker.set(request.use_reranker)
+        try:
+            result = agent.run(request.question)
+            result['runtime_options'] = {'use_cache': request.use_cache, 'use_reranker': request.use_reranker}
+        finally:
+            runtime_options.use_cache.reset(cache_token)
+            runtime_options.use_reranker.reset(rerank_token)
         return JSONResponse(result, status_code=502 if result["status"] == "error" else 200)
     finally:
         _request_slot.release()
@@ -105,6 +115,13 @@ def evaluation():
 @app.get("/tokens.css", include_in_schema=False)
 def design_tokens():
     return FileResponse(ROOT / "tokens.css", media_type="text/css")
+
+
+@app.get("/", include_in_schema=False)
+def frontend():
+    built = ROOT / "static/app/index.html"
+    return FileResponse(built if built.is_file() else ROOT / "static/index.html", media_type="text/html",
+                        headers={"Cache-Control": "no-cache"})
 
 
 app.mount("/", StaticFiles(directory=ROOT / "static", html=True), name="static")

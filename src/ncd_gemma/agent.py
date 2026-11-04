@@ -215,6 +215,7 @@ class Agent:
                             item = {key: hit[key] for key in ("chunk_id", "document_id", "edition_id", "pdf_page_start", "pdf_page_end", "score")}
                             item.update(source_id=source_id, text=text, text_truncated=len(text) < len(hit["text"]),
                                         header_text=hit.get("header_text", ""), injection_flags=hit.get("injection_flags", []))
+                            item['section_path'] = hit.get('section_path', [])
                             if hit.get('focus_window'):
                                 item['focus_window'] = hit['focus_window']
                             if 'passage_rerank_score' in hit:

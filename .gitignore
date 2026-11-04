@@ -14,6 +14,8 @@ dist/
 build/
 output/pdf/
 tmp/
+frontend/node_modules/
+frontend/*.tsbuildinfo
 # Local UI screenshots may contain private corpus quotations.
 output/ui/
 output/public_data/

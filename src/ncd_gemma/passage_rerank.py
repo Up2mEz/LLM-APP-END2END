@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 from .config import ROOT
 from .evidence import explicit_row_lookup
+from .runtime_options import use_cache
 
 MODEL = 'BAAI/bge-reranker-v2-m3'
 REVISION = '953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e'
@@ -27,6 +28,8 @@ class PassageReranker:
             keys.append(key)
             path=self.cache/(key+'.json')
             try:
+                if not use_cache.get():
+                    raise ValueError('Request cache disabled')
                 score=json.loads(path.read_text())['score']
                 if type(score) not in (int,float) or not math.isfinite(score):raise ValueError('Invalid cache')
             except (OSError,ValueError,KeyError,TypeError):
@@ -39,7 +42,8 @@ class PassageReranker:
             values=self.model.predict([(question,evidence[i]['text']) for i in missing],batch_size=4,show_progress_bar=False)
             for i,value in zip(missing,values):
                 scores[i]=float(value)
-                (self.cache/(keys[i]+'.json')).write_text(json.dumps({'score':scores[i]}),encoding='utf8')
+                if use_cache.get():
+                    (self.cache/(keys[i]+'.json')).write_text(json.dumps({'score':scores[i]}),encoding='utf8')
         # Do not threshold scores as probabilities or remove evidence merely for a low score.
         order=sorted(range(len(evidence)),key=lambda i:(-scores[i],i))
         # Start with a compact evidence pack; multi-part questions keep more
