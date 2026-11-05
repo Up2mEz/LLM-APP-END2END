@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-process.env.PLAYWRIGHT_BROWSERS_PATH='D:/skill ai/.tools/demo-runtime/browsers';
-const {chromium}=await import('file:///D:/skill%20ai/.tools/demo-runtime/node_modules/playwright/index.mjs');
+const modulePath=process.env.NCD_REPORT_PLAYWRIGHT_MODULE || path.join(root,'private/report-runtime/node_modules/playwright/index.mjs');
+if(!fs.existsSync(modulePath))throw new Error('Install report tools: npm install --prefix private/report-runtime playwright@1.58.2');
+const {chromium}=await import(pathToFileURL(modulePath).href);
+fs.mkdirSync(path.join(root,'output/pdf'),{recursive:true});
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const inline=s=>esc(s).replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
 const text=fs.readFileSync(path.join(root,'docs/PROJECT_REPORT_SUBMISSION_TH.md'),'utf8');
@@ -22,8 +24,12 @@ const sections=groups.map((group,index)=>{
   const img=row.match(/^!\[([^\]]*)\]\(([^)]+)\)/);
   if(img){
    let target=path.resolve(root,'docs',img[2]);
-   if(img[2].includes('architecture'))target=path.join(root,'output/pdf/assets/architecture-black-text.png');
-   html+=`<figure><img src="${pathToFileURL(target).href}"><figcaption>${esc(img[1])}</figcaption></figure>`;continue;
+   let src=pathToFileURL(target).href;
+   if(target.endsWith('.svg')){
+    const svg=fs.readFileSync(target,'utf8').replace('</svg>','<style>text,tspan{fill:#000!important}</style></svg>');
+    src='data:image/svg+xml;base64,'+Buffer.from(svg).toString('base64');
+   }
+   html+=`<figure><img src="${src}"><figcaption>${esc(img[1])}</figcaption></figure>`;continue;
   }
   if(row.startsWith('### '))html+='<h3>'+inline(row.slice(4))+'</h3>';
   else if(row.startsWith('## '))html+='<h2>'+inline(row.slice(3))+'</h2>';

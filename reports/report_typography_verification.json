@@ -1,15 +1,28 @@
 {
-  "run_id": "capstone-current-v2",
-  "additional_comparison": "paired-agent-v30-current-20261105",
   "pages": 8,
-  "sha256": "32df6213449ebe8ced1c8390c8766b93581987817b925381fdb5ef56d59325f3",
-  "pua": 0,
-  "corrupt_question_marks": false,
+  "sha256": "2dd212f6e5502ae8b4dfdcc6e3fe58c16370665cdd7c30984a934ce9546a36c3",
   "text_colors": [
     0
   ],
   "font": "Angsana New",
+  "diagram_fonts": "Arial",
   "renderer": "Chromium",
-  "paired_results_page": 7,
-  "paired_results_page_visually_reviewed": true
+  "pua": 0,
+  "replacement_characters": 0,
+  "student_id": "67070060",
+  "body_update_date": false,
+  "visually_reviewed_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "evaluation_runs": [
+    "capstone-current-v2",
+    "paired-agent-v30-current-20261105"
+  ]
 }

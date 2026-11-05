@@ -1,0 +1,45 @@
+{
+  "scope": "Saved results for offline score reproduction; no fresh model calls. Raw bytes preserved.",
+  "files": [
+    {
+      "run": "capstone-current-v2",
+      "name": "answers.jsonl",
+      "file": "capstone-current-v2--answers.jsonl.gz",
+      "sha256": "4083b6da30251b13ad6ff6fc93a6328613e8e224d1b84d22cd795339ca070ba8",
+      "compressed_sha256": "1fab319d611804d1c8b526050b70113b4d3748acea81433892c260c495fd9015",
+      "rows": 60
+    },
+    {
+      "run": "capstone-current-v2",
+      "name": "retrieval.jsonl",
+      "file": "capstone-current-v2--retrieval.jsonl.gz",
+      "sha256": "e6723d454c175e812243590441ce27e3ba31a0c960a8c3b900e76f0e1843d77f",
+      "compressed_sha256": "1f8ab9c21701cdd8cc3531adf0b5acc60552c31af2ecd04d11ba4743eaa573e7",
+      "rows": 60
+    },
+    {
+      "run": "capstone-current-v2",
+      "name": "review_key.jsonl",
+      "file": "capstone-current-v2--review_key.jsonl.gz",
+      "sha256": "38006c1cf10d926a30b323a326e9bc4519cf24b780145f3609f8491c1dfd7b86",
+      "compressed_sha256": "5757f2a2cddd09c29a71d8ea6c17a772e3d22160edf9d2a4adcaccdba8d6ecdd",
+      "rows": 60
+    },
+    {
+      "run": "paired-agent-v30-current-20261105",
+      "name": "answers.jsonl",
+      "file": "paired-agent-v30-current-20261105--answers.jsonl.gz",
+      "sha256": "28af02e0914b1f0c22b63035fb6d64c075a04bfb28c35f953622c99fe9e06632",
+      "compressed_sha256": "f069a13e1beaf7e020a7fdea01bb49cda1bdbe2d23024cc005df09bd13230374",
+      "rows": 120
+    },
+    {
+      "run": "paired-agent-v30-current-20261105",
+      "name": "review_key.jsonl",
+      "file": "paired-agent-v30-current-20261105--review_key.jsonl.gz",
+      "sha256": "aca0ae95521980cffd4e355fe7b442787971c169921d5afb2faeca58b550228f",
+      "compressed_sha256": "daa90e23db243a76e3496acfbbb23c6c85a5df90ef89a9d851e0d15a542b7db8",
+      "rows": 120
+    }
+  ]
+}
